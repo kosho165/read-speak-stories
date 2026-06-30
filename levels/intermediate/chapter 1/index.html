@@ -3,57 +3,1156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Levels | Read & Speak Stories</title>
+    <title>Oliver Twist - Chapter 1 | Read & Speak Stories</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; margin: 0; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .header-title { color: #6f42c1; margin-bottom: 40px; font-size: 28px; text-align: center; }
-        .levels-container { display: flex; gap: 25px; justify-content: center; flex-wrap: wrap; max-width: 1000px; width: 100%; }
+        :root{--primary-purple:#6f42c1;--light-purple:#f3e8ff;--dark-purple:#553098;--bg-color:#f8f9fa;--text-dark:#333;--text-gray:#6c757d; --border-light:#e0e0e0; --highlight-yellow:#fff3cd; --border-yellow:#ffc107;}
+        body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:var(--bg-color);margin:0;padding:20px;color:var(--text-dark); height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; overflow: hidden;}
         
-        .level-card { background: white; padding: 30px; border-radius: 20px; text-align: center; width: 260px; box-shadow: 0 6px 15px rgba(0,0,0,0.08); transition: 0.3s; border: 2px solid transparent; display: flex; flex-direction: column; }
-        .level-card:hover { transform: translateY(-10px); border-color: #6f42c1; }
-        .level-card h2 { color: #553098; margin-top: 10px; font-size: 24px; }
-        .level-card p { color: #666; margin-bottom: 25px; flex-grow: 1; }
+        .top-headers{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;gap:20px; flex-shrink: 0; max-width:1400px; width: 100%; margin-left: auto; margin-right: auto;}
+        .header-left{background:#fef3c7;border:1px solid #fde68a;padding:15px 30px;border-radius:40px;text-align:center;box-shadow:0 4px 6px rgba(0,0,0,0.05);}
+        .header-left h3{margin:0;color:#92400e;font-size:18px;display:flex;align-items:center;gap:8px;justify-content:center;}
+        .header-left p{margin:5px 0 0;color:#b45309;font-size:12px;font-weight:bold;direction:ltr;}
+        .header-right{background:white;padding:15px 40px;border-radius:20px;box-shadow:0 4px 6px rgba(0,0,0,0.05);flex-grow:1;text-align:left;border-bottom:4px solid var(--primary-purple);direction:ltr;display:flex;flex-direction:column;align-items:flex-end;}
+        .header-right h2{margin:0;color:var(--primary-purple);font-size:24px;display:flex;align-items:center;gap:10px;}
+        .header-right p{margin:5px 0 0;color:#666;font-size:13px;}
+
+        .top-controls-wrapper { background:white; border-radius:12px; padding:15px; margin-bottom:20px; box-shadow:0 4px 6px rgba(0,0,0,0.02); border:1px solid var(--border-light); max-width:1400px; width:100%; margin-left:auto; margin-right:auto; flex-shrink:0;}
+        .tabs-row-top { display:flex; gap:8px; justify-content:center; flex-wrap:wrap;}
+        .tab-btn-top { background:white; border:1px solid var(--border-light); padding:8px 20px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:15px; color:#555; display:flex; flex-direction:column; align-items:center; gap:4px; transition:0.2s; flex:1; min-width:120px;}
+        .tab-btn-top span:last-child { font-size:11px; font-weight:normal; color:#888; }
+        .tab-btn-top:hover:not(.locked) { border-color:var(--primary-purple); color:var(--primary-purple); background:#f3e8ff;}
+        .tab-btn-top.active { background:var(--primary-purple); color:white; border-color:var(--dark-purple); box-shadow:0 4px 8px rgba(111,66,193,0.3);}
+        .tab-btn-top.active span:last-child { color:#ddd; }
+        .tab-btn-top.locked { color:#aaa; cursor:not-allowed; background:#f9f9f9; }
+
+        .word-counter-badge {background-color:#e63946 !important; color:#ffffff !important; border-radius:50px; padding:2px 8px; font-size:16px !important; font-weight:bold !important; margin-right:5px; border:2px solid #ffffff; box-shadow:0 2px 4px rgba(0,0,0,0.2); display:inline-flex; align-items:center; justify-content:center; min-width:20px;}
+
+        .main-layout{display:flex;gap:20px;align-items:flex-start;flex: 1; min-height: 0; max-width:1400px; width: 100%; margin: 0 auto; direction: rtl;}
         
-        .start-btn { background: #6f42c1; color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 16px; transition: 0.2s; }
-        .start-btn:hover { background: #553098; }
+        .media-column{flex:0 0 42%;display:flex;flex-direction:column;gap:15px; height: 100%; direction: ltr;}
+        .video-wrapper{position:relative;padding-bottom:56.25%;height:0;background:#000;border-radius:12px;overflow:hidden;border:2px solid #ddd;box-shadow:0 4px 10px rgba(0,0,0,0.1); flex-shrink: 0;}
+        .video-wrapper iframe {position:absolute;top:0;left:0;width:100%;height:100%; border:none;}
+        .speed-controls{display:flex;justify-content:center;gap:10px; flex-shrink: 0;}
+        .speed-btn{background:white;border:1px solid #ddd;padding:10px 15px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:5px;transition:0.2s;}
+        .speed-btn span:last-child{font-size:10px;font-weight:normal;color:#888;}
+        .speed-btn.active-speed{background:var(--primary-purple);color:white;border-color:var(--dark-purple);}
+        .speed-btn.active-speed span:last-child{color:#ddd;}
+
+        .interactive-column{flex:1;display:flex;flex-direction:column;gap:15px;height:100%;min-width:0;}
         
-        .locked { opacity: 0.6; filter: grayscale(0.5); }
-        .status-badge { font-size: 12px; background: #eee; padding: 5px 12px; border-radius: 12px; color: #777; align-self: center; margin-bottom: 10px; font-weight: bold; }
-        .back-btn { margin-top: 50px; color: #666; text-decoration: none; font-weight: bold; }
+        .content-area{flex:1; background:white; border-radius:12px; border:1px solid var(--border-light); padding:20px; display: flex; flex-direction: column; overflow: hidden; box-shadow:0 4px 6px rgba(0,0,0,0.02); min-height: 0;}
+        .tab-content{display:none; flex:1; flex-direction:column; min-height:0;}
+        .tab-content.active-content{display:flex;}
+
+        .script-box{flex:1; overflow-y:auto; position:relative; direction:ltr; text-align:left; scroll-behavior:smooth; padding-bottom: 50%; min-height: 0;}
+        .script-line{font-size:18px;color:#333;padding:12px 15px;margin-bottom:8px;border-left:5px solid transparent;border-radius:4px;line-height:1.6;transition:0.2s;cursor:pointer;}
+        .script-line:hover{background:#f9f9f9;}
+        .script-line.active-line{background-color:var(--highlight-yellow);border-left-color:var(--border-yellow);font-weight:bold;color:#000;box-shadow:0 2px 4px rgba(0,0,0,0.05);}
+        .speaker-name{color:#000;font-weight:bold;margin-right:5px;}
+        .word{cursor:pointer;transition:0.2s;display:inline-block;border-bottom:1px dashed #ccc;padding:0 2px;}
+        .word:hover{background:#e0d4f5;color:var(--primary-purple);border-radius:4px;border-bottom-color:var(--primary-purple);}
+
+        .action-btn{background:var(--primary-purple);color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:14px;margin:3px;transition:0.2s; line-height:1.4;}
+        .action-btn.danger{background:#dc3545;}.action-btn.success{background:#28a745;}.action-btn.warning{background:#ffc107;color:#000;}.action-btn.info{background:#17a2b8;}
+        
+        #dictDefaultView {display: flex; flex-direction: column; height: 100%; min-height: 0;}
+        #wordBankList {flex: 1; overflow-y: auto; min-height: 0; margin-bottom: 15px; padding-left: 10px;}
+        
+        .dict-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #eee;direction:rtl;}
+        .word-en{font-weight:bold;font-size:18px;color:var(--primary-purple);direction:ltr;display:inline-block;}
+        .quiz-opt{display:block;width:100%;text-align:center;direction:ltr;padding:15px;margin-bottom:10px;border:2px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-size:18px;font-weight:bold;transition:0.2s;}
+        .quiz-opt:hover{background:#f3e8ff;border-color:var(--primary-purple);}
+
+        .chat-container{flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:15px; padding-bottom:20px; min-height:0; scroll-behavior:smooth;}
+        .chat-row{display:flex;gap:10px;align-items:flex-end;direction:ltr; transition:0.3s;}
+        .chat-row.my-turn{flex-direction:row-reverse;}
+        .chat-avatar{width:45px;height:45px;border-radius:50%;object-fit:cover;border:2px solid var(--primary-purple);background:#eee;flex-shrink:0;}
+        .chat-bubble{padding:12px 18px;border-radius:18px;font-size:16px;max-width:75%;line-height:1.4;position:relative;}
+        .chat-row.my-turn .chat-bubble{background:var(--primary-purple);color:white;border-bottom-right-radius:2px;}
+        .chat-row.other-turn .chat-bubble{background:#f1f1f1;color:#333;border-bottom-left-radius:2px;border:1px solid #e0e0e0;}
+        .rp-instruction{text-align:center;color:#dc3545;font-weight:bold;font-size:18px;margin:10px 0; min-height: 60px;}
+
+        ::-webkit-scrollbar{width:8px;}::-webkit-scrollbar-track{background:#f1f1f1;}::-webkit-scrollbar-thumb{background:#ccc;border-radius:4px;}::-webkit-scrollbar-thumb:hover{background:var(--primary-purple);}
     </style>
 </head>
 <body>
 
-    <h1 class="header-title">📚 Choose Your Level to Start</h1>
+<div class="top-headers">
+    <!-- التعديل هنا: مسار مطلق بيبدأ بـ / عشان يرجع لقائمة الفصول صح -->
+    <a href="/levels/intermediate/index.html" style="background: #dc3545; color: white; text-decoration: none; padding: 12px 25px; border-radius: 40px; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s; direction: ltr;">
+        <span>🔙</span> Chapters Menu
+    </a>
 
-    <div class="levels-container">
-        
-        <!-- Beginner Level -->
-        <div class="level-card">
-            <h2>Beginner</h2>
-            <p>For beginners learning English</p>
-            <a href="levels/beginner/index.html" class="start-btn">Enter Library</a>
+    <div class="header-left">
+        <h3>⭐ <span id="totalPoints">100</span> نقطة | 🎯 المستوى: متوسط</h3>
+        <p>100 Points | Level: Intermediate</p>
+    </div>
+    <div class="header-right">
+        <h2>Oliver Twist 👑</h2>
+        <p>Chapter 1 | The Workhouse</p>
+    </div>
+</div>
+
+<div class="top-controls-wrapper">
+    <div class="tabs-row-top" style="direction: rtl;">
+        <button class="tab-btn-top active" onclick="switchTab('scriptTab', this)">
+            <span>📖 السكريبت</span><span>Script</span>
+        </button>
+        <button class="tab-btn-top" onclick="switchTab('speakTab', this)">
+            <span>🗣️ تبادل الأدوار</span><span>Roleplay</span>
+        </button>
+        <button class="tab-btn-top" onclick="switchTab('writeTab', this)">
+            <span>✍️ إملاء</span><span>Dictation</span>
+        </button>
+        <button class="tab-btn-top" onclick="switchTab('dictTab', this)">
+            <span>🏦 القاموس <span id="wordCounter" class="word-counter-badge">0</span></span><span>Dictionary</span>
+        </button>
+        <button class="tab-btn-top" onclick="switchTab('meaningTab', this)">
+            <span>🧠 المعاني</span><span>Meaning Quiz</span>
+        </button>
+        <button id="quizTabBtn" class="tab-btn-top" style="color:#aaa; cursor:not-allowed; background:#f9f9f9;" onclick="switchTab('quizTab', this)">
+            <span>🔒 أجب بصوتك</span><span>Speak Answer</span>
+        </button>
+    </div>
+</div>
+
+<div class="main-layout">
+    <div class="media-column">
+        <!-- YouTube API Div -->
+        <div class="video-wrapper">
+            <div id="mainVideo"></div>
         </div>
-
-        <!-- Intermediate Level -->
-        <div class="level-card" style="border-color: #6f42c1; box-shadow: 0 8px 20px rgba(111, 66, 193, 0.2);">
-            <span class="status-badge" style="background: #e0d4f5; color: #553098;">Current</span>
-            <h2>Intermediate</h2>
-            <p>Intermediate Stories Library (Oliver Twist & more)</p>
-            <a href="levels/intermediate/index.html" class="start-btn">Enter Library</a>
+        <div class="speed-controls">
+            <button class="speed-btn" onclick="changeVideoSpeed(0.5, this)">
+                <span>بطيء جداً (0.5x)</span><span>Very Slow</span>
+            </button>
+            <button class="speed-btn" onclick="changeVideoSpeed(0.75, this)">
+                <span>بطيء (0.75x)</span><span>Slow</span>
+            </button>
+            <button class="speed-btn active-speed" onclick="changeVideoSpeed(1, this)">
+                <span>السرعة العادية</span><span>Normal Speed</span>
+            </button>
         </div>
-
-        <!-- Advanced Level -->
-        <div class="level-card locked">
-            <span class="status-badge">Coming Soon</span>
-            <h2>Advanced</h2>
-            <p>Advanced Global Stories & Novels</p>
-            <button class="start-btn" style="background: #ccc; cursor: not-allowed;">Locked</button>
-        </div>
-
     </div>
 
-    <a href="index.html" class="back-btn">🔙 Back to Start Screen</a>
+    <div class="interactive-column">
+        <div class="content-area" id="mainContentArea" style="direction: rtl;">
+            
+            <!-- Script Tab -->
+            <div id="scriptTab" class="tab-content active-content">
+                <div style="color:var(--primary-purple); font-weight:bold; font-size:18px; margin-bottom:15px; text-align:right; flex-shrink: 0; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+                    📖 السكريبت التفاعلي<br>
+                    <span style="font-size:12px; font-weight:normal; color:#666;">Interactive Script</span>
+                </div>
+                <div class="script-box" id="scriptBoxContainer"></div>
+            </div>
 
+            <!-- Roleplay Tab -->
+            <div id="speakTab" class="tab-content">
+                <h3 style="color:var(--primary-purple); margin-top:0; text-align:center; flex-shrink:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+                    🗣️ المحادثة الحية (مثل دورك)<br>
+                    <span style="font-size:14px; font-weight:normal; color:#666;">Live Chat (Roleplay)</span>
+                </h3>
+                
+                <div id="rpStep1" style="text-align:center; margin-top:30px; flex:1;">
+                    <p style="font-size:18px; font-weight:bold; margin-bottom:20px;">
+                        اختر الشخصية التي تريد تمثيلها:<br>
+                        <span style="font-size:14px; font-weight:normal; color:#666;">Choose the character you want to play:</span>
+                    </p>
+                    <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
+                        <button class="action-btn" style="background:#6f42c1; padding:10px 20px; font-size:18px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Narrator')">
+                            <img src="../../images/narrator.jpg" alt="Narrator" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <div style="text-align:right; line-height:1.2;">دور الراوي<br><span style="font-size:12px; font-weight:normal;">Role: Narrator</span></div>
+                        </button>
+                        <button class="action-btn" style="background:#ffc107; color:#000; padding:10px 20px; font-size:18px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Young Woman')">
+                            <img src="../../images/woman.jpg" alt="Young Woman" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <div style="text-align:right; line-height:1.2;">دور الأم<br><span style="font-size:12px; font-weight:normal;">Role: Young Woman</span></div>
+                        </button>
+                        <button class="action-btn" style="background:#20c997; padding:10px 20px; font-size:18px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Nurse')">
+                            <img src="../../images/nurse.jpg" alt="Nurse" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <div style="text-align:right; line-height:1.2;">دور الممرضة<br><span style="font-size:12px; font-weight:normal;">Role: Nurse</span></div>
+                        </button>
+                        <button class="action-btn" style="background:#e83e8c; padding:10px 20px; font-size:18px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Oliver')">
+                            <img src="../../images/oliver.jpg" alt="Oliver" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <div style="text-align:right; line-height:1.2;">دور أوليفر<br><span style="font-size:12px; font-weight:normal;">Role: Oliver</span></div>
+                        </button>
+                        <button class="action-btn" style="background:#fd7e14; padding:10px 20px; font-size:18px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Boy')">
+                            <img src="../../images/boy.jpg" alt="Boy" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <div style="text-align:right; line-height:1.2;">دور الولد<br><span style="font-size:12px; font-weight:normal;">Role: Boy</span></div>
+                        </button>
+                        <button class="action-btn info" style="padding:10px 20px; font-size:18px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Bumble')">
+                            <img src="../../images/bumble.jpg" alt="Bumble" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <div style="text-align:right; line-height:1.2;">دور بامبل<br><span style="font-size:12px; font-weight:normal;">Role: Mr Bumble</span></div>
+                        </button>
+                        <button class="action-btn" style="background:#28a745; padding:10px 20px; font-size:18px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Cook')">
+                            <img src="../../images/cook.jpg" alt="Cook" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <div style="text-align:right; line-height:1.2;">دور الطباخ<br><span style="font-size:12px; font-weight:normal;">Role: Cook</span></div>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="rpStep2" style="display:none; flex:1; flex-direction:column; min-height:0;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #eee; padding-bottom:10px; margin-bottom:15px; direction:rtl; flex-shrink:0;">
+                        <h4 style="margin:0; color:var(--dark-purple);">دورك: <span id="chosenRoleDisplay" style="color:#dc3545;"></span></h4>
+                        <button class="action-btn danger" style="padding:6px 12px; font-size:14px; margin:0;" onclick="resetRoleplay()">
+                            🔄 تغيير الشخصية<br><span style="font-size:11px; font-weight:normal;">Change Character</span>
+                        </button>
+                    </div>
+                    
+                    <div id="chatInterface" class="chat-container"></div>
+
+                    <div id="rpControlsArea" style="text-align:center; padding-top:15px; border-top:1px solid #eee; margin-top:10px; flex-shrink:0;">
+                        <div id="rpInstruction" class="rp-instruction"></div>
+                        <button id="rpMicBtn" class="action-btn danger" style="border-radius:50px; padding:12px 30px; font-size:16px; display:none;" onclick="toggleRoleplayMic()">
+                            🎤 ابدأ التسجيل<br><span style="font-size:12px; font-weight:normal;">Start Recording</span>
+                        </button>
+                        <button id="rpPlayFullBtn" class="action-btn success" style="width:100%; padding:15px; font-size:18px; display:none;" onclick="togglePlayFullScene()">
+                            🎬 اسمع المحادثة كاملة بصوتك!<br><span style="font-size:13px; font-weight:normal;">Hear the full scene with your voice!</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dictation Tab -->
+            <div id="writeTab" class="tab-content" style="text-align:center;">
+                <h3 style="color:var(--primary-purple); margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+                    ✍️ استمع واكتب<br>
+                    <span style="font-size:14px; font-weight:normal; color:#666;">Listen and Write</span>
+                </h3>
+                <div style="background:#f9f9f9; padding:20px; border-radius:10px; border:1px solid #eee; margin-top:15px;">
+                    <p id="dictCounterDisplay" style="font-weight:bold; font-size:18px; color:#555; margin-top:0; line-height:1.4;">الجملة 1 من 5<br><span style="font-size:12px; font-weight:normal;">Sentence 1 of 5</span></p>
+                    
+                    <div style="display:flex; justify-content:center; gap:10px; margin-bottom:20px;">
+                        <button class="action-btn" onclick="playDictationAudio()">
+                            🎬 فيديو<br><span style="font-size:11px; font-weight:normal;">Video</span>
+                        </button>
+                        <button class="action-btn info" onclick="playDictationTTS('en-US')">
+                            🇺🇸 أمريكي<br><span style="font-size:11px; font-weight:normal;">US Audio</span>
+                        </button>
+                        <button class="action-btn" style="background:#e83e8c;" onclick="playDictationTTS('en-GB')">
+                            🇬🇧 بريطاني<br><span style="font-size:11px; font-weight:normal;">UK Audio</span>
+                        </button>
+                    </div>
+                    <input type="text" id="dictationInput" placeholder="Type what you hear..." style="width:80%; padding:12px; font-size:20px; border:2px solid #ccc; border-radius:6px; text-align:center; direction:ltr;">
+                    <p id="dictHint" style="color:#666; margin:10px 0; font-weight:bold; line-height:1.4; font-size:18px;"></p>
+                    
+                    <div style="display:flex; justify-content:center; gap:10px; margin-top:15px;">
+                        <button id="checkDictationBtn" class="action-btn success" onclick="checkDictation()">
+                            ✔️ تحقق<br><span style="font-size:11px; font-weight:normal;">Check</span>
+                        </button>
+                        <button id="nextDictationBtn" class="action-btn" style="display:none;" onclick="nextDictation()">
+                            ➡️ التالي<br><span style="font-size:11px; font-weight:normal;">Next</span>
+                        </button>
+                    </div>
+                    <p id="dictationResult" style="font-weight:bold; font-size:18px; margin-top:15px; line-height:1.4;"></p>
+                </div>
+            </div>
+
+            <!-- Dictionary Tab -->
+            <div id="dictTab" class="tab-content" style="text-align:center;">
+                <div id="dictDefaultView">
+                    <h3 style="color:var(--primary-purple); margin-top:0; flex-shrink:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+                        🏦 القاموس الناطق<br>
+                        <span style="font-size:14px; font-weight:normal; color:#666;">Audio Dictionary</span>
+                    </h3>
+                    <div id="wordBankList">
+                        <p style="color:#888; margin-top:50px;">اضغط على أي كلمة في السكريبت لإضافتها.</p>
+                    </div>
+                    <button class="action-btn success" style="width:100%; padding:15px; font-size:16px; flex-shrink:0;" onclick="startAudioVocabQuiz()">
+                        🎧 تحدي الاستماع<br><span style="font-size:12px; font-weight:normal;">Listening Challenge</span>
+                    </button>
+                </div>
+                <div id="dictQuizView" style="display: none; flex-direction: column; height: 100%;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; flex-shrink: 0;">
+                        <h3 style="color:var(--primary-purple); margin:0; line-height: 1.2; text-align: right;">
+                            🎧 تحدي الاستماع<br>
+                            <span style="font-size:14px; font-weight:normal; color:#666;">Listening Challenge</span>
+                        </h3>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <p id="quizCounterDisplay" style="font-weight:bold; font-size:16px; color:#555; margin:0; direction: ltr;">Question 1 of X</p>
+                            <button class="action-btn warning" style="border-radius:50%; width:50px; height:50px; font-size:20px; margin:0; display:flex; justify-content:center; align-items:center;" onclick="playCurrentQuizAudio()">🔊</button>
+                        </div>
+                    </div>
+                    
+                    <div style="flex: 1; overflow-y: auto; min-height: 0;">
+                        <div id="dictQuizOptions" style="text-align:left; direction:ltr;"></div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px; margin-top: auto; flex-shrink: 0;">
+                        <p id="dictQuizResult" style="font-weight:bold; font-size:16px; margin:0; line-height:1.4; text-align:right; flex:1; direction:ltr;"></p>
+                        <button class="action-btn danger" style="padding:10px 20px; font-size:15px; margin:0; white-space: nowrap;" onclick="exitAudioVocabQuiz()">
+                            🚪 إنهاء التحدي End Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meaning Quiz Tab -->
+            <div id="meaningTab" class="tab-content" style="text-align:center;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; flex-shrink: 0;">
+                    <h3 style="color:var(--primary-purple); margin:0; line-height: 1.2; text-align: right;">
+                        🧠 تحدي المعاني<br>
+                        <span style="font-size:14px; font-weight:normal; color:#666;">Meaning Quiz</span>
+                    </h3>
+                    <p id="mqCounterDisplay" style="font-weight:bold; font-size:16px; color:#888; margin:0; direction: ltr;">Question 1 of X</p>
+                </div>
+                
+                <div style="flex: 1; overflow-y: auto; min-height: 0;">
+                    <div style="background:white; padding:15px; border-radius:10px; border:1px solid #eee; text-align:left; direction:ltr;">
+                        <h4 id="mqDefinition" style="font-size:18px; color:var(--dark-purple); margin-top:0; margin-bottom:15px; line-height:1.4;"></h4>
+                        <div id="mqOptions"></div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px; margin-top: auto; flex-shrink: 0;">
+                    <p id="mqResult" style="font-weight:bold; font-size:16px; margin:0; line-height:1.4; text-align:right; flex:1;"></p>
+                    <button id="mqNextBtn" class="action-btn success" style="padding:10px 20px; font-size:15px; display:none; margin:0; white-space: nowrap;" onclick="nextMeaningQ()">
+                        السؤال التالي ➡️ Next
+                    </button>
+                </div>
+            </div>
+
+            <!-- Speak Answer Quiz Tab -->
+            <div id="quizTab" class="tab-content" style="text-align:center;">
+                <div id="lockedMessage">
+                    <h3 style="color:var(--text-gray);">الامتحان مقفل 🔒</h3>
+                    <p style="color:#888;">شاهد الفيديو للنهاية لفتح الامتحان.</p>
+                </div>
+                <div id="unlockedQuiz" style="display:none; flex-direction: column; height: 100%;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; flex-shrink: 0;">
+                        <h3 style="color:#28a745; margin:0; line-height: 1.2; text-align: right;">
+                            🔓 أجب بصوتك<br>
+                            <span style="font-size:14px; font-weight:normal; color:#666;">Speak The Answer</span>
+                        </h3>
+                    </div>
+                    
+                    <div style="flex: 1; overflow-y: auto; min-height: 0;">
+                        <div style="background:white; padding:20px; border-radius:10px; border:1px solid #eee; text-align:left; direction:ltr;">
+                            <h4 id="vqQuestion" style="font-size:20px; color:var(--dark-purple); margin-top:0; margin-bottom:20px; line-height:1.4;"></h4>
+                            
+                            <div style="text-align:center; padding:20px; background:#f9f9f9; border-radius:10px; border:2px dashed #ccc;">
+                                <p id="vqTranscriptText" style="color:#666; font-size:16px; margin-bottom:15px; min-height:24px;">Your answer will appear here...</p>
+                                <button id="vqMicBtn" class="action-btn danger" style="border-radius:50px; padding:15px 40px; font-size:18px; display:inline-block;" onclick="toggleQuizMic()">
+                                    🎤 اضغط وتحدث Speak
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px; margin-top: auto; flex-shrink: 0;">
+                        <p id="vqResult" style="font-weight:bold; font-size:18px; margin:0; line-height:1.4; text-align:right; flex:1;"></p>
+                        <button id="vqNextBtn" class="action-btn success" style="padding:10px 20px; font-size:15px; display:none; margin:0; white-space: nowrap;" onclick="nextVideoQuiz()">
+                            السؤال التالي ➡️ Next
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- YouTube IFrame Player API -->
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+    var player;
+    var isPlayerReady = false;
+    
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('mainVideo', {
+            videoId: 'UitIIwNUOp8',
+            playerVars: {
+                'playsinline': 1,
+                'rel': 0,
+                'controls': 1
+            },
+            events: {
+                'onReady': function() { isPlayerReady = true; },
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    let timeUpdateInterval;
+    function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING) {
+            timeUpdateInterval = setInterval(handleTimeUpdate, 100);
+        } else {
+            clearInterval(timeUpdateInterval);
+        }
+    }
+
+    const correctSound = new Audio('../../correct.mp3');
+    const wrongSound = new Audio('../../wrong.mp3');
+    function playFeedback(isCorrect) {
+        if(isCorrect) { correctSound.currentTime = 0; correctSound.play().catch(()=>{}); }
+        else { wrongSound.currentTime = 0; wrongSound.play().catch(()=>{}); }
+    }
+
+    let points = 100;
+    function updatePoints(amount) { points += amount; document.getElementById('totalPoints').innerText = points; }
+
+    let isQuizUnlocked = false;
+    let isRoleplayingActive = false; 
+
+    function switchTab(tabId, btnElement) { 
+        if (btnElement.style.cursor === 'not-allowed') return; 
+        
+        if (player && player.pauseVideo) player.pauseVideo(); 
+        window.speechSynthesis.cancel();
+        if(isPlayingFullScene) stopFullScenePlay();
+
+        document.querySelectorAll('.tab-btn-top').forEach(btn => { 
+            if(btn.style.cursor !== 'not-allowed') btn.classList.remove('active'); 
+        }); 
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active-content')); 
+        document.getElementById(tabId).classList.add('active-content'); 
+        btnElement.classList.add('active'); 
+    }
+
+    const mainDictionary = { 
+        "workhouse": "ملجأ للفقراء", "generous": "كريم", "soup": "حساء / شوربة",
+        "hungry": "جائع", "dining room": "غرفة الطعام", "cook": "طباخ",
+        "ungrateful": "ناكر للجميل / جاحد", "wretch": "بائس / شقي", "notice": "إعلان / لافتة",
+        "baby": "طفل رضيع", "ill": "مريض", "wedding ring": "خاتم الزواج",
+        "married": "متزوج", "manager": "مدير", "bowls": "أوعية / سلطانيات",
+        "young woman": "امرأة شابة", "dark room": "غرفة مظلمة", "little wretch": "بائس صغير",
+        "one day": "ذات يوم", "go on": "استمر / هيا", "ask for": "يطلب",
+        "asked for": "طلب", "walked up": "تقدم / مشى باتجاه", "come in": "تفضل بالدخول",
+        "grew up": "كَبُرَ / نشأ"
+    };
+
+    const scriptData = [
+        { start: 2.0, end: 5.0, speaker: "Narrator", text: "Chapter 1" },
+        { start: 5.0, end: 8.0, speaker: "Narrator", text: "Oliver is born." },
+        { start: 8.0, end: 11.0, speaker: "Narrator", text: "In England, 150 years ago," },
+        { start: 11.0, end: 15.0, speaker: "Narrator", text: "poor people lived in the workhouse." },
+        { start: 15.0, end: 25.0, speaker: "Narrator", text: "One evening, a young woman arrived at the door." },
+        { start: 25.0, end: 28.0, speaker: "Young Woman", text: "Please help me." },
+        { start: 28.0, end: 31.0, speaker: "Young Woman", text: "I'm going to have a baby." },
+        { start: 31.0, end: 35.0, speaker: "Nurse", text: "Come in." },
+        { start: 35.0, end: 40.0, speaker: "Narrator", text: "That night, a baby boy was born." },
+        { start: 40.0, end: 45.0, speaker: "Narrator", text: "The young woman was very ill." },
+        { start: 45.0, end: 49.0, speaker: "Young Woman", text: "Let me see the child and die." },
+        { start: 49.0, end: 56.0, speaker: "Narrator", text: "She kissed the baby, then she died." },
+        { start: 56.0, end: 60.0, speaker: "Doctor", text: "Who was she? Who is the child's father?" },
+        { start: 60.0, end: 62.0, speaker: "Nurse", text: "Nobody knows." },
+        { start: 62.0, end: 67.0, speaker: "Doctor", text: "The old story, no wedding ring, she wasn't married." },
+        { start: 67.0, end: 69.0, speaker: "Nurse", text: "What name can we give to the child?" },
+        { start: 69.0, end: 75.0, speaker: "Doctor", text: "Let's call him Oliver. Oliver Twist." },
+        { start: 75.0, end: 79.0, speaker: "Narrator", text: "Oliver grew up in the workhouse with the poor children." },
+        { start: 79.0, end: 87.0, speaker: "Narrator", text: "Life was very hard." },
+        { start: 87.0, end: 92.0, speaker: "Narrator", text: "The manager of the workhouse was Mr Bumble." },
+        { start: 92.0, end: 95.0, speaker: "Bumble", text: "We are very generous here, boys." },
+        { start: 95.0, end: 98.0, speaker: "Bumble", text: "Children have three bowls of soup a day." },
+        { start: 98.0, end: 105.0, speaker: "Bumble", text: "And bread on Sundays." },
+        { start: 105.0, end: 107.0, speaker: "Narrator", text: "The children were always hungry." },
+        { start: 107.0, end: 109.0, speaker: "Narrator", text: "One day..." },
+        { start: 109.0, end: 111.0, speaker: "Boy", text: "I'm so hungry." },
+        { start: 111.0, end: 113.0, speaker: "Boy", text: "I'm going to eat one of you." },
+        { start: 113.0, end: 115.0, speaker: "Boy", text: "Let's ask for more food." },
+        { start: 115.0, end: 120.0, speaker: "Boy", text: "Oliver, you ask." },
+        { start: 120.0, end: 123.0, speaker: "Narrator", text: "That evening, in the dining room..." },
+        { start: 123.0, end: 128.0, speaker: "Boy", text: "Oliver, go on, ask for more." },
+        { start: 128.0, end: 130.0, speaker: "Narrator", text: "Oliver walked up to the cook." },
+        { start: 130.0, end: 140.0, speaker: "Oliver", text: "Please, sir, I want some more." },
+        { start: 140.0, end: 142.0, speaker: "Cook", text: "What?" },
+        { start: 142.0, end: 148.0, speaker: "Oliver", text: "Please, sir, I want some more." },
+        { start: 148.0, end: 151.0, speaker: "Narrator", text: "The cook hit Oliver on the head." },
+        { start: 151.0, end: 154.0, speaker: "Oliver", text: "Ow!" },
+        { start: 154.0, end: 159.0, speaker: "Cook", text: "Mr Bumble, Oliver Twist asked for more." },
+        { start: 159.0, end: 164.0, speaker: "Bumble", text: "More? I don't believe it." },
+        { start: 164.0, end: 171.0, speaker: "Narrator", text: "Mr Bumble pushed Oliver into a small, dark room." },
+        { start: 171.0, end: 176.0, speaker: "Bumble", text: "Get in there, you ungrateful little wretch." },
+        { start: 176.0, end: 189.0, speaker: "Bumble", text: "We don't want you here." },
+        { start: 189.0, end: 193.0, speaker: "Narrator", text: "He put a notice outside the workhouse." },
+        { start: 193.0, end: 200.0, speaker: "Bumble", text: "Hmm. Let's see if anybody wants to take him." }
+    ];
+
+    const scriptBox = document.getElementById('scriptBoxContainer');
+    let collectedWords = [];
+
+    function formatClickableText(text) {
+        let html = text;
+        const compounds = ["wedding ring", "dining room", "little wretch", "young woman", "dark room", "one day", "go on", "ask for", "asked for", "walked up", "come in", "grew up"];
+        compounds.forEach(phrase => { const regex = new RegExp(`\\b${phrase}\\b`, 'gi'); html = html.replace(regex, match => match.replace(/ /g, '___SPACE___')); });
+        return html.split(' ').map(w => { 
+            let cleanW = w.replace(/___SPACE___/g, ' '); 
+            return `<span class="word">${cleanW}</span>`; 
+        }).join(' ');
+    }
+
+    scriptData.forEach((line) => {
+        const div = document.createElement('div');
+        div.className = 'script-line';
+        div.setAttribute('data-start', line.start);
+        div.setAttribute('data-end', line.end);
+        div.innerHTML = `<span class="speaker-name">${line.speaker}:</span> ${formatClickableText(line.text)}`;
+        
+        div.addEventListener('click', function(e) {
+            if (e.target.classList.contains('word')) return; 
+            if(player && player.seekTo) {
+                player.seekTo(line.start, true);
+                player.playVideo();
+            }
+        });
+        scriptBox.appendChild(div);
+    });
+
+    document.querySelectorAll('.word').forEach(wordEl => { 
+        wordEl.addEventListener('click', function(e) { 
+            e.stopPropagation(); 
+            const cleanWord = this.innerText.replace(/[.,?!]/g, '').toLowerCase(); 
+            if(!collectedWords.includes(cleanWord)) { collectedWords.push(cleanWord); renderWordBank(); }
+            this.style.background = "var(--light-purple)"; setTimeout(() => { this.style.background = ""; }, 300);
+        }); 
+    });
+
+    let activeLineIndex = -1;
+    function handleTimeUpdate() {
+        if (!player || !player.getCurrentTime) return;
+        
+        const currentTime = player.getCurrentTime();
+        if (!isRoleplayingActive) {
+            let foundIndex = -1;
+            const lines = document.querySelectorAll('.script-line');
+            lines.forEach((line, index) => {
+                const start = parseFloat(line.getAttribute('data-start'));
+                const end = parseFloat(line.getAttribute('data-end'));
+                if (currentTime >= start && currentTime <= end) {
+                    foundIndex = index;
+                }
+            });
+
+            if (foundIndex !== -1 && foundIndex !== activeLineIndex) {
+                lines.forEach(l => l.classList.remove('active-line'));
+                const activeLine = lines[foundIndex];
+                activeLine.classList.add('active-line');
+                activeLine.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                activeLineIndex = foundIndex;
+            }
+        }
+        
+        let dur = player.getDuration();
+        if (dur && currentTime >= dur - 2 && !isQuizUnlocked) unlockQuiz();
+    }
+    
+    function changeVideoSpeed(rate, btn) { 
+        if(player && player.setPlaybackRate) player.setPlaybackRate(rate); 
+        document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active-speed')); 
+        btn.classList.add('active-speed'); 
+    }
+    
+    function unlockQuiz() { 
+        isQuizUnlocked = true; 
+        const btn = document.getElementById('quizTabBtn'); 
+        btn.style.color = "white"; btn.style.cursor = "pointer"; btn.style.background = "#28a745"; 
+        btn.innerHTML = "🔓 أجب بصوتك <br><span style='font-size:12px; font-weight:normal;'>Speak Answer</span>"; 
+        document.getElementById('lockedMessage').style.display = 'none'; 
+        document.getElementById('unlockedQuiz').style.display = 'flex'; 
+        loadVideoQuiz(); 
+    }
+
+    function renderWordBank() { 
+        const list = document.getElementById('wordBankList'); list.innerHTML = ''; 
+        if(collectedWords.length === 0) { list.innerHTML = '<p style="color:#888; margin-top:50px;">اضغط على أي كلمة في السكريبت لإضافتها.</p>'; document.getElementById('wordCounter').innerText = 0; return; } 
+        document.getElementById('wordCounter').innerText = collectedWords.length; 
+        collectedWords.forEach(cleanWord => { 
+            const translation = mainDictionary[cleanWord] || "تمت إضافتها 📌"; 
+            const safeWord = cleanWord.replace(/'/g, "\\'");
+            const imgSrc = '../../images/' + cleanWord.replace(/ /g, '_') + '.jpg';
+            
+            const itemDiv = document.createElement('div'); itemDiv.className = 'dict-item'; 
+            itemDiv.innerHTML = `<div style="display:flex; gap:5px; direction:ltr; align-items:center;">
+                                    <img src="${imgSrc}" style="width:45px; height:45px; border-radius:5px; object-fit:cover; margin-right:10px;" onerror="this.style.display='none'">
+                                    <button class="action-btn" onclick="speakTTS('${safeWord}', 'en-US')">🇺🇸</button>
+                                    <button class="action-btn info" onclick="speakTTS('${safeWord}', 'en-GB')">🇬🇧</button>
+                                    <button class="action-btn danger" onclick="removeWord('${safeWord}')">✖</button>
+                                 </div>
+                                 <div style="text-align:right;">
+                                    <span class="word-en">${cleanWord}</span><br>
+                                    <span style="font-size:15px; color:#555;">${translation}</span>
+                                 </div>`; 
+            list.appendChild(itemDiv); 
+        }); 
+    }
+    
+    function removeWord(word) { collectedWords = collectedWords.filter(w => w !== word); renderWordBank(); }
+    
+    function speakTTS(text, accent) { 
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text); 
+        u.lang = accent;
+        const voices = window.speechSynthesis.getVoices();
+        let selectedVoice;
+        
+        if (accent === 'en-US') {
+            selectedVoice = voices.find(v => v.lang === 'en-US' && (v.name.includes('Natural') || v.name.includes('Premium') || v.name.includes('Online'))) || 
+                            voices.find(v => v.lang === 'en-US' && (v.name.includes('Female') || v.name.includes('Google US English'))) || 
+                            voices.find(v => v.lang === 'en-US');
+        } else if (accent === 'en-GB') {
+            selectedVoice = voices.find(v => v.lang === 'en-GB' && (v.name.includes('Natural') || v.name.includes('Premium') || v.name.includes('Online'))) || 
+                            voices.find(v => v.lang === 'en-GB' && (v.name.includes('Female') || v.name.includes('Google UK English Female'))) || 
+                            voices.find(v => v.lang === 'en-GB');
+        }
+        
+        if (selectedVoice) u.voice = selectedVoice;
+        u.pitch = 1.0; 
+        u.rate = 0.9; 
+        window.speechSynthesis.speak(u); 
+    }
+    window.speechSynthesis.onvoiceschanged = () => {};
+
+    let currentVocabAns = ""; let vqCount = 0; let actVocabWords = [];
+    function startAudioVocabQuiz() { 
+        if(collectedWords.length < 3) return alert("أضف 3 كلمات على الأقل للقاموس."); 
+        vqCount = 0; 
+        actVocabWords = [...collectedWords].sort(()=>0.5-Math.random()); 
+        document.getElementById('dictDefaultView').style.display = 'none'; 
+        document.getElementById('dictQuizView').style.display = 'flex'; 
+        nextAudioVocabQ(); 
+    }
+    function nextAudioVocabQ() { 
+        if (vqCount >= actVocabWords.length) { 
+            document.getElementById('dictQuizResult').innerHTML = "🎉 Meaning Challenge Completed Successfully!"; 
+            document.getElementById('dictQuizResult').style.color = "green"; 
+            document.getElementById('dictQuizOptions').innerHTML = ""; 
+            return; 
+        }
+        currentVocabAns = actVocabWords[vqCount]; 
+        vqCount++; 
+        document.getElementById('quizCounterDisplay').innerHTML = `Question ${vqCount} of ${actVocabWords.length}`; 
+        document.getElementById('dictQuizResult').innerText = "";
+        
+        let keys = Object.keys(mainDictionary).filter(k => k !== currentVocabAns).sort(()=>0.5-Math.random()); let opts = [currentVocabAns, keys[0], keys[1]].sort(()=>0.5-Math.random());
+        let html = ""; opts.forEach(opt => { 
+            const safeOpt = opt.replace(/'/g, "\\'");
+            html += `<button class="quiz-opt" onclick="checkVocabQ('${safeOpt}', this)">${opt}</button>`; 
+        }); document.getElementById('dictQuizOptions').innerHTML = html; 
+        setTimeout(()=>speakTTS(currentVocabAns,'en-GB'), 500);
+    }
+    function playCurrentQuizAudio() { speakTTS(currentVocabAns, 'en-GB'); }
+    function checkVocabQ(sel, btn) { 
+        const btns = document.getElementById('dictQuizOptions').querySelectorAll('button'); btns.forEach(b => b.disabled = true);
+        if(sel === currentVocabAns) { 
+            playFeedback(true); btn.style.background = "#d4edda"; btn.style.borderColor = "green"; document.getElementById('dictQuizResult').innerHTML = "✔️ إجابة صحيحة!"; document.getElementById('dictQuizResult').style.color = "green"; updatePoints(10); setTimeout(nextAudioVocabQ, 1500); 
+        } 
+        else { 
+            playFeedback(false); btn.style.background = "#f8d7da"; btn.style.borderColor = "red"; document.getElementById('dictQuizResult').innerHTML = `❌ خطأ!`; document.getElementById('dictQuizResult').style.color = "red"; updatePoints(-5); btns.forEach(b => { if(b.innerText === currentVocabAns) { b.style.background = "#d4edda"; b.style.borderColor = "green"; }}); setTimeout(nextAudioVocabQ, 2500); 
+        }
+    }
+    function exitAudioVocabQuiz() { document.getElementById('dictDefaultView').style.display = 'flex'; document.getElementById('dictQuizView').style.display = 'none'; }
+
+    const meaningQuizData = [
+        { def: "A place where poor people lived and worked.", opts: ["workhouse", "baby", "ill"], correct: 0 },
+        { def: "Wanting or needing food.", opts: ["married", "hungry", "generous"], correct: 1 },
+        { def: "A round, deep dish used for food or liquid.", opts: ["bowl", "wretch", "notice"], correct: 0 },
+        { def: "Giving or ready to give more of something.", opts: ["manager", "cook", "generous"], correct: 2 }
+    ];
+    let mqIndex = 0;
+    function loadMeaningQuiz() {
+        if (mqIndex >= meaningQuizData.length) { 
+            document.getElementById('meaningTab').innerHTML = "<h3 style='color:green; text-align:center; margin-top:50px;'>🎉 Meaning Challenge Completed Successfully!</h3>"; 
+            return; 
+        }
+        const q = meaningQuizData[mqIndex]; 
+        document.getElementById('mqCounterDisplay').innerHTML = `Question ${mqIndex + 1} of ${meaningQuizData.length}`; 
+        document.getElementById('mqDefinition').innerText = `"${q.def}"`; 
+        document.getElementById('mqResult').innerText = ''; 
+        document.getElementById('mqNextBtn').style.display = 'none';
+        
+        let html = ""; q.opts.forEach((opt, idx) => { html += `<button class="quiz-opt" style="font-weight:normal;" onclick="checkMeaningQ(this, ${idx === q.correct})">${opt}</button>`; }); document.getElementById('mqOptions').innerHTML = html;
+    }
+    function checkMeaningQ(btn, isCorrect) {
+        const btns = document.getElementById('mqOptions').querySelectorAll('button'); btns.forEach(b => b.disabled = true);
+        if(isCorrect) { 
+            btn.style.background = "#d4edda"; btn.style.borderColor = "green"; playFeedback(true); updatePoints(15); document.getElementById('mqResult').innerHTML = "✔️ إجابة صحيحة"; document.getElementById('mqResult').style.color = "green"; document.getElementById('mqNextBtn').style.display = 'block'; 
+        } else { 
+            btn.style.background = "#f8d7da"; btn.style.borderColor = "red"; playFeedback(false); updatePoints(-5); document.getElementById('mqResult').innerHTML = "❌ إجابة خاطئة"; document.getElementById('mqResult').style.color = "red"; const correctIndex = meaningQuizData[mqIndex].correct; btns[correctIndex].style.background = "#d4edda"; btns[correctIndex].style.borderColor = "green"; setTimeout(() => { document.getElementById('mqNextBtn').style.display = 'block'; }, 1500); 
+        }
+    }
+    function nextMeaningQ() { mqIndex++; loadMeaningQuiz(); }
+    loadMeaningQuiz();
+
+    const roleplayScene = scriptData.map(line => {
+        let imgName = "../../images/oliver.jpg";
+        if (line.speaker === "Narrator") imgName = "../../images/narrator.jpg";
+        else if (line.speaker === "Bumble") imgName = "../../images/bumble.jpg";
+        else if (line.speaker === "Cook") imgName = "../../images/cook.jpg";
+        else if (line.speaker === "Boy") imgName = "../../images/boy.jpg";
+        else if (line.speaker === "Young Woman") imgName = "../../images/woman.jpg";
+        else if (line.speaker === "Doctor") imgName = "../../images/doctor.jpg";
+        else if (line.speaker === "Nurse") imgName = "../../images/nurse.jpg";
+
+        return {
+            char: line.speaker,
+            text: line.text,
+            clean: line.text.toLowerCase().replace(/[.,?!]/g, '').trim(),
+            start: line.start,
+            end: line.end,
+            img: imgName
+        };
+    });
+    
+    let userRole = "";
+    let rpIndex = 0;
+    let userAudioBlobs = {};
+    let recognition = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRpRecording = false;
+    let fullTranscript = ""; 
+
+    function selectRole(role) {
+        userRole = role;
+        userAudioBlobs = {};
+        rpIndex = 0; 
+        document.getElementById('chosenRoleDisplay').innerText = role;
+        document.getElementById('rpStep1').style.display = 'none';
+        document.getElementById('rpStep2').style.display = 'flex';
+        document.getElementById('chatInterface').innerHTML = "";
+        
+        document.getElementById('rpPlayFullBtn').style.display = 'none';
+        document.getElementById('rpMicBtn').style.display = 'none';
+        
+        isRoleplayingActive = true;
+        nextRoleplayStep();
+    }
+
+    function resetRoleplay() {
+        if(isRpRecording) stopRecording();
+        stopFullScenePlay();
+        userRole = "";
+        document.getElementById('rpStep1').style.display = 'block';
+        document.getElementById('rpStep2').style.display = 'none';
+        isRoleplayingActive = false;
+        if(player && player.pauseVideo) player.pauseVideo();
+    }
+
+    function createFallbackImageString(charName) {
+        let color = charName === "Oliver" ? "%28a745" : charName === "Bumble" ? "%17a2b8" : "%e83e8c";
+        if(charName === "Narrator") color = "%6f42c1";
+        if(charName === "Boy") color = "%fd7e14";
+        if(charName === "Nurse") color = "%20c997";
+        if(charName === "Young Woman") color = "%ffc107";
+        if(charName === "Doctor") color = "%17a2b8";
+        return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='45' height='45'><circle cx='22.5' cy='22.5' r='22.5' fill='${color}'/><text x='50%' y='50%' fill='white' font-size='16' font-family='Arial' dy='.3em' text-anchor='middle'>${charName.charAt(0)}</text></svg>`;
+    }
+
+    function nextRoleplayStep() {
+        if (rpIndex >= roleplayScene.length) {
+            document.getElementById('rpInstruction').innerHTML = "🎉 أحسنت! اكتمل المشهد.";
+            document.getElementById('rpInstruction').style.color = "green";
+            document.getElementById('rpMicBtn').style.display = 'none';
+            document.getElementById('rpPlayFullBtn').style.display = 'inline-block';
+            return;
+        }
+
+        const line = roleplayScene[rpIndex];
+        const chatContainer = document.getElementById('chatInterface');
+        const isMyTurn = (line.char === userRole);
+        
+        const row = document.createElement('div');
+        row.className = `chat-row ${isMyTurn ? 'my-turn' : 'other-turn'}`;
+        
+        const fallbackImg = createFallbackImageString(line.char);
+        row.innerHTML = `<img src="${line.img}" class="chat-avatar" alt="${line.char}" onerror="this.onerror=null; this.src='${fallbackImg}';">
+                         <div class="chat-bubble" id="bubble_${rpIndex}">${isMyTurn ? "..." : line.text}</div>`;
+        
+        chatContainer.appendChild(row);
+        
+        setTimeout(() => {
+            chatContainer.scrollTo({top: chatContainer.scrollHeight, behavior: 'smooth'});
+        }, 100);
+
+        if (isMyTurn) {
+            document.getElementById('rpInstruction').innerHTML = `دورك! الجملة هي:<br><strong style="color:var(--dark-purple); display:inline-block; direction:ltr; margin-top:5px;">${line.text}</strong>`;
+            document.getElementById('rpInstruction').style.color = "#333";
+            
+            const micBtn = document.getElementById('rpMicBtn');
+            micBtn.style.display = 'inline-block';
+            micBtn.innerHTML = "🎤 ابدأ التسجيل Start Recording";
+            micBtn.disabled = false;
+            micBtn.style.opacity = '1';
+            micBtn.classList.replace('warning', 'danger');
+            micBtn.classList.replace('success', 'danger');
+            
+            setTimeout(() => {
+                micBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 200);
+
+        } else {
+            document.getElementById('rpInstruction').innerHTML = `استمع لرد ${line.char}...`;
+            document.getElementById('rpInstruction').style.color = "#666";
+            document.getElementById('rpMicBtn').style.display = 'none';
+            
+            if(player && player.unMute) {
+                player.unMute();
+                player.seekTo(line.start, true);
+                player.playVideo();
+                
+                let checkEnd = setInterval(() => {
+                    if(player.getCurrentTime() >= line.end) {
+                        player.pauseVideo();
+                        clearInterval(checkEnd);
+                        rpIndex++; 
+                        setTimeout(nextRoleplayStep, 500); 
+                    }
+                }, 50);
+            }
+        }
+    }
+
+    async function toggleRoleplayMic() {
+        const btn = document.getElementById('rpMicBtn');
+        const instr = document.getElementById('rpInstruction');
+        
+        if (isRpRecording) { 
+            isRpRecording = false;
+            btn.innerHTML = "⏳ يتم الحفظ والاستمرار...";
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+
+            if(recognition) recognition.stop();
+            if(mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
+            
+            setTimeout(() => {
+                evaluateRecording(true); 
+            }, 800);
+            return; 
+        }
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+            
+            let currentRecordIndex = rpIndex; 
+            mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                userAudioBlobs[currentRecordIndex] = URL.createObjectURL(audioBlob);
+                stream.getTracks().forEach(t => t.stop());
+            };
+
+            window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (window.SpeechRecognition) {
+                recognition = new SpeechRecognition();
+                recognition.lang = 'en-US';
+                recognition.continuous = true; 
+                recognition.interimResults = true;
+                
+                fullTranscript = "";
+                
+                recognition.onstart = () => {
+                    isRpRecording = true;
+                    btn.innerHTML = "⏹️ إنهاء واستمرار Stop & Continue";
+                    btn.classList.replace('danger', 'warning');
+                    
+                    const line = roleplayScene[rpIndex];
+                    instr.innerHTML = `جاري التسجيل... 🔴<br><strong style="color:var(--dark-purple); display:inline-block; direction:ltr; margin-top:5px;">${line.text}</strong>`;
+                    
+                    mediaRecorder.start();
+                };
+                
+                recognition.onresult = (e) => {
+                    fullTranscript = "";
+                    for(let i=0; i<e.results.length; i++) {
+                        fullTranscript += e.results[i][0].transcript + " ";
+                    }
+                };
+                
+                recognition.onend = () => { 
+                    if (isRpRecording) {
+                        isRpRecording = false;
+                        if(mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
+                        btn.innerHTML = "⏳ يتم الحفظ...";
+                        btn.disabled = true;
+                        btn.style.opacity = '0.7';
+                        setTimeout(() => {
+                            evaluateRecording(true);
+                        }, 800);
+                    }
+                };
+                recognition.start();
+            } else { alert("عفواً، متصفحك لا يدعم التعرف على الصوت."); }
+        } catch(e) { alert("يجب السماح باستخدام المايكروفون."); }
+    }
+
+    function stopRecording() {
+        isRpRecording = false;
+        if(recognition) recognition.stop();
+        if(mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
+    }
+
+    function evaluateRecording(forcePass = false) {
+        const line = roleplayScene[rpIndex];
+        playFeedback(true);
+        document.getElementById(`bubble_${rpIndex}`).innerText = line.text;
+        document.getElementById(`bubble_${rpIndex}`).innerHTML += "<br><span style='font-size:11px; color:#ddd;'>🎙️ مسجل</span>";
+        document.getElementById('rpMicBtn').style.display = 'none';
+        
+        rpIndex++;
+        setTimeout(nextRoleplayStep, 500);
+    }
+
+    let isPlayingFullScene = false;
+    let sceneTimeout;
+    let currentUserAudio = null;
+
+    function togglePlayFullScene() {
+        const btn = document.getElementById('rpPlayFullBtn');
+        if (isPlayingFullScene) {
+            stopFullScenePlay();
+            btn.innerHTML = "🎬 اسمع المحادثة كاملة بصوتك!";
+            btn.classList.replace('danger', 'success');
+        } else {
+            btn.innerHTML = "⏹️ إيقاف العرض Stop Playback";
+            btn.classList.replace('success', 'danger');
+            
+            document.querySelector('.media-column').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            playFullSceneStep(0);
+        }
+    }
+
+    function playFullSceneStep(index) {
+        if (index >= roleplayScene.length) {
+            stopFullScenePlay();
+            document.getElementById('rpPlayFullBtn').innerHTML = "🎬 إعادة المشهد بصوتك";
+            document.getElementById('rpPlayFullBtn').classList.replace('danger', 'success');
+            return;
+        }
+        isPlayingFullScene = true;
+        const line = roleplayScene[index];
+        const bubbles = document.querySelectorAll('.chat-bubble');
+        bubbles.forEach((b, i) => { 
+            b.style.transform = i === index ? "scale(1.05)" : "scale(1)"; 
+            b.style.boxShadow = i === index ? "0 0 10px rgba(111,66,193,0.5)" : "none"; 
+        });
+        
+        if (bubbles[index]) {
+            bubbles[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        if (line.char === userRole && userAudioBlobs[index]) {
+            if(player && player.mute) player.mute(); 
+            player.seekTo(line.start, true);
+            player.playVideo();
+            
+            currentUserAudio = new Audio(userAudioBlobs[index]);
+            currentUserAudio.onended = () => {
+                player.pauseVideo();
+                player.unMute();
+                playFullSceneStep(index + 1);
+            };
+            currentUserAudio.play();
+        } else {
+            if(player && player.unMute) {
+                player.unMute();
+                player.seekTo(line.start, true);
+                player.playVideo();
+                
+                let checkTime = setInterval(() => {
+                    if(!isPlayingFullScene) { clearInterval(checkTime); return; }
+                    if(player.getCurrentTime() >= line.end) {
+                        player.pauseVideo();
+                        clearInterval(checkTime);
+                        playFullSceneStep(index + 1);
+                    }
+                }, 50);
+            }
+        }
+    }
+
+    function stopFullScenePlay() {
+        isPlayingFullScene = false;
+        clearTimeout(sceneTimeout);
+        if(currentUserAudio) { currentUserAudio.pause(); currentUserAudio = null; }
+        if(player && player.pauseVideo) {
+            player.pauseVideo();
+            player.unMute();
+        }
+        document.querySelectorAll('.chat-bubble').forEach(b => { b.style.transform = "scale(1)"; b.style.boxShadow = "none"; });
+    }
+
+    const dictData = [
+        { ans: "poor people lived in the workhouse", hint: "Where did poor people live?", time: 11.0, playTime: 4000 },
+        { ans: "i'm going to have a baby", hint: "What did the young woman say at the door?", time: 28.0, playTime: 3000 },
+        { ans: "the children were always hungry", hint: "How did the children feel?", time: 105.0, playTime: 2000 },
+        { ans: "please sir i want some more", hint: "What did Oliver ask the cook?", time: 130.0, playTime: 10000 },
+        { ans: "mr bumble pushed oliver into a small dark room", hint: "Where did Mr Bumble push Oliver?", time: 164.0, playTime: 7000 }
+    ];
+    let dictIndex = 0;
+    function loadDictation() { 
+        document.getElementById('dictCounterDisplay').innerHTML = `الجملة ${dictIndex + 1} من ${dictData.length}`;
+        document.getElementById('dictHint').innerHTML = "💡 تلميح: " + dictData[dictIndex].hint; 
+        document.getElementById('dictationInput').value = ''; 
+        document.getElementById('dictationResult').innerHTML = ''; 
+        document.getElementById('nextDictationBtn').style.display = 'none'; 
+        document.getElementById('dictationInput').disabled = false;
+    }
+    function playDictationAudio() { 
+        if(player && player.seekTo) {
+            player.seekTo(dictData[dictIndex].time, true); 
+            player.playVideo(); 
+            setTimeout(() => player.pauseVideo(), dictData[dictIndex].playTime); 
+        }
+    }
+    function playDictationTTS(langCode) { speakTTS(dictData[dictIndex].ans, langCode); }
+    function checkDictation() { 
+        let val = document.getElementById('dictationInput').value.toLowerCase().trim().replace(/[^\w\s']/g, '').replace(/\s+/g, ' '); 
+        if (val === dictData[dictIndex].ans.replace(/[^\w\s']/g, '')) { 
+            document.getElementById('dictationResult').innerHTML = "✔️ إجابة صحيحة!"; document.getElementById('dictationResult').style.color = "green"; playFeedback(true); updatePoints(20); document.getElementById('nextDictationBtn').style.display = 'inline-block'; 
+        } else { 
+            document.getElementById('dictationResult').innerHTML = "❌ حاول مرة أخرى!"; document.getElementById('dictationResult').style.color = "red"; playFeedback(false); updatePoints(-5); 
+        } 
+    }
+    function nextDictation() { 
+        dictIndex++; 
+        if(dictIndex < dictData.length) {
+            loadDictation(); 
+        } else { 
+            document.getElementById('dictCounterDisplay').innerHTML = "🎉 اكتملت جميع الجمل!";
+            document.getElementById('dictHint').innerHTML = "🎉 أتممت الإملاء بنجاح!"; 
+            document.getElementById('dictationInput').disabled = true; 
+            document.getElementById('nextDictationBtn').style.display = 'none'; 
+        } 
+    }
+    loadDictation();
+
+    const voiceQuizData = [
+        { q: "1. Where did the poor people live?", keywords: ["workhouse", "house"], correctMsg: "Excellent! They lived in the workhouse." },
+        { q: "2. What did Oliver Twist ask for?", keywords: ["more", "food", "soup", "bread"], correctMsg: "Correct! He asked for more food." },
+        { q: "3. Where did Mr. Bumble push Oliver?", keywords: ["room", "dark"], correctMsg: "Good job! Into a small dark room." }
+    ];
+    let vqIndex = 0;
+    let vqRecognition = null;
+    let isVqRecording = false;
+    let isVqChecking = false;
+    let fullSpokenText = "";
+
+    function loadVideoQuiz() { 
+        if (vqIndex >= voiceQuizData.length) { document.getElementById('unlockedQuiz').innerHTML = "<h3 style='color:green; text-align:center; margin-top:50px;'>🎉 اكتمل الامتحان بنجاح!</h3>"; return; }
+        const q = voiceQuizData[vqIndex]; 
+        document.getElementById('vqQuestion').innerText = q.q; 
+        document.getElementById('vqResult').innerText = ''; 
+        document.getElementById('vqTranscriptText').innerText = 'Your answer will appear here...'; 
+        document.getElementById('vqNextBtn').style.display = 'none';
+        
+        const btn = document.getElementById('vqMicBtn');
+        btn.innerHTML = "🎤 اضغط وتحدث Speak";
+        btn.classList.replace('warning', 'danger');
+        btn.style.display = 'inline-block';
+        
+        isVqChecking = false;
+    }
+
+    async function toggleQuizMic() {
+        const btn = document.getElementById('vqMicBtn');
+        const transcriptText = document.getElementById('vqTranscriptText');
+        
+        if (isVqRecording || isVqChecking) {
+            if(vqRecognition) vqRecognition.stop();
+            return;
+        }
+
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (window.SpeechRecognition) {
+            vqRecognition = new SpeechRecognition();
+            vqRecognition.lang = 'en-US';
+            vqRecognition.interimResults = true;
+            
+            vqRecognition.onstart = () => {
+                isVqRecording = true;
+                isVqChecking = false;
+                fullSpokenText = ""; 
+                btn.innerHTML = "⏹️ إيقاف Stop";
+                btn.classList.replace('danger', 'warning');
+                transcriptText.innerText = "Listening...";
+                transcriptText.style.color = "#8b5cf6";
+            };
+            
+            vqRecognition.onresult = (e) => {
+                let interimText = '';
+                let currentFinal = '';
+                
+                for (let i = e.resultIndex; i < e.results.length; ++i) {
+                    if (e.results[i].isFinal) {
+                        currentFinal += e.results[i][0].transcript.toLowerCase() + ' ';
+                    } else {
+                        interimText += e.results[i][0].transcript.toLowerCase();
+                    }
+                }
+                
+                fullSpokenText += currentFinal;
+                let displayTxt = fullSpokenText + interimText;
+                
+                if (displayTxt.trim() !== '') {
+                    transcriptText.innerText = `You are saying: "${displayTxt}"`;
+                }
+            };
+            
+            vqRecognition.onerror = (e) => {
+                isVqRecording = false;
+                if(isVqChecking) return;
+                btn.innerHTML = "🎤 أعد المحاولة Try Again";
+                btn.classList.replace('warning', 'danger');
+                transcriptText.innerText = "Didn't catch that. Try again.";
+            };
+            
+            vqRecognition.onend = () => { 
+                isVqRecording = false; 
+                let finalEvalText = fullSpokenText.trim();
+                
+                if (!isVqChecking && finalEvalText !== '') {
+                    isVqChecking = true;
+                    transcriptText.innerText = `You said: "${finalEvalText}"`;
+                    transcriptText.style.color = "#333";
+                    checkVoiceQuizAnswer(finalEvalText);
+                } else if (!isVqChecking && finalEvalText === '') {
+                    btn.innerHTML = "🎤 أعد المحاولة Try Again";
+                    btn.classList.replace('warning', 'danger');
+                    transcriptText.innerText = "Didn't catch anything. Try again.";
+                }
+            };
+            
+            vqRecognition.start();
+        } else { alert("متصفحك لا يدعم هذه الخاصية."); }
+    }
+
+    function checkVoiceQuizAnswer(spokenText) {
+        const q = voiceQuizData[vqIndex];
+        const btn = document.getElementById('vqMicBtn');
+        btn.style.display = 'none'; 
+        
+        let isCorrect = q.keywords.some(word => spokenText.includes(word));
+        
+        if(isCorrect) { 
+            playFeedback(true); 
+            updatePoints(30); 
+            document.getElementById('vqResult').innerHTML = "✔️ " + q.correctMsg; 
+            document.getElementById('vqResult').style.color = "green"; 
+            document.getElementById('vqNextBtn').style.display = 'block'; 
+        } else { 
+            playFeedback(false); 
+            updatePoints(-5); 
+            document.getElementById('vqResult').innerHTML = "❌ الإجابة غير دقيقة، حاول ذكر كلمات من المشهد."; 
+            document.getElementById('vqResult').style.color = "red"; 
+            
+            setTimeout(() => {
+                document.getElementById('vqResult').innerHTML = "";
+                btn.style.display = 'inline-block';
+                btn.innerHTML = "🎤 حاول مرة تانية Try Again";
+                btn.classList.replace('warning', 'danger');
+                isVqChecking = false; 
+            }, 2500); 
+        }
+    }
+
+    function nextVideoQuiz() { vqIndex++; loadVideoQuiz(); }
+
+</script>
 </body>
 </html>
