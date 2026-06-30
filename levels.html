@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Levels | Read & Speak Stories</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; margin: 0; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header-title { color: #6f42c1; margin-bottom: 40px; font-size: 28px; text-align: center; }
+        .levels-container { display: flex; gap: 25px; justify-content: center; flex-wrap: wrap; max-width: 1000px; width: 100%; }
+        
+        .level-card { background: white; padding: 30px; border-radius: 20px; text-align: center; width: 260px; box-shadow: 0 6px 15px rgba(0,0,0,0.08); transition: 0.3s; border: 2px solid transparent; display: flex; flex-direction: column; }
+        .level-card:hover { transform: translateY(-10px); border-color: #6f42c1; }
+        .level-card h2 { color: #553098; margin-top: 10px; font-size: 24px; }
+        .level-card p { color: #666; margin-bottom: 25px; flex-grow: 1; }
+        
+        .start-btn { background: #6f42c1; color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 16px; transition: 0.2s; }
+        .start-btn:hover { background: #553098; }
+        
+        .locked { opacity: 0.6; filter: grayscale(0.5); }
+        .status-badge { font-size: 12px; background: #eee; padding: 5px 12px; border-radius: 12px; color: #777; align-self: center; margin-bottom: 10px; font-weight: bold; }
+        .back-btn { margin-top: 50px; color: #666; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1 class="header-title">📚 Choose Your Level to Start</h1>
+
+    <div class="levels-container">
+        
+        <!-- Beginner Level -->
+        <div class="level-card">
+            <h2>Beginner</h2>
+            <p>For beginners learning English</p>
+            <a href="levels/beginner/index.html" class="start-btn">Enter Library</a>
+        </div>
+
+        <!-- Intermediate Level -->
+        <div class="level-card" style="border-color: #6f42c1; box-shadow: 0 8px 20px rgba(111, 66, 193, 0.2);">
+            <span class="status-badge" style="background: #e0d4f5; color: #553098;">Current</span>
+            <h2>Intermediate</h2>
+            <p>Intermediate Stories Library (Oliver Twist & more)</p>
+            <a href="levels/intermediate/index.html" class="start-btn">Enter Library</a>
+        </div>
+
+        <!-- Advanced Level -->
+        <div class="level-card locked">
+            <span class="status-badge">Coming Soon</span>
+            <h2>Advanced</h2>
+            <p>Advanced Global Stories & Novels</p>
+            <button class="start-btn" style="background: #ccc; cursor: not-allowed;">Locked</button>
+        </div>
+
+    </div>
+
+    <a href="index.html" class="back-btn">🔙 Back to Start Screen</a>
+
+</body>
+</html>
