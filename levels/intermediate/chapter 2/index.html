@@ -6,10 +6,8 @@
     <title>Oliver Twist - Chapter 2 | Read & Speak Stories</title>
     <style>
         :root{--primary-purple:#6f42c1;--light-purple:#f3e8ff;--dark-purple:#553098;--bg-color:#f8f9fa;--text-dark:#333;--text-gray:#6c757d; --border-light:#e0e0e0; --highlight-yellow:#fff3cd; --border-yellow:#ffc107;}
-        /* إغلاق التمرير في الصفحة بالكامل */
         body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:var(--bg-color);margin:0;padding:10px 20px;color:var(--text-dark); height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; overflow: hidden;}
         
-        /* Header Exact Match */
         .top-headers{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:20px; flex-shrink: 0; max-width:1400px; width: 100%; margin-left: auto; margin-right: auto;}
         .header-left{background:#fef3c7;border:1px solid #fde68a;padding:12px 25px;border-radius:40px;text-align:center;box-shadow:0 4px 6px rgba(0,0,0,0.05);}
         .header-left h3{margin:0;color:#92400e;font-size:18px;display:flex;align-items:center;gap:8px;justify-content:center;}
@@ -18,7 +16,6 @@
         .header-right h2{margin:0;color:var(--primary-purple);font-size:24px;display:flex;align-items:center;gap:10px;}
         .header-right p{margin:5px 0 0;color:#666;font-size:13px;}
 
-        /* Top Action Bar */
         .top-controls-wrapper { background:white; border-radius:12px; padding:10px; margin-bottom:10px; box-shadow:0 4px 6px rgba(0,0,0,0.02); border:1px solid var(--border-light); max-width:1400px; width:100%; margin-left:auto; margin-right:auto; flex-shrink:0;}
         .tabs-row-top { display:flex; gap:8px; justify-content:center; flex-wrap:wrap;}
         .tab-btn-top { background:white; border:1px solid var(--border-light); padding:8px 20px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:15px; color:#555; display:flex; flex-direction:column; align-items:center; gap:4px; transition:0.2s; flex:1; min-width:120px;}
@@ -28,18 +25,14 @@
         .tab-btn-top.active span:last-child { color:#ddd; }
         .tab-btn-top.locked { color:#aaa; cursor:not-allowed; background:#f9f9f9; }
 
-        /* Progress Bar */
         .progress-tracker { background:white; border-radius:12px; padding:10px; margin-bottom:10px; box-shadow:0 4px 6px rgba(0,0,0,0.02); border:1px solid var(--border-light); max-width:1400px; width:100%; margin-left:auto; margin-right:auto; flex-shrink:0; display:flex; justify-content:center; gap:20px; flex-wrap:wrap; font-size:16px; font-weight:bold; color:#555;}
         .prog-item { display:flex; align-items:center; gap:8px; transition:0.3s; }
         .prog-divider { color:#ccc; }
 
-        /* Word Counter Badge */
         .word-counter-badge {background-color:#e63946 !important; color:#ffffff !important; border-radius:50px; padding:2px 8px; font-size:16px !important; font-weight:bold !important; margin-right:5px; border:2px solid #ffffff; box-shadow:0 2px 4px rgba(0,0,0,0.2); display:inline-flex; align-items:center; justify-content:center; min-width:20px;}
 
-        /* Main Layout */
         .main-layout{display:flex;gap:20px;align-items:flex-start;flex: 1; min-height: 0; max-width:1400px; width: 100%; margin: 0 auto; direction: rtl;}
         
-        /* Right Column (Video Area) */
         .media-column{flex:0 0 42%;display:flex;flex-direction:column;gap:15px; height:max-content; position: sticky; top: 15px; z-index: 10; direction: ltr;}
         .video-wrapper{position:relative;padding-bottom:56.25%;height:0;background:#000;border-radius:12px;overflow:hidden;border:2px solid #ddd;box-shadow:0 4px 10px rgba(0,0,0,0.1); flex-shrink: 0;}
         .video-wrapper iframe {position:absolute;top:0;left:0;width:100%;height:100%; border:none;}
@@ -49,15 +42,12 @@
         .speed-btn.active-speed{background:var(--primary-purple);color:white;border-color:var(--dark-purple);}
         .speed-btn.active-speed span:last-child{color:#ddd;}
 
-        /* Left Column (Interactive Area) */
         .interactive-column{flex:1;display:flex;flex-direction:column;gap:15px;height:100%;min-width:0;}
         
-        /* Content Area - تم إرجاع min-height لـ 0 عشان المربع نفسه يسكرول وميطردش الزرار برة */
         .content-area{flex:1; background:white; border-radius:12px; border:1px solid var(--border-light); padding:20px; display: flex; flex-direction: column; overflow: hidden; box-shadow:0 4px 6px rgba(0,0,0,0.02); min-height: 0;}
         .tab-content{display:none; flex:1; flex-direction:column; min-height:0;}
         .tab-content.active-content{display:flex;}
 
-        /* Script Formatting */
         .script-box{flex:1; overflow-y:auto; position:relative; direction:ltr; text-align:left; scroll-behavior:smooth; padding-bottom: 50%; min-height: 0;}
         .script-line{font-size:18px;color:#333;padding:12px 15px;margin-bottom:8px;border-left:5px solid transparent;border-radius:4px;line-height:1.6;transition:0.2s;cursor:pointer;}
         .script-line:hover{background:#f9f9f9;}
@@ -66,11 +56,9 @@
         .word{cursor:pointer;transition:0.2s;display:inline-block;border-bottom:1px dashed #ccc;padding:0 2px;}
         .word:hover{background:#e0d4f5;color:var(--primary-purple);border-radius:4px;border-bottom-color:var(--primary-purple);}
 
-        /* Buttons & Utilities */
         .action-btn{background:var(--primary-purple);color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:14px;margin:3px;transition:0.2s; line-height:1.4;}
         .action-btn.danger{background:#dc3545;}.action-btn.success{background:#28a745;}.action-btn.warning{background:#ffc107;color:#000;}.action-btn.info{background:#17a2b8;}
         
-        /* Dictionary & Quizzes */
         #dictDefaultView {display: flex; flex-direction: column; height: 100%; min-height: 0;}
         #wordBankList {flex: 1; overflow-y: auto; min-height: 0; margin-bottom: 15px; padding-left: 10px;}
         
@@ -79,7 +67,6 @@
         .quiz-opt{display:block;width:100%;text-align:center;direction:ltr;padding:15px;margin-bottom:10px;border:2px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-size:18px;font-weight:bold;transition:0.2s;}
         .quiz-opt:hover{background:#f3e8ff;border-color:var(--primary-purple);}
 
-        /* Live Chat Roleplay UI */
         .chat-container{flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:15px; padding-bottom:20px; min-height:0; scroll-behavior:smooth;}
         .chat-row{display:flex;gap:10px;align-items:flex-end;direction:ltr; transition:0.3s;}
         .chat-row.my-turn{flex-direction:row-reverse;}
@@ -95,7 +82,8 @@
 <body>
 
 <div class="top-headers">
-    <a href="../index.html" style="background: #dc3545; color: white; text-decoration: none; padding: 12px 25px; border-radius: 40px; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s; direction: ltr;">
+    <!-- التعديل هنا: مسار مطلق بيبدأ بـ / عشان يرجع لقائمة الفصول صح -->
+    <a href="/levels/intermediate/index.html" style="background: #dc3545; color: white; text-decoration: none; padding: 12px 25px; border-radius: 40px; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s; direction: ltr;">
         <span>🔙</span> Chapters Menu
     </a>
 
@@ -132,7 +120,6 @@
     </div>
 </div>
 
-<!-- Progress Bar -->
 <div class="progress-tracker" style="direction: rtl;">
     <div class="prog-item" id="prog-quiz"><span class="icon">❌</span> الامتحان 📋</div>
     <span class="prog-divider">|</span>
@@ -145,7 +132,6 @@
     <div class="prog-item" id="prog-vocab"><span class="icon">❌</span> الكلمات 🎧</div>
 </div>
 
-<!-- Success Overlay Modal -->
 <div id="successOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; flex-direction:column; direction: rtl;">
     <div style="background:white; padding:40px; border-radius:20px; text-align:center; max-width:500px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
         <h1 style="font-size:60px; margin:0;">🏆</h1>
@@ -392,13 +378,12 @@
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
-    // --- YouTube API Setup ---
     var player;
     var isPlayerReady = false;
     
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('mainVideo', {
-            videoId: 'UlCXd5XUE9M', // لينك اليوتيوب بتاع الفصل التاني
+            videoId: 'UlCXd5XUE9M',
             playerVars: {
                 'playsinline': 1,
                 'rel': 0,
@@ -420,7 +405,6 @@
         }
     }
 
-    // --- Audio Feedback ---
     const correctSound = new Audio('../../correct.mp3');
     const wrongSound = new Audio('../../wrong.mp3');
     function playFeedback(isCorrect) {
@@ -434,10 +418,9 @@
     let isQuizUnlocked = false;
     let isRoleplayingActive = false; 
 
-    // --- Progress & Score Tracking ---
     let completedSections = { speaking: false, dictation: false, vocab: false, meaning: false, quiz: false };
     let scores = { dictation: 0, vocab: 0, meaning: 0, quiz: 0 };
-    let totals = { dictation: 5, vocab: 0, meaning: 4, quiz: 5 }; // Vocab total is set dynamically
+    let totals = { dictation: 5, vocab: 0, meaning: 4, quiz: 5 }; 
     let firstTry = { dictation: true, vocab: true, meaning: true, quiz: true };
 
     function markProgress(section) {
@@ -463,7 +446,6 @@
         }
     }
 
-    // --- Tab Switching Logic (إيقاف الصوت والفيديو) ---
     function switchTab(tabId, btnElement) { 
         if (btnElement.style.cursor === 'not-allowed') return; 
         
@@ -479,7 +461,6 @@
         btnElement.classList.add('active'); 
     }
 
-    // --- Comprehensive Dictionary for Chapter 2 ---
     const mainDictionary = { 
         "chapter": "فصل", "2": "رقم 2", "mr": "السيد", "sourberry": "سوربيري", "bumble": "بامبل",
         "met": "قابل", "the": "ال", "undertaker": "حانوتي / متعهد دفن", "do": "هل / تفعل",
@@ -515,7 +496,6 @@
         "night": "ليلة", "punished": "عاقب", "mr. sourberry": "السيد سوربيري", "mrs. sourberry": "السيدة سوربيري"
     };
 
-    // --- Oliver Twist Chapter 2 Script Data ---
     const scriptData = [
         { start: 0.0, end: 8.0, speaker: "Narrator", text: "Chapter 2 Mr. Sourberry" },
         { start: 8.0, end: 15.0, speaker: "Narrator", text: "Mr. Bumble met Mr. Sourberry, the undertaker." },
@@ -562,7 +542,6 @@
         { start: 197.0, end: 202.0, speaker: "Narrator", text: "That night, Mr. Sourberry punished Oliver." }
     ];
 
-    // --- Script Render & Logic ---
     const scriptBox = document.getElementById('scriptBoxContainer');
     let collectedWords = [];
 
@@ -651,7 +630,6 @@
         loadVideoQuiz(); 
     }
 
-    // --- Dictionary Logic ---
     function renderWordBank() { 
         const list = document.getElementById('wordBankList'); list.innerHTML = ''; 
         if(collectedWords.length === 0) { list.innerHTML = '<p style="color:#888; margin-top:50px;">اضغط على أي كلمة في السكريبت لإضافتها.</p>'; document.getElementById('wordCounter').innerText = 0; return; } 
@@ -702,7 +680,6 @@
     }
     window.speechSynthesis.onvoiceschanged = () => {};
 
-    // --- Audio Vocab Quiz ---
     let currentVocabAns = ""; let vqCount = 0; let actVocabWords = [];
     function startAudioVocabQuiz() { 
         if(collectedWords.length < 3) return alert("أضف 3 كلمات على الأقل للقاموس."); 
@@ -755,7 +732,6 @@
     }
     function exitAudioVocabQuiz() { document.getElementById('dictDefaultView').style.display = 'flex'; document.getElementById('dictQuizView').style.display = 'none'; }
 
-    // --- Meaning Quiz ---
     const meaningQuizData = [
         { def: "A person who prepares dead bodies for burial.", opts: ["undertaker", "manager", "cook"], correct: 0 },
         { def: "A very angry feeling.", opts: ["frightened", "furious", "jealous"], correct: 1 },
@@ -799,7 +775,6 @@
     function nextMeaningQ() { firstTry.meaning = true; mqIndex++; loadMeaningQuiz(); }
     loadMeaningQuiz();
 
-    // --- Master Scene Roleplay ---
     const roleplayScene = scriptData.map(line => {
         let imgName = "../../images/oliver.jpg";
         if (line.speaker === "Narrator") imgName = "../../images/narrator.jpg";
@@ -1021,7 +996,6 @@
         setTimeout(nextRoleplayStep, 500);
     }
 
-    // --- Master Scene Playback ---
     let isPlayingFullScene = false;
     let sceneTimeout;
     let currentUserAudio = null;
@@ -1107,7 +1081,6 @@
         document.querySelectorAll('.chat-bubble').forEach(b => { b.style.transform = "scale(1)"; b.style.boxShadow = "none"; });
     }
 
-    // --- Dictation Tab ---
     const dictData = [
         { ans: "he can come and work for me", hint: "What did Mr. Sourberry say Oliver can do?", time: 20.0, playTime: 5000 },
         { ans: "these are some bits of cold meat for the dog", hint: "What food did Mrs. Sourberry give Oliver?", time: 54.0, playTime: 5000 },
@@ -1162,7 +1135,6 @@
     }
     loadDictation();
 
-    // --- Speak Answer Quiz Tab (5 Questions) ---
     const voiceQuizData = [
         { q: "1. Who is Mr. Sourberry?", keywords: ["undertaker"], correctMsg: "Excellent! He is the undertaker." },
         { q: "2. Where did Oliver sleep?", keywords: ["shop", "coffins", "room"], correctMsg: "Correct! In the room with the coffins." },
