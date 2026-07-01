@@ -3,60 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Levels | Read & Speak Stories</title>
+    <title>Study Levels | Read & Speak Stories</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; margin: 0; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .header-title { color: #6f42c1; margin-bottom: 40px; font-size: 28px; text-align: center; }
-        .levels-container { display: flex; gap: 25px; justify-content: center; flex-wrap: wrap; max-width: 1000px; width: 100%; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #eaddf7 0%, #d4c1ee 100%);
+        }
         
-        .level-card { background: white; padding: 30px; border-radius: 20px; text-align: center; width: 260px; box-shadow: 0 6px 15px rgba(0,0,0,0.08); transition: 0.3s; border: 2px solid transparent; display: flex; flex-direction: column; }
-        .level-card:hover { transform: translateY(-10px); border-color: #6f42c1; }
-        .level-card h2 { color: #553098; margin-top: 10px; font-size: 24px; }
-        .level-card p { color: #666; margin-bottom: 25px; flex-grow: 1; }
+        /* نفس المربع الأبيض الأنيق */
+        .main-card {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 85%;
+            border: 1px solid #f3e8ff;
+        }
+
+        .main-card img {
+            width: 160px;
+            height: auto;
+            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.15));
+            margin-bottom: 20px;
+            border-radius: 15px;
+        }
         
-        .start-btn { background: #6f42c1; color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 16px; transition: 0.2s; }
-        .start-btn:hover { background: #553098; }
+        .main-card h1 {
+            color: #553098;
+            font-size: 26px;
+            margin-bottom: 30px;
+            margin-top: 0;
+        }
         
-        .locked { opacity: 0.6; filter: grayscale(0.5); }
-        .status-badge { font-size: 12px; background: #eee; padding: 5px 12px; border-radius: 12px; color: #777; align-self: center; margin-bottom: 10px; font-weight: bold; }
-        .back-btn { margin-top: 50px; color: #666; text-decoration: none; font-weight: bold; }
+        /* ترتيب أزرار المستويات فوق بعض بنظافة */
+        .levels-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+        
+        .level-btn {
+            background: white;
+            color: #6f42c1;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 15px;
+            text-decoration: none;
+            border: 2px solid #6f42c1;
+            transition: 0.3s;
+            display: block;
+        }
+        
+        .level-btn:hover {
+            background: #6f42c1;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(111, 66, 193, 0.2);
+        }
+
+        /* توقيع حقوق الملكية */
+        .creator-text {
+            color: #999;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
     </style>
 </head>
 <body>
 
-    <h1 class="header-title">📚 Choose Your Level to Start</h1>
-
-    <div class="levels-container">
+    <div class="main-card">
+        <!-- اللوجو فوق جوه المربع -->
+        <img src="/images/logo.png" alt="Read & Speak Stories Logo" onerror="this.src='/images/logo.jpg'">
         
-        <!-- Beginner Level -->
-        <div class="level-card">
-            <h2>Beginner</h2>
-            <p>For beginners learning English</p>
-            <!-- التعديل هنا: مسار مطلق بيبدأ بـ / -->
-            <a href="/levels/beginner/index.html" class="start-btn">Enter Library</a>
+        <h1>Choose Your Level</h1>
+        
+        <!-- المستويات ملمومة هنا -->
+        <div class="levels-container">
+            <a href="/levels/beginner/index.html" class="level-btn">Beginner</a>
+            <a href="/levels/intermediate/index.html" class="level-btn">Intermediate</a>
+            <a href="/levels/advanced/index.html" class="level-btn">Advanced</a>
         </div>
 
-        <!-- Intermediate Level -->
-        <div class="level-card" style="border-color: #6f42c1; box-shadow: 0 8px 20px rgba(111, 66, 193, 0.2);">
-            <span class="status-badge" style="background: #e0d4f5; color: #553098;">Current</span>
-            <h2>Intermediate</h2>
-            <p>Intermediate Stories Library (Oliver Twist & more)</p>
-            <!-- التعديل هنا: مسار مطلق بيبدأ بـ / -->
-            <a href="/levels/intermediate/index.html" class="start-btn">Enter Library</a>
+        <!-- التوقيع تحت -->
+        <div class="creator-text">
+            Created by : Hisham Embaby
         </div>
-
-        <!-- Advanced Level -->
-        <div class="level-card locked">
-            <span class="status-badge">Coming Soon</span>
-            <h2>Advanced</h2>
-            <p>Advanced Global Stories & Novels</p>
-            <button class="start-btn" style="background: #ccc; cursor: not-allowed;">Locked</button>
-        </div>
-
     </div>
-
-    <!-- التعديل هنا: مسار مطلق بيبدأ بـ / -->
-    <a href="/index.html" class="back-btn">🔙 Back to Start Screen</a>
 
 </body>
 </html>
