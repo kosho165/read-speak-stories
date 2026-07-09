@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oliver Twist - Chapter 1 | Read & Speak Stories</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root{--primary-purple:#6f42c1;--light-purple:#f3e8ff;--dark-purple:#553098;--bg-color:#f8f9fa;--text-dark:#333;--text-gray:#6c757d; --border-light:#e0e0e0; --highlight-yellow:#fff3cd; --border-yellow:#ffc107;}
         body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:var(--bg-color);margin:0;padding:20px;color:var(--text-dark); height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; overflow: hidden;}
@@ -32,6 +33,9 @@
         .media-column{flex:0 0 42%;display:flex;flex-direction:column;gap:15px; height: 100%; direction: ltr;}
         .video-wrapper{position:relative;padding-bottom:56.25%;height:0;background:#000;border-radius:12px;overflow:hidden;border:2px solid #ddd;box-shadow:0 4px 10px rgba(0,0,0,0.1); flex-shrink: 0;}
         .video-wrapper iframe {position:absolute;top:0;left:0;width:100%;height:100%; border:none;}
+        /* التعديل لضمان ظهور الترجمة بدون قص */
+        .video-wrapper video {position:absolute;top:0;left:0;width:100%;height:100%; border:none; object-fit: contain; background-color:#000;}
+        
         .speed-controls{display:flex;justify-content:center;gap:10px; flex-shrink: 0;}
         .speed-btn{background:white;border:1px solid #ddd;padding:10px 15px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:5px;transition:0.2s;}
         .speed-btn span:last-child{font-size:10px;font-weight:normal;color:#888;}
@@ -161,31 +165,31 @@
                     </p>
                     <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
                         <button class="action-btn" style="background:#6f42c1; padding:10px 20px; font-size:18px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Narrator')">
-                            <img src="../../images/narrator.jpg" alt="Narrator" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <img src="narrator.jpg" alt="Narrator" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
                             <div style="text-align:right; line-height:1.2;">دور الراوي<br><span style="font-size:12px; font-weight:normal;">Role: Narrator</span></div>
                         </button>
                         <button class="action-btn" style="background:#ffc107; color:#000; padding:10px 20px; font-size:18px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Young Woman')">
-                            <img src="../../images/woman.jpg" alt="Young Woman" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <img src="woman.jpg" alt="Young Woman" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
                             <div style="text-align:right; line-height:1.2;">دور الأم<br><span style="font-size:12px; font-weight:normal;">Role: Young Woman</span></div>
                         </button>
                         <button class="action-btn" style="background:#20c997; padding:10px 20px; font-size:18px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Nurse')">
-                            <img src="../../images/nurse.jpg" alt="Nurse" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <img src="nurse.jpg" alt="Nurse" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
                             <div style="text-align:right; line-height:1.2;">دور الممرضة<br><span style="font-size:12px; font-weight:normal;">Role: Nurse</span></div>
                         </button>
                         <button class="action-btn" style="background:#e83e8c; padding:10px 20px; font-size:18px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Oliver')">
-                            <img src="../../images/oliver.jpg" alt="Oliver" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <img src="oliver.jpg" alt="Oliver" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
                             <div style="text-align:right; line-height:1.2;">دور أوليفر<br><span style="font-size:12px; font-weight:normal;">Role: Oliver</span></div>
                         </button>
                         <button class="action-btn" style="background:#fd7e14; padding:10px 20px; font-size:18px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Boy')">
-                            <img src="../../images/boy.jpg" alt="Boy" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <img src="boy.jpg" alt="Boy" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
                             <div style="text-align:right; line-height:1.2;">دور الولد<br><span style="font-size:12px; font-weight:normal;">Role: Boy</span></div>
                         </button>
                         <button class="action-btn info" style="padding:10px 20px; font-size:18px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Bumble')">
-                            <img src="../../images/bumble.jpg" alt="Bumble" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <img src="bumble.jpg" alt="Bumble" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
                             <div style="text-align:right; line-height:1.2;">دور بامبل<br><span style="font-size:12px; font-weight:normal;">Role: Mr Bumble</span></div>
                         </button>
                         <button class="action-btn" style="background:#28a745; padding:10px 20px; font-size:18px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Cook')">
-                            <img src="../../images/cook.jpg" alt="Cook" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <img src="cook.jpg" alt="Cook" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
                             <div style="text-align:right; line-height:1.2;">دور الطباخ<br><span style="font-size:12px; font-weight:normal;">Role: Cook</span></div>
                         </button>
                     </div>
@@ -383,8 +387,8 @@
         }
     }
 
-    const correctSound = new Audio('../../correct.mp3');
-    const wrongSound = new Audio('../../wrong.mp3');
+    const correctSound = new Audio('correct.mp3');
+    const wrongSound = new Audio('wrong.mp3');
     function playFeedback(isCorrect) {
         if(isCorrect) { correctSound.currentTime = 0; correctSound.play().catch(()=>{}); }
         else { wrongSound.currentTime = 0; wrongSound.play().catch(()=>{}); }
@@ -561,7 +565,7 @@
         collectedWords.forEach(cleanWord => { 
             const translation = mainDictionary[cleanWord] || "تمت إضافتها 📌"; 
             const safeWord = cleanWord.replace(/'/g, "\\'");
-            const imgSrc = '../../images/' + cleanWord.replace(/ /g, '_') + '.jpg';
+            const imgSrc = cleanWord.replace(/ /g, '_') + '.jpg';
             
             const itemDiv = document.createElement('div'); itemDiv.className = 'dict-item'; 
             itemDiv.innerHTML = `<div style="display:flex; gap:5px; direction:ltr; align-items:center;">
@@ -676,14 +680,14 @@
     loadMeaningQuiz();
 
     const roleplayScene = scriptData.map(line => {
-        let imgName = "../../images/oliver.jpg";
-        if (line.speaker === "Narrator") imgName = "../../images/narrator.jpg";
-        else if (line.speaker === "Bumble") imgName = "../../images/bumble.jpg";
-        else if (line.speaker === "Cook") imgName = "../../images/cook.jpg";
-        else if (line.speaker === "Boy") imgName = "../../images/boy.jpg";
-        else if (line.speaker === "Young Woman") imgName = "../../images/woman.jpg";
-        else if (line.speaker === "Doctor") imgName = "../../images/doctor.jpg";
-        else if (line.speaker === "Nurse") imgName = "../../images/nurse.jpg";
+        let imgName = "oliver.jpg";
+        if (line.speaker === "Narrator") imgName = "narrator.jpg";
+        else if (line.speaker === "Bumble") imgName = "bumble.jpg";
+        else if (line.speaker === "Cook") imgName = "cook.jpg";
+        else if (line.speaker === "Boy") imgName = "boy.jpg";
+        else if (line.speaker === "Young Woman") imgName = "woman.jpg";
+        else if (line.speaker === "Doctor") imgName = "doctor.jpg";
+        else if (line.speaker === "Nurse") imgName = "nurse.jpg";
 
         return {
             char: line.speaker,
