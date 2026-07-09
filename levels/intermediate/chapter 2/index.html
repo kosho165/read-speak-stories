@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oliver Twist - Chapter 2 | Read & Speak Stories</title>
-    <script src="[https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js](https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js)"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root{--primary-purple:#6f42c1;--light-purple:#f3e8ff;--dark-purple:#553098;--bg-color:#f8f9fa;--text-dark:#333;--text-gray:#6c757d; --border-light:#e0e0e0; --highlight-yellow:#fff3cd; --border-yellow:#ffc107;}
         body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:var(--bg-color);margin:0;padding:10px 20px;color:var(--text-dark); height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; overflow: hidden;}
@@ -157,7 +157,7 @@
             <video id="mainVideo" controls playsinline style="display:none;">
                 <source src="oliver-part-2.mp4" type="video/mp4" id="localVideoSource">
             </video>
-            <iframe id="youtubeVideo" src="[https://www.youtube.com/embed/UlCXd5XUE9M?enablejsapi=1&rel=0](https://www.youtube.com/embed/UlCXd5XUE9M?enablejsapi=1&rel=0)" title="Oliver Twist - Chapter 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <iframe id="youtubeVideo" src="https://www.youtube.com/embed/UlCXd5XUE9M?enablejsapi=1&rel=0" title="Oliver Twist - Chapter 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
         <div class="speed-controls">
             <button class="speed-btn" onclick="changeAppVideoSpeed(0.5, this)">
@@ -196,27 +196,27 @@
                     </p>
                     <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
                         <button class="action-btn" style="background:#6f42c1; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Narrator')">
-                            <img src="narrator.jpg" alt="Narrator" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%236f42c1\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>N</text></svg>';">
+                            <img src="narrator.jpg" alt="Narrator" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%236f42c1\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>N</text></svg>';">
                             <div style="font-weight:bold; font-size:18px; direction:ltr;">Role: Narrator</div>
                         </button>
                         <button class="action-btn" style="background:#17a2b8; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Mr. Sowerberry')">
-                            <img src="mr_sowerberry.jpg" alt="Mr. Sowerberry" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%2317a2b8\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>M</text></svg>';">
+                            <img src="mr_sowerberry.jpg" alt="Mr. Sowerberry" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%2317a2b8\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>M</text></svg>';">
                             <div style="font-weight:bold; font-size:18px; direction:ltr;">Role: Mr. Sowerberry</div>
                         </button>
                         <button class="action-btn" style="background:#ffc107; color:#000; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Mrs. Sowerberry')">
-                            <img src="mrs_sowerberry.jpg" alt="Mrs. Sowerberry" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%23ffc107\'/><text x=\'50%\' y=\'50%\' fill=\'black\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>M</text></svg>';">
+                            <img src="mrs_sowerberry.jpg" alt="Mrs. Sowerberry" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%23ffc107\'/><text x=\'50%\' y=\'50%\' fill=\'black\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>M</text></svg>';">
                             <div style="font-weight:bold; font-size:18px; direction:ltr;">Role: Mrs. Sowerberry</div>
                         </button>
                         <button class="action-btn" style="background:#e83e8c; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Oliver')">
-                            <img src="oliver.jpg" alt="Oliver" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%23e83e8c\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>O</text></svg>';">
+                            <img src="oliver.jpg" alt="Oliver" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%23e83e8c\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>O</text></svg>';">
                             <div style="font-weight:bold; font-size:18px; direction:ltr;">Role: Oliver</div>
                         </button>
                         <button class="action-btn" style="background:#dc3545; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Noah')">
-                            <img src="noah.jpg" alt="Noah" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%23dc3545\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>N</text></svg>';">
+                            <img src="noah.jpg" alt="Noah" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%23dc3545\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>N</text></svg>';">
                             <div style="font-weight:bold; font-size:18px; direction:ltr;">Role: Noah</div>
                         </button>
                         <button class="action-btn" style="background:#28a745; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Bumble')">
-                            <img src="bumble.jpg" alt="Bumble" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%2328a745\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>B</text></svg>';">
+                            <img src="bumble.jpg" alt="Bumble" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%2328a745\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>B</text></svg>';">
                             <div style="font-weight:bold; font-size:18px; direction:ltr;">Role: Mr. Bumble</div>
                         </button>
                     </div>
@@ -393,7 +393,7 @@
     document.getElementById('totalPoints').innerText = points;
 
     const tag = document.createElement('script'); 
-    tag.src = "[https://www.youtube.com/iframe_api](https://www.youtube.com/iframe_api)"; 
+    tag.src = "https://www.youtube.com/iframe_api"; 
     document.head.appendChild(tag);
 
     localSource.addEventListener('error', function() {
@@ -986,7 +986,7 @@
         let color = charName === "Oliver" ? "%28a745" : charName === "Bumble" ? "%17a2b8" : "%e83e8c";
         if(charName === "Narrator") color = "%6f42c1"; if(charName === "Mr. Sowerberry") color = "%17a2b8";
         if(charName === "Mrs. Sowerberry") color = "%ffc107"; if(charName === "Noah") color = "%dc3545";
-        return `data:image/svg+xml;utf8,<svg xmlns='[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)' width='45' height='45'><circle cx='22.5' cy='22.5' r='22.5' fill='${color}'/><text x='50%' y='50%' fill='white' font-size='16' font-family='Arial' dy='.3em' text-anchor='middle'>${charName.charAt(0)}</text></svg>`;
+        return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='45' height='45'><circle cx='22.5' cy='22.5' r='22.5' fill='${color}'/><text x='50%' y='50%' fill='white' font-size='16' font-family='Arial' dy='.3em' text-anchor='middle'>${charName.charAt(0)}</text></svg>`;
     }
 
     function nextRoleplayStep() {
