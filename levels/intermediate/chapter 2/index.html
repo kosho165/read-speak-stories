@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oliver Twist - Chapter 2 | Read & Speak Stories</title>
+    <script src="[https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js](https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js)"></script>
     <style>
         :root{--primary-purple:#6f42c1;--light-purple:#f3e8ff;--dark-purple:#553098;--bg-color:#f8f9fa;--text-dark:#333;--text-gray:#6c757d; --border-light:#e0e0e0; --highlight-yellow:#fff3cd; --border-yellow:#ffc107;}
         body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:var(--bg-color);margin:0;padding:10px 20px;color:var(--text-dark); height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; overflow: hidden;}
@@ -35,7 +36,8 @@
         
         .media-column{flex:0 0 42%;display:flex;flex-direction:column;gap:15px; height:max-content; position: sticky; top: 15px; z-index: 10; direction: ltr;}
         .video-wrapper{position:relative;padding-bottom:56.25%;height:0;background:#000;border-radius:12px;overflow:hidden;border:2px solid #ddd;box-shadow:0 4px 10px rgba(0,0,0,0.1); flex-shrink: 0;}
-        .video-wrapper iframe {position:absolute;top:0;left:0;width:100%;height:100%; border:none;}
+        .video-wrapper video, .video-wrapper iframe {position:absolute;top:0;left:0;width:100%;height:100%; border:none; object-fit: cover;}
+        
         .speed-controls{display:flex;justify-content:center;gap:10px; flex-shrink: 0;}
         .speed-btn{background:white;border:1px solid #ddd;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:5px;transition:0.2s;}
         .speed-btn span:last-child{font-size:10px;font-weight:normal;color:#888;}
@@ -64,6 +66,14 @@
         
         .dict-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #eee;direction:rtl;}
         .word-en{font-weight:bold;font-size:18px;color:var(--primary-purple);direction:ltr;display:inline-block;}
+        .dict-btn {border:none; padding:8px 15px; border-radius:6px; cursor:pointer; font-size:16px; margin:2px; transition:0.2s; min-width: 45px;}
+        .dict-btn-us {background:#6f42c1; color:white;}
+        .dict-btn-us:hover {background:#553098;}
+        .dict-btn-uk {background:#17a2b8; color:white;}
+        .dict-btn-uk:hover {background:#117a8b;}
+        .dict-btn-del {background:#dc3545; color:white;}
+        .dict-btn-del:hover {background:#c82333;}
+        
         .quiz-opt{display:block;width:100%;text-align:center;direction:ltr;padding:15px;margin-bottom:10px;border:2px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-size:18px;font-weight:bold;transition:0.2s;}
         .quiz-opt:hover{background:#f3e8ff;border-color:var(--primary-purple);}
 
@@ -82,18 +92,17 @@
 <body>
 
 <div class="top-headers">
-    <!-- التعديل هنا: مسار مطلق بيبدأ بـ / عشان يرجع لقائمة الفصول صح -->
-    <a href="/levels/intermediate/index.html" style="background: #dc3545; color: white; text-decoration: none; padding: 12px 25px; border-radius: 40px; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s; direction: ltr;">
+    <a href="../index.html" style="background: #dc3545; color: white; text-decoration: none; padding: 12px 25px; border-radius: 40px; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s; direction: ltr;">
         <span>🔙</span> Chapters Menu
     </a>
 
     <div class="header-left">
         <h3>⭐ <span id="totalPoints">100</span> نقطة | 🎯 المستوى: متوسط</h3>
-        <p>100 Points | Level: Intermediate</p>
+        <p>Points | Level: Intermediate</p>
     </div>
     <div class="header-right">
         <h2>Oliver Twist 👑</h2>
-        <p>Chapter 2 | Mr. Sourberry</p>
+        <p>Chapter 2 | Mr. Sowerberry</p>
     </div>
 </div>
 
@@ -114,48 +123,50 @@
         <button class="tab-btn-top" onclick="switchTab('meaningTab', this)">
             <span>🧠 المعاني</span><span>Meaning Quiz</span>
         </button>
-        <button id="quizTabBtn" class="tab-btn-top" style="color:#aaa; cursor:not-allowed; background:#f9f9f9;" onclick="switchTab('quizTab', this)">
+        <button id="quizTabBtn" class="tab-btn-top locked" onclick="switchTab('quizTab', this)">
             <span>🔒 أجب بصوتك</span><span>Speak Answer</span>
         </button>
     </div>
 </div>
 
-<div class="progress-tracker" style="direction: rtl;">
-    <div class="prog-item" id="prog-quiz"><span class="icon">❌</span> الامتحان 📋</div>
+<div class="progress-tracker" style="direction: ltr;">
+    <div class="prog-item" id="prog-quiz"><span class="icon">❌</span> الامتحان | Quiz 📋</div>
     <span class="prog-divider">|</span>
-    <div class="prog-item" id="prog-dictation"><span class="icon">❌</span> الإملاء ✍️</div>
+    <div class="prog-item" id="prog-dictation"><span class="icon">❌</span> الإملاء | Dictation ✍️</div>
     <span class="prog-divider">|</span>
-    <div class="prog-item" id="prog-speaking"><span class="icon">❌</span> التحدث 🗣️</div>
+    <div class="prog-item" id="prog-speaking"><span class="icon">❌</span> التحدث | Speaking 🗣️</div>
     <span class="prog-divider">|</span>
-    <div class="prog-item" id="prog-meaning"><span class="icon">❌</span> المعاني 🧠</div>
+    <div class="prog-item" id="prog-meaning"><span class="icon">❌</span> المعاني | Meaning 🧠</div>
     <span class="prog-divider">|</span>
-    <div class="prog-item" id="prog-vocab"><span class="icon">❌</span> الكلمات 🎧</div>
+    <div class="prog-item" id="prog-vocab"><span class="icon">❌</span> الكلمات | Vocab 🎧</div>
 </div>
 
 <div id="successOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; flex-direction:column; direction: rtl;">
     <div style="background:white; padding:40px; border-radius:20px; text-align:center; max-width:500px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
         <h1 style="font-size:60px; margin:0;">🏆</h1>
-        <h2 style="color:var(--primary-purple); margin-top:10px;">عمل رائع يا بطل!</h2>
-        <p style="font-size:20px; color:#555; margin-bottom:5px;">لقد أنهيت الفصل بنسبة نجاح:</p>
+        <h2 style="color:var(--primary-purple); margin-top:10px;" id="congratsNameDisplay">عمل رائع يا بطل! | Great job!</h2>
+        <p style="font-size:20px; color:#555; margin-bottom:5px;">لقد أنهيت الفصل بنسبة نجاح:<br><span style="font-size:16px;">You completed the chapter with a success rate of:</span></p>
         <div style="font-size:50px; font-weight:bold; color:#28a745; margin:10px 0;" id="finalPercentageDisplay">100%</div>
-        <button class="action-btn success" style="font-size:18px; padding:10px 30px; margin-top:20px;" onclick="document.getElementById('successOverlay').style.display='none'">استمرار</button>
+        <button class="action-btn success" style="font-size:18px; padding:10px 30px; margin-top:20px;" onclick="document.getElementById('successOverlay').style.display='none'">استمرار | Continue</button>
     </div>
 </div>
 
 <div class="main-layout">
     <div class="media-column">
-        <!-- YouTube API Div -->
         <div class="video-wrapper">
-            <div id="mainVideo"></div>
+            <video id="mainVideo" controls playsinline style="display:none;">
+                <source src="oliver-part-2.mp4" type="video/mp4" id="localVideoSource">
+            </video>
+            <iframe id="youtubeVideo" src="[https://www.youtube.com/embed/UlCXd5XUE9M?enablejsapi=1&rel=0](https://www.youtube.com/embed/UlCXd5XUE9M?enablejsapi=1&rel=0)" title="Oliver Twist - Chapter 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
         <div class="speed-controls">
-            <button class="speed-btn" onclick="changeVideoSpeed(0.5, this)">
+            <button class="speed-btn" onclick="changeAppVideoSpeed(0.5, this)">
                 <span>بطيء جداً (0.5x)</span><span>Very Slow</span>
             </button>
-            <button class="speed-btn" onclick="changeVideoSpeed(0.75, this)">
+            <button class="speed-btn" onclick="changeAppVideoSpeed(0.75, this)">
                 <span>بطيء (0.75x)</span><span>Slow</span>
             </button>
-            <button class="speed-btn active-speed" onclick="changeVideoSpeed(1, this)">
+            <button class="speed-btn active-speed" onclick="changeAppVideoSpeed(1, this)">
                 <span>السرعة العادية</span><span>Normal Speed</span>
             </button>
         </div>
@@ -164,7 +175,6 @@
     <div class="interactive-column">
         <div class="content-area" id="mainContentArea" style="direction: rtl;">
             
-            <!-- Script Tab -->
             <div id="scriptTab" class="tab-content active-content">
                 <div style="color:var(--primary-purple); font-weight:bold; font-size:18px; margin-bottom:15px; text-align:right; flex-shrink: 0; border-bottom: 2px solid #eee; padding-bottom: 10px;">
                     📖 السكريبت التفاعلي<br>
@@ -173,7 +183,6 @@
                 <div class="script-box" id="scriptBoxContainer"></div>
             </div>
 
-            <!-- Roleplay Tab -->
             <div id="speakTab" class="tab-content">
                 <h3 style="color:var(--primary-purple); margin-top:0; text-align:center; flex-shrink:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">
                     🗣️ المحادثة الحية (مثل دورك)<br>
@@ -187,27 +196,27 @@
                     </p>
                     <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
                         <button class="action-btn" style="background:#6f42c1; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Narrator')">
-                            <img src="../../images/narrator.jpg" alt="Narrator" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <img src="narrator.jpg" alt="Narrator" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%236f42c1\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>N</text></svg>';">
                             <div style="font-weight:bold; font-size:18px; direction:ltr;">Role: Narrator</div>
                         </button>
-                        <button class="action-btn" style="background:#17a2b8; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Mr. Sourberry')">
-                            <img src="../../images/mr_sourberry.jpg" alt="Mr. Sourberry" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
-                            <div style="font-weight:bold; font-size:18px; direction:ltr;">Role: Mr. Sourberry</div>
+                        <button class="action-btn" style="background:#17a2b8; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Mr. Sowerberry')">
+                            <img src="mr_sowerberry.jpg" alt="Mr. Sowerberry" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%2317a2b8\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>M</text></svg>';">
+                            <div style="font-weight:bold; font-size:18px; direction:ltr;">Role: Mr. Sowerberry</div>
                         </button>
-                        <button class="action-btn" style="background:#ffc107; color:#000; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Mrs. Sourberry')">
-                            <img src="../../images/mrs_sourberry.jpg" alt="Mrs. Sourberry" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
-                            <div style="font-weight:bold; font-size:18px; direction:ltr;">Role: Mrs. Sourberry</div>
+                        <button class="action-btn" style="background:#ffc107; color:#000; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Mrs. Sowerberry')">
+                            <img src="mrs_sowerberry.jpg" alt="Mrs. Sowerberry" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%23ffc107\'/><text x=\'50%\' y=\'50%\' fill=\'black\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>M</text></svg>';">
+                            <div style="font-weight:bold; font-size:18px; direction:ltr;">Role: Mrs. Sowerberry</div>
                         </button>
                         <button class="action-btn" style="background:#e83e8c; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Oliver')">
-                            <img src="../../images/oliver.jpg" alt="Oliver" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <img src="oliver.jpg" alt="Oliver" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%23e83e8c\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>O</text></svg>';">
                             <div style="font-weight:bold; font-size:18px; direction:ltr;">Role: Oliver</div>
                         </button>
                         <button class="action-btn" style="background:#dc3545; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Noah')">
-                            <img src="../../images/noah.jpg" alt="Noah" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <img src="noah.jpg" alt="Noah" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%23dc3545\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>N</text></svg>';">
                             <div style="font-weight:bold; font-size:18px; direction:ltr;">Role: Noah</div>
                         </button>
                         <button class="action-btn" style="background:#28a745; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Bumble')">
-                            <img src="../../images/bumble.jpg" alt="Bumble" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <img src="bumble.jpg" alt="Bumble" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)\' width=\'45\' height=\'45\'><circle cx=\'22.5\' cy=\'22.5\' r=\'22.5\' fill=\'%2328a745\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'16\' font-family=\'Arial\' dy=\'.3em\' text-anchor=\'middle\'>B</text></svg>';">
                             <div style="font-weight:bold; font-size:18px; direction:ltr;">Role: Mr. Bumble</div>
                         </button>
                     </div>
@@ -235,7 +244,6 @@
                 </div>
             </div>
 
-            <!-- Dictation Tab -->
             <div id="writeTab" class="tab-content" style="text-align:center;">
                 <h3 style="color:var(--primary-purple); margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">
                     ✍️ استمع واكتب<br>
@@ -260,17 +268,16 @@
                     
                     <div style="display:flex; justify-content:center; gap:10px; margin-top:15px;">
                         <button id="checkDictationBtn" class="action-btn success" onclick="checkDictation()">
-                            ✔️ تحقق<br><span style="font-size:11px; font-weight:normal;">Check</span>
+                            ✔️ تحقق | Check
                         </button>
                         <button id="nextDictationBtn" class="action-btn" style="display:none;" onclick="nextDictation()">
-                            ➡️ التالي<br><span style="font-size:11px; font-weight:normal;">Next</span>
+                            ➡️ التالي | Next
                         </button>
                     </div>
                     <p id="dictationResult" style="font-weight:bold; font-size:18px; margin-top:15px; line-height:1.4;"></p>
                 </div>
             </div>
 
-            <!-- Dictionary Tab -->
             <div id="dictTab" class="tab-content" style="text-align:center;">
                 <div id="dictDefaultView">
                     <h3 style="color:var(--primary-purple); margin-top:0; flex-shrink:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">
@@ -278,7 +285,7 @@
                         <span style="font-size:14px; font-weight:normal; color:#666;">Audio Dictionary</span>
                     </h3>
                     <div id="wordBankList">
-                        <p style="color:#888; margin-top:50px;">اضغط على أي كلمة في السكريبت لإضافتها.</p>
+                        <p style="color:#888; margin-top:50px;">اضغط على أي كلمة في السكريبت لإضافتها.<br><span style="font-size:14px;">Click on any word in the script to add it.</span></p>
                     </div>
                     <button class="action-btn success" style="width:100%; padding:15px; font-size:16px; flex-shrink:0;" onclick="startAudioVocabQuiz()">
                         🎧 تحدي الاستماع<br><span style="font-size:12px; font-weight:normal;">Listening Challenge</span>
@@ -303,13 +310,12 @@
                     <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px; margin-top: auto; flex-shrink: 0;">
                         <p id="dictQuizResult" style="font-weight:bold; font-size:16px; margin:0; line-height:1.4; text-align:right; flex:1; direction:ltr; padding-right:10px;"></p>
                         <button class="action-btn danger" style="padding:10px 20px; font-size:15px; margin:0; white-space: nowrap;" onclick="exitAudioVocabQuiz()">
-                            🚪 إنهاء التحدي End Challenge
+                            🚪 إنهاء التحدي | End Challenge
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Meaning Quiz Tab -->
             <div id="meaningTab" class="tab-content" style="text-align:center;">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; flex-shrink: 0;">
                     <h3 style="color:var(--primary-purple); margin:0; line-height: 1.2; text-align: right;">
@@ -334,11 +340,10 @@
                 </div>
             </div>
 
-            <!-- Speak Answer Quiz Tab -->
             <div id="quizTab" class="tab-content" style="text-align:center;">
                 <div id="lockedMessage">
                     <h3 style="color:var(--text-gray);">الامتحان مقفل 🔒</h3>
-                    <p style="color:#888;">شاهد الفيديو للنهاية لفتح الامتحان.</p>
+                    <p style="color:#888;">شاهد الفيديو للنهاية لفتح الامتحان.<br><span style="font-size:14px;">Watch the video to the end to unlock the quiz.</span></p>
                 </div>
                 <div id="unlockedQuiz" style="display:none; flex-direction: column; height: 100%;">
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; flex-shrink: 0;">
@@ -355,14 +360,14 @@
                             <div style="text-align:center; padding:20px; background:#f9f9f9; border-radius:10px; border:2px dashed #ccc;">
                                 <p id="vqTranscriptText" style="color:#666; font-size:16px; margin-bottom:15px; min-height:24px;">Your answer will appear here...</p>
                                 <button id="vqMicBtn" class="action-btn danger" style="border-radius:50px; padding:15px 40px; font-size:18px; display:inline-block;" onclick="toggleQuizMic()">
-                                    🎤 اضغط وتحدث Speak
+                                    🎤 اضغط وتحدث | Speak
                                 </button>
                             </div>
                         </div>
                     </div>
                     
                     <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px; margin-top: auto; flex-shrink: 0;">
-                        <p id="vqResult" style="font-weight:bold; font-size:18px; margin:0; line-height:1.4; text-align:right; flex:1; padding-right:10px;"></p>
+                        <p id="vqResult" style="font-weight:bold; font-size:18px; margin:0; line-height:1.4; text-align:right; flex:1; padding-right:10px; direction:ltr;"></p>
                         <button id="vqNextBtn" class="action-btn success" style="padding:10px 20px; font-size:15px; display:none; margin:0; white-space: nowrap;" onclick="nextVideoQuiz()">
                             السؤال التالي ➡️ Next
                         </button>
@@ -374,54 +379,102 @@
     </div>
 </div>
 
-<!-- YouTube IFrame Player API -->
-<script src="https://www.youtube.com/iframe_api"></script>
-
 <script>
-    var player;
-    var isPlayerReady = false;
+    const videoElement = document.getElementById('mainVideo');
+    const youtubeElement = document.getElementById('youtubeVideo');
+    const localSource = document.getElementById('localVideoSource');
+    let useYouTube = true;
+    let ytPlayer = null;
+
+    const studentName = "بطل";
+    document.getElementById('congratsNameDisplay').innerText = "عمل رائع يا " + studentName + "! | Great job!";
     
+    let points = 100;
+    document.getElementById('totalPoints').innerText = points;
+
+    const tag = document.createElement('script'); 
+    tag.src = "[https://www.youtube.com/iframe_api](https://www.youtube.com/iframe_api)"; 
+    document.head.appendChild(tag);
+
+    localSource.addEventListener('error', function() {
+        videoElement.style.display = 'none';
+        youtubeElement.style.display = 'block';
+        useYouTube = true;
+    });
+
     function onYouTubeIframeAPIReady() {
-        player = new YT.Player('mainVideo', {
-            videoId: 'UlCXd5XUE9M',
-            playerVars: {
-                'playsinline': 1,
-                'rel': 0,
-                'controls': 1
-            },
-            events: {
-                'onReady': function() { isPlayerReady = true; },
-                'onStateChange': onPlayerStateChange
-            }
+        ytPlayer = new YT.Player('youtubeVideo', {
+            events: { 'onStateChange': onPlayerStateChange }
         });
     }
 
-    let timeUpdateInterval;
+    let ytInterval;
     function onPlayerStateChange(event) {
         if (event.data == YT.PlayerState.PLAYING) {
-            timeUpdateInterval = setInterval(handleTimeUpdate, 100);
+            ytInterval = setInterval(handleTimeUpdate, 100);
         } else {
-            clearInterval(timeUpdateInterval);
+            clearInterval(ytInterval);
         }
     }
 
-    const correctSound = new Audio('../../correct.mp3');
-    const wrongSound = new Audio('../../wrong.mp3');
+    function playAppVideo(time, pauseAfter = 0) {
+        if (useYouTube && ytPlayer && ytPlayer.seekTo) {
+            ytPlayer.seekTo(time, true);
+            ytPlayer.playVideo();
+            if (pauseAfter > 0) setTimeout(() => ytPlayer.pauseVideo(), pauseAfter);
+        } else {
+            videoElement.currentTime = time;
+            videoElement.play();
+            if (pauseAfter > 0) setTimeout(() => videoElement.pause(), pauseAfter);
+        }
+    }
+
+    function pauseAppVideo() {
+        if (useYouTube && ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
+        else videoElement.pause();
+    }
+
+    function muteAppVideo(muted) {
+        if (useYouTube && ytPlayer && ytPlayer.mute) {
+            if (muted) ytPlayer.mute(); else ytPlayer.unMute();
+        } else {
+            videoElement.muted = muted;
+        }
+    }
+
+    function changeAppVideoSpeed(rate, btn) { 
+        if (useYouTube && ytPlayer && ytPlayer.setPlaybackRate) ytPlayer.setPlaybackRate(rate);
+        else videoElement.playbackRate = rate; 
+        document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active-speed')); 
+        btn.classList.add('active-speed'); 
+    }
+
+    const correctSound = new Audio('correct.mp3');
+    const wrongSound = new Audio('wrong.mp3');
     function playFeedback(isCorrect) {
         if(isCorrect) { correctSound.currentTime = 0; correctSound.play().catch(()=>{}); }
         else { wrongSound.currentTime = 0; wrongSound.play().catch(()=>{}); }
     }
 
-    let points = 100;
-    function updatePoints(amount) { points += amount; document.getElementById('totalPoints').innerText = points; }
+    function updatePoints(amount) { 
+        points += amount; 
+        document.getElementById('totalPoints').innerText = points; 
+    }
 
-    let isQuizUnlocked = false;
     let isRoleplayingActive = false; 
+    let isQuizUnlocked = false;
 
     let completedSections = { speaking: false, dictation: false, vocab: false, meaning: false, quiz: false };
     let scores = { dictation: 0, vocab: 0, meaning: 0, quiz: 0 };
     let totals = { dictation: 5, vocab: 0, meaning: 4, quiz: 5 }; 
     let firstTry = { dictation: true, vocab: true, meaning: true, quiz: true };
+
+    Object.keys(completedSections).forEach(sec => {
+        if(completedSections[sec]) {
+            let el = document.getElementById('prog-' + sec);
+            if(el) { el.innerHTML = el.innerHTML.replace('❌', '✔️'); el.style.color = '#28a745'; }
+        }
+    });
 
     function markProgress(section) {
         if(!completedSections[section]) {
@@ -442,14 +495,15 @@
             setTimeout(() => {
                 document.getElementById('finalPercentageDisplay').innerText = percentage + "%";
                 document.getElementById('successOverlay').style.display = 'flex';
+                if (typeof confetti !== 'undefined') confetti({ particleCount: 200, spread: 100, origin: { y: 0.9 }, zIndex: 10000 });
+                try { let successMusic = new Audio('success.mp3'); successMusic.volume = 0.4; successMusic.play().catch(e => console.log(e)); } catch(e) {}
             }, 1000);
         }
     }
 
     function switchTab(tabId, btnElement) { 
         if (btnElement.style.cursor === 'not-allowed') return; 
-        
-        if (player && player.pauseVideo) player.pauseVideo(); 
+        pauseAppVideo(); 
         window.speechSynthesis.cancel();
         if(isPlayingFullScene) stopFullScenePlay();
 
@@ -462,53 +516,170 @@
     }
 
     const mainDictionary = { 
-        "chapter": "فصل", "2": "رقم 2", "mr": "السيد", "sourberry": "سوربيري", "bumble": "بامبل",
-        "met": "قابل", "the": "ال", "undertaker": "حانوتي / متعهد دفن", "do": "هل / تفعل",
-        "you": "أنت", "know": "تعرف", "anybody": "أي شخص", "who": "الذي / من", "wants": "يريد",
-        "a": "أداة نكرة", "boy": "ولد / فتى", "i'll": "أنا سوف", "take": "آخذ", "him": "هو (للمفعول)",
-        "he": "هو", "can": "يستطيع", "come": "يأتي", "and": "و", "work for me": "يعمل لدي",
-        "took": "أخذ", "oliver": "أوليفر", "to": "إلى", "house": "منزل", "is": "يكون",
-        "that": "ذلك", "mrs": "السيدة", "here": "هنا", "my": "ملكي", "dear": "عزيزي",
-        "oh": "أوه", "he's": "إنه", "very": "جداً", "small": "صغير", "but": "لكن",
-        "he'll": "هو سوف", "grow": "يكبر / ينمو", "on": "على", "our": "خاصتنا", "food": "طعام",
-        "she": "هي", "into": "بداخل / في", "kitchen": "مطبخ", "these": "هؤلاء", "are": "يكونون",
-        "some": "بعض", "bits": "قطع", "of": "من", "cold meat": "لحم بارد", "for": "من أجل / لـ",
-        "dog": "كلب", "eat": "يأكل", "with": "مع", "me": "أنا (للمفعول)", "your": "لك / خاصتك",
-        "bed": "سرير", "in": "في", "shop": "متجر / دكان", "coffins": "توابيت", "coffin": "تابوت",
-        "slept": "نام", "room": "غرفة", "frightened": "خائف", "next morning": "الصباح التالي", "open": "افتح",
-        "door": "باب", "yes": "نعم", "sir": "سيدي", "want": "يريد", "i'm": "أنا", "noah": "نواه",
-        "claypole": "كلايبول", "you're": "أنت تكون", "under": "تحت", "workhouse boy": "فتى الملجأ",
-        "now": "الآن", "those": "أولئك", "windows": "نوافذ", "start work": "يبدأ العمل", "was": "كان",
-        "satisfied": "راضٍ", "has": "يمتلك / لديه", "sad face": "وجه حزين", "perfect": "مثالي",
-        "children's": "للأطفال", "funerals": "جنازات", "jealous": "غيور", "hated": "كره",
-        "how's": "كيف حال", "mother": "أم", "workhouse": "ملجأ الفقراء", "dead": "ميتة",
-        "don't": "لا", "talk about": "يتحدث عن", "her": "ها (للمفعول/الملكية)", "bad": "سيء / سيئة",
-        "one": "شخص / واحد", "what": "ماذا", "did": "فعل (ماضي)", "say": "يقول", "sorry": "آسف",
-        "woman": "امرأة", "furious": "غاضب جداً", "attacked": "هاجم", "help": "النجدة / مساعدة",
-        "killing": "يقتل", "rushed in": "اندفعت للداخل", "murderous": "قاتل / دموي", "little": "صغير",
-        "villain": "شرير", "they": "هم", "pushed": "دفعوا", "downstairs": "للطابق السفلي",
-        "cellar": "قبو / بدروم", "poor": "مسكين / فقير", "i": "أنا", "knew": "كنت أعرف",
-        "murderer": "قاتل", "run to": "اركض إلى", "tell": "أخبر", "few": "بضع / قليل",
-        "minutes": "دقائق", "later": "لاحقاً", "arrived": "وصل", "this": "هذا", "voice": "صوت",
-        "aren't": "ألا / لست", "afraid": "خائف", "no": "لا", "mad": "مجنون", "not": "ليس",
-        "it's": "إنه", "meat": "لحم", "gave": "أعطى", "must": "يجب", "only": "فقط",
-        "soup": "حساء / شوربة", "we": "نحن", "were": "كنا", "too": "جداً", "kind": "طيبون",
-        "night": "ليلة", "punished": "عاقب", "mr. sourberry": "السيد سوربيري", "mrs. sourberry": "السيدة سوربيري"
+        "chapter": "📖 A section of a book", 
+        "2": "2️⃣ The number two", 
+        "mr": "👨 A title for a man", 
+        "sowerberry": "👨‍💼 The undertaker's name", 
+        "bumble": "👨‍✈️ The workhouse manager",
+        "met": "🤝 Saw and talked to someone", 
+        "the": "👉 A specific thing", 
+        "undertaker": "⚰️ A person who prepares dead bodies", 
+        "do": "❓ Used to ask a question",
+        "you": "👉 The person I am talking to", 
+        "know": "🧠 To have information in your mind", 
+        "anybody": "👤 Any person", 
+        "who": "❓ What person", 
+        "wants": "🙏 Would like to have",
+        "a": "1️⃣ One thing", 
+        "boy": "👦 A male child", 
+        "i'll": "🙋‍♂️ I will do it", 
+        "take": "🤲 To bring someone with you", 
+        "him": "👦 That boy",
+        "he": "👦 That man or boy", 
+        "can": "✅ Is able to do it", 
+        "come": "🚶‍♂️ To move toward me", 
+        "and": "➕ Also", 
+        "work for me": "🛠️ To do a job for someone",
+        "took": "🤲 Brought someone somewhere", 
+        "oliver": "👦 The main boy's name", 
+        "to": "➡️ In the direction of", 
+        "house": "🏠 A building where people live", 
+        "is": "✅ Exists or happens",
+        "that": "👉 The thing over there", 
+        "mrs": "👩 A title for a married woman", 
+        "here": "📍 In this place", 
+        "my": "🙋‍♂️ Belonging to me", 
+        "dear": "❤️ Someone you love",
+        "oh": "😮 Used to show surprise", 
+        "he's": "👦 He is", 
+        "very": "❗ A lot", 
+        "small": "🤏 Not big in size", 
+        "but": "🛑 However",
+        "he'll": "👦 He will", 
+        "grow": "📈 To get bigger or taller", 
+        "on": "⬆️ Placed above something", 
+        "our": "👨‍👩‍👧 Belonging to us", 
+        "food": "🍲 Things you eat",
+        "she": "👩 That woman or girl", 
+        "into": "🚪 Going inside something", 
+        "kitchen": "🍳 A room for cooking", 
+        "these": "👇 The things right here", 
+        "are": "✅ Exist",
+        "some": "🤏 A little amount", 
+        "bits": "🧩 Small pieces", 
+        "of": "🔗 Belonging to", 
+        "cold meat": "🥩 Meat that is not hot", 
+        "for": "🎁 Given to someone",
+        "dog": "🐕 A pet animal that barks", 
+        "eat": "🍽️ To put food in your mouth", 
+        "with": "🤝 Together", 
+        "me": "🙋‍♂️ Myself", 
+        "your": "👉 Belonging to you",
+        "bed": "🛏️ A piece of furniture for sleeping", 
+        "in": "📦 Inside", 
+        "shop": "🏪 A place to buy things", 
+        "coffins": "⚰️ Boxes for dead people", 
+        "coffin": "⚰️ A box for a dead person",
+        "slept": "😴 Rested at night", 
+        "room": "🚪 A part of a house", 
+        "frightened": "😨 Feeling scared or afraid", 
+        "next morning": "🌅 The day after", 
+        "open": "👐 Not closed",
+        "door": "🚪 Used to enter a room", 
+        "yes": "👍 Agreeing", 
+        "sir": "🤵 A polite way to address a man", 
+        "want": "🙏 To wish for something", 
+        "i'm": "🙋‍♂️ I am", 
+        "noah": "👦 An older boy's name",
+        "claypole": "🏷️ Noah's family name", 
+        "you're": "👉 You are", 
+        "under": "⬇️ Below someone or something", 
+        "workhouse boy": "👦 A poor boy from the workhouse",
+        "now": "⏳ At this moment", 
+        "those": "👉 The things over there", 
+        "windows": "🪟 Glass openings in a wall", 
+        "start work": "▶️ To begin doing your job", 
+        "was": "⏳ Happened in the past",
+        "satisfied": "😌 Happy with something", 
+        "has": "🤲 Owns or holds", 
+        "sad face": "😔 An unhappy look", 
+        "perfect": "✨ Exactly right, 100% good",
+        "children's": "👧👦 Belonging to young people", 
+        "funerals": "🪦 Ceremonies for burying dead people", 
+        "jealous": "😒 Upset because someone has something you want", 
+        "hated": "😠 Disliked very much",
+        "how's": "❓ How is", 
+        "mother": "👩‍👦 A female parent", 
+        "workhouse": "🏠 A house where poor people worked", 
+        "dead": "💀 Not alive anymore",
+        "don't": "🛑 Do not", 
+        "talk about": "🗣️ To speak regarding someone", 
+        "her": "👩 That woman", 
+        "bad": "👎 Not good",
+        "one": "1️⃣ A single person or thing", 
+        "what": "❓ Asking for information", 
+        "did": "⏳ Used for a past action", 
+        "say": "💬 To speak words", 
+        "sorry": "🥺 Feeling regret or sadness",
+        "woman": "👩 An adult female", 
+        "furious": "😡 Very, very angry", 
+        "attacked": "🤺 Tried to hurt someone physically", 
+        "help": "🆘 Assisting someone in danger",
+        "killing": "🔪 Making someone die", 
+        "rushed in": "🏃‍♀️ Ran inside quickly", 
+        "murderous": "🗡️ Wanting to kill", 
+        "little": "🤏 Small in size",
+        "villain": "🦹 A bad person", 
+        "they": "👥 A group of people", 
+        "pushed": "✋ Used force to move someone", 
+        "downstairs": "⬇️ To a lower floor in a house",
+        "cellar": "📦 An underground room", 
+        "poor": "😢 Deserving pity or having no money", 
+        "i": "🙋‍♂️ Me", 
+        "knew": "🧠 Had information in the past",
+        "murderer": "🔪 A person who kills someone", 
+        "run to": "🏃‍♂️ To move fast towards someone", 
+        "tell": "🗣️ To speak information to someone", 
+        "few": "🤏 A small number",
+        "minutes": "⏱️ Measures of time (60 seconds)", 
+        "later": "⏳ At a time in the future", 
+        "arrived": "📍 Reached a place", 
+        "this": "👇 The thing right here", 
+        "voice": "🔊 The sound when someone speaks",
+        "aren't": "❓ Are not", 
+        "afraid": "😨 Scared", 
+        "no": "👎 Disagreeing", 
+        "mad": "🤪 Crazy or acting wildly", 
+        "not": "🛑 Makes a word negative",
+        "it's": "👉 It is", 
+        "meat": "🥩 Animal flesh used as food", 
+        "gave": "🎁 Handed something to someone in the past", 
+        "must": "❗ Have to do it", 
+        "only": "1️⃣ Just that and nothing else",
+        "soup": "🍲 A liquid food", 
+        "we": "👥 You and me", 
+        "were": "⏳ Happened to us in the past", 
+        "too": "❗ More than needed", 
+        "kind": "😊 Nice to others",
+        "night": "🌙 The dark part of the day", 
+        "punished": "⚖️ Made someone suffer for doing wrong", 
+        "mr. sowerberry": "👨‍💼 The man who sells coffins", 
+        "mrs. sowerberry": "👩‍🍳 The undertaker's angry wife"
     };
 
     const scriptData = [
-        { start: 0.0, end: 8.0, speaker: "Narrator", text: "Chapter 2 Mr. Sourberry" },
-        { start: 8.0, end: 15.0, speaker: "Narrator", text: "Mr. Bumble met Mr. Sourberry, the undertaker." },
-        { start: 15.0, end: 20.0, speaker: "Bumble", text: "Do you know anybody who wants a boy, Mr. Sourberry?" },
-        { start: 20.0, end: 25.0, speaker: "Mr. Sourberry", text: "I'll take him. He can come and work for me." },
-        { start: 25.0, end: 32.0, speaker: "Narrator", text: "Mr. Bumble took Oliver to Mr. Sourberry's house." },
-        { start: 32.0, end: 38.0, speaker: "Mr. Sourberry", text: "Is that the boy? Mrs. Sourberry, come here, my dear." },
-        { start: 38.0, end: 41.0, speaker: "Mrs. Sourberry", text: "Oh, he's very small." },
-        { start: 41.0, end: 44.0, speaker: "Bumble", text: "But he'll grow, Mrs. Sourberry. He'll grow." },
-        { start: 44.0, end: 48.0, speaker: "Mrs. Sourberry", text: "Yes, on our food." },
+        { start: 0.0, end: 8.0, speaker: "Narrator", text: "Chapter 2 Mr. Sowerberry" },
+        { start: 8.0, end: 15.0, speaker: "Narrator", text: "Mr. Bumble met Mr. Sowerberry, the undertaker." },
+        { start: 15.0, end: 20.0, speaker: "Bumble", text: "Do you know anybody who wants a boy, Mr. Sowerberry?" },
+        { start: 20.0, end: 25.0, speaker: "Mr. Sowerberry", text: "I'll take him. He can come and work for me." },
+        { start: 25.0, end: 32.0, speaker: "Narrator", text: "Mr. Bumble took Oliver to Mr. Sowerberry's house." },
+        { start: 32.0, end: 38.0, speaker: "Mr. Sowerberry", text: "Is that the boy? Mrs. Sowerberry, come here, my dear." },
+        { start: 38.0, end: 41.0, speaker: "Mrs. Sowerberry", text: "Oh, he's very small." },
+        { start: 41.0, end: 44.0, speaker: "Bumble", text: "But he'll grow, Mrs. Sowerberry. He'll grow." },
+        { start: 44.0, end: 48.0, speaker: "Mrs. Sowerberry", text: "Yes, on our food." },
         { start: 48.0, end: 54.0, speaker: "Narrator", text: "She took Oliver into the kitchen." },
-        { start: 54.0, end: 59.0, speaker: "Mrs. Sourberry", text: "These are some bits of cold meat for the dog. You can eat that." },
-        { start: 59.0, end: 68.0, speaker: "Mrs. Sourberry", text: "Come with me. Your bed is in the shop with the coffins." },
+        { start: 54.0, end: 59.0, speaker: "Mrs. Sowerberry", text: "These are some bits of cold meat for the dog. You can eat that." },
+        { start: 59.0, end: 68.0, speaker: "Mrs. Sowerberry", text: "Come with me. Your bed is in the shop with the coffins." },
         { start: 68.0, end: 71.0, speaker: "Narrator", text: "Oliver slept in the room with the coffins." },
         { start: 71.0, end: 73.0, speaker: "Narrator", text: "He was very frightened." },
         { start: 73.0, end: 81.0, speaker: "Narrator", text: "The next morning..." },
@@ -516,8 +687,8 @@
         { start: 83.0, end: 87.0, speaker: "Oliver", text: "Yes, sir. Do you want a coffin, sir?" },
         { start: 87.0, end: 94.0, speaker: "Noah", text: "I'm Mr. Noah Claypole, and you're under me, workhouse boy." },
         { start: 94.0, end: 104.0, speaker: "Noah", text: "Now open those windows and start work." },
-        { start: 104.0, end: 107.0, speaker: "Narrator", text: "Mr. Sourberry was very satisfied with Oliver." },
-        { start: 107.0, end: 115.0, speaker: "Mr. Sourberry", text: "He has a sad face, perfect for children's funerals." },
+        { start: 104.0, end: 107.0, speaker: "Narrator", text: "Mr. Sowerberry was very satisfied with Oliver." },
+        { start: 107.0, end: 115.0, speaker: "Mr. Sowerberry", text: "He has a sad face, perfect for children's funerals." },
         { start: 115.0, end: 120.0, speaker: "Narrator", text: "Noah was jealous. He hated Oliver." },
         { start: 120.0, end: 122.0, speaker: "Noah", text: "How's your mother, workhouse?" },
         { start: 122.0, end: 126.0, speaker: "Oliver", text: "She's dead. Don't talk about her." },
@@ -526,29 +697,30 @@
         { start: 130.0, end: 136.0, speaker: "Noah", text: "I'm sorry for you, workhouse. Your mother was a bad woman." },
         { start: 136.0, end: 142.0, speaker: "Narrator", text: "Oliver was furious. He attacked Noah." },
         { start: 142.0, end: 146.0, speaker: "Noah", text: "Help! Help! He's killing me!" },
-        { start: 146.0, end: 152.0, speaker: "Narrator", text: "Mrs. Sourberry rushed in." },
-        { start: 152.0, end: 155.0, speaker: "Mrs. Sourberry", text: "You murderous little villain!" },
+        { start: 146.0, end: 152.0, speaker: "Narrator", text: "Mrs. Sowerberry rushed in." },
+        { start: 152.0, end: 155.0, speaker: "Mrs. Sowerberry", text: "You murderous little villain!" },
         { start: 155.0, end: 163.0, speaker: "Narrator", text: "They pushed Oliver downstairs into the cellar." },
-        { start: 163.0, end: 167.0, speaker: "Mrs. Sourberry", text: "Poor Noah! I knew that boy was a murderer." },
-        { start: 167.0, end: 169.0, speaker: "Mrs. Sourberry", text: "Run to Mr. Bumble and tell him to come." },
+        { start: 163.0, end: 167.0, speaker: "Mrs. Sowerberry", text: "Poor Noah! I knew that boy was a murderer." },
+        { start: 167.0, end: 169.0, speaker: "Mrs. Sowerberry", text: "Run to Mr. Bumble and tell him to come." },
         { start: 169.0, end: 177.0, speaker: "Narrator", text: "A few minutes later, Mr. Bumble arrived." },
         { start: 177.0, end: 181.0, speaker: "Bumble", text: "Do you know this voice, Oliver?" },
         { start: 181.0, end: 184.0, speaker: "Bumble", text: "Aren't you afraid?" },
         { start: 184.0, end: 185.0, speaker: "Oliver", text: "No." },
-        { start: 185.0, end: 187.0, speaker: "Mrs. Sourberry", text: "The boy is mad, Mr. Bumble." },
-        { start: 187.0, end: 192.0, speaker: "Bumble", text: "No, not mad. It's meat, Mrs. Sourberry." },
+        { start: 185.0, end: 187.0, speaker: "Mrs. Sowerberry", text: "The boy is mad, Mr. Bumble." },
+        { start: 187.0, end: 192.0, speaker: "Bumble", text: "No, not mad. It's meat, Mrs. Sowerberry." },
         { start: 192.0, end: 196.0, speaker: "Bumble", text: "You gave him meat. That boy must eat only soup." },
-        { start: 196.0, end: 197.0, speaker: "Mrs. Sourberry", text: "We were too kind." },
-        { start: 197.0, end: 202.0, speaker: "Narrator", text: "That night, Mr. Sourberry punished Oliver." }
+        { start: 196.0, end: 197.0, speaker: "Mrs. Sowerberry", text: "We were too kind." },
+        { start: 197.0, end: 202.0, speaker: "Narrator", text: "That night, Mr. Sowerberry punished Oliver." }
     ];
 
     const scriptBox = document.getElementById('scriptBoxContainer');
+    
     let collectedWords = [];
 
     function formatClickableText(text) {
         let html = text;
-        const compounds = ["cold meat", "work for me", "workhouse boy", "start work", "sad face", "talk about", "rushed in", "run to", "next morning", "mr. sourberry", "mrs. sourberry"];
-        compounds.forEach(phrase => { const regex = new RegExp(`\\b${phrase.replace('.', '\\.')}\\b`, 'gi'); html = html.replace(regex, match => match.replace(/ /g, '___SPACE___')); });
+        const compounds = ["cold meat", "work for me", "workhouse boy", "start work", "sad face", "talk about", "rushed in", "run to", "next morning", "mr. sowerberry", "mrs. sowerberry"];
+        compounds.forEach(phrase => { const regex = new RegExp(`\\b${phrase.replace(/\./g, '\\.')}\\b`, 'gi'); html = html.replace(regex, match => match.replace(/ /g, '___SPACE___')); });
         return html.split(' ').map(w => { 
             let cleanW = w.replace(/___SPACE___/g, ' '); 
             return `<span class="word">${cleanW}</span>`; 
@@ -564,10 +736,7 @@
         
         div.addEventListener('click', function(e) {
             if (e.target.classList.contains('word')) return; 
-            if(player && player.seekTo) {
-                player.seekTo(line.start, true);
-                player.playVideo();
-            }
+            playAppVideo(line.start);
         });
         scriptBox.appendChild(div);
     });
@@ -576,16 +745,26 @@
         wordEl.addEventListener('click', function(e) { 
             e.stopPropagation(); 
             const cleanWord = this.innerText.replace(/[.,?!]/g, '').toLowerCase(); 
-            if(!collectedWords.includes(cleanWord)) { collectedWords.push(cleanWord); renderWordBank(); }
+            if(!collectedWords.includes(cleanWord)) { 
+                collectedWords.push(cleanWord); 
+                renderWordBank(); 
+            }
             this.style.background = "var(--light-purple)"; setTimeout(() => { this.style.background = ""; }, 300);
         }); 
     });
 
     let activeLineIndex = -1;
     function handleTimeUpdate() {
-        if (!player || !player.getCurrentTime) return;
+        let currentTime = 0; let duration = 0;
         
-        const currentTime = player.getCurrentTime();
+        if (useYouTube && ytPlayer && ytPlayer.getCurrentTime) {
+            currentTime = ytPlayer.getCurrentTime();
+            duration = ytPlayer.getDuration();
+        } else {
+            currentTime = videoElement.currentTime;
+            duration = videoElement.duration;
+        }
+
         if (!isRoleplayingActive) {
             let foundIndex = -1;
             const lines = document.querySelectorAll('.script-line');
@@ -601,60 +780,63 @@
                 lines.forEach(l => l.classList.remove('active-line'));
                 const activeLine = lines[foundIndex];
                 activeLine.classList.add('active-line');
-                
                 const container = document.getElementById('scriptBoxContainer');
                 const scrollPos = activeLine.offsetTop - (container.clientHeight / 2) + (activeLine.clientHeight / 2);
                 container.scrollTo({ top: scrollPos, behavior: 'smooth' });
-                
                 activeLineIndex = foundIndex;
             }
         }
         
-        let dur = player.getDuration();
-        if (dur && currentTime >= dur - 2 && !isQuizUnlocked) unlockQuiz();
+        if (duration > 0 && currentTime >= duration - 2 && !isQuizUnlocked) {
+            isQuizUnlocked = true;
+            unlockQuiz();
+        }
     }
     
-    function changeVideoSpeed(rate, btn) { 
-        if(player && player.setPlaybackRate) player.setPlaybackRate(rate); 
-        document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active-speed')); 
-        btn.classList.add('active-speed'); 
-    }
-    
+    videoElement.addEventListener('timeupdate', handleTimeUpdate);
+
     function unlockQuiz() { 
-        isQuizUnlocked = true; 
         const btn = document.getElementById('quizTabBtn'); 
-        btn.style.color = "white"; btn.style.cursor = "pointer"; btn.style.background = "#28a745"; 
-        btn.innerHTML = "🔓 أجب بصوتك <br><span style='font-size:12px; font-weight:normal;'>Speak Answer</span>"; 
-        document.getElementById('lockedMessage').style.display = 'none'; 
-        document.getElementById('unlockedQuiz').style.display = 'flex'; 
+        if(btn) {
+            btn.style.color = "white"; btn.style.cursor = "pointer"; btn.style.background = "#28a745"; 
+            btn.classList.remove('locked');
+            btn.innerHTML = "🔓 أجب بصوتك <br><span style='font-size:12px; font-weight:normal;'>Speak Answer</span>"; 
+        }
+        const lm = document.getElementById('lockedMessage');
+        if(lm) lm.style.display = 'none'; 
+        const uq = document.getElementById('unlockedQuiz');
+        if(uq) uq.style.display = 'flex'; 
         loadVideoQuiz(); 
     }
 
     function renderWordBank() { 
         const list = document.getElementById('wordBankList'); list.innerHTML = ''; 
-        if(collectedWords.length === 0) { list.innerHTML = '<p style="color:#888; margin-top:50px;">اضغط على أي كلمة في السكريبت لإضافتها.</p>'; document.getElementById('wordCounter').innerText = 0; return; } 
+        if(collectedWords.length === 0) { list.innerHTML = '<p style="color:#888; margin-top:50px;">اضغط على أي كلمة في السكريبت لإضافتها.<br><span style="font-size:14px;">Click on any word in the script to add it.</span></p>'; document.getElementById('wordCounter').innerText = 0; return; } 
         document.getElementById('wordCounter').innerText = collectedWords.length; 
+        
         collectedWords.forEach(cleanWord => { 
-            const translation = mainDictionary[cleanWord] || "ترجمة غير متوفرة"; 
+            const translation = mainDictionary[cleanWord] || "Translation not available"; 
             const safeWord = cleanWord.replace(/'/g, "\\'");
-            const imgSrc = '../../images/' + cleanWord.replace(/ /g, '_') + '.jpg';
             
             const itemDiv = document.createElement('div'); itemDiv.className = 'dict-item'; 
             itemDiv.innerHTML = `<div style="display:flex; gap:5px; direction:ltr; align-items:center;">
-                                    <img src="${imgSrc}" style="width:45px; height:45px; border-radius:5px; object-fit:cover; margin-right:10px;" onerror="this.style.display='none'">
-                                    <button class="action-btn" onclick="speakTTS('${safeWord}', 'en-US')">🇺🇸</button>
-                                    <button class="action-btn info" onclick="speakTTS('${safeWord}', 'en-GB')">🇬🇧</button>
-                                    <button class="action-btn danger" onclick="removeWord('${safeWord}')">✖</button>
+                                    <button class="dict-btn dict-btn-us" onclick="speakTTS('${safeWord}', 'en-US')">🇺🇸</button>
+                                    <button class="dict-btn dict-btn-uk" onclick="speakTTS('${safeWord}', 'en-GB')">🇬🇧</button>
+                                    <button class="dict-btn dict-btn-del" onclick="removeWord('${safeWord}')">✖</button>
                                  </div>
                                  <div style="text-align:right;">
                                     <span class="word-en">${cleanWord}</span><br>
-                                    <span style="font-size:15px; color:#555;">${translation}</span>
+                                    <span style="font-size:15px; color:#555; direction:ltr; display:inline-block;">${translation}</span>
                                  </div>`; 
             list.appendChild(itemDiv); 
         }); 
     }
     
-    function removeWord(word) { collectedWords = collectedWords.filter(w => w !== word); renderWordBank(); }
+    function removeWord(word) { 
+        collectedWords = collectedWords.filter(w => w !== word); 
+        renderWordBank(); 
+    }
+    renderWordBank();
     
     function speakTTS(text, accent) { 
         window.speechSynthesis.cancel();
@@ -695,15 +877,15 @@
         if (vqCount >= actVocabWords.length) { 
             markProgress('vocab');
             let p = Math.round((scores.vocab / actVocabWords.length) * 100);
-            let resHtml = `<div style="text-align:center; padding:20px; background:#f3e8ff; border-radius:10px; border:2px solid var(--primary-purple); margin-top:20px;">
-                <h3 style="color:var(--primary-purple); margin-top:0;">📊 نتيجة الكلمات / Vocab Result</h3>
-                <p style="font-size:18px; margin:5px 0;">✔️ إجابات صحيحة (من أول مرة): <span style="color:green; font-weight:bold;">${scores.vocab}</span></p>
-                <p style="font-size:18px; margin:5px 0;">❌ أخطاء (احتاجت محاولات): <span style="color:red; font-weight:bold;">${actVocabWords.length - scores.vocab}</span></p>
-                <div style="font-size:24px; font-weight:bold; color:var(--dark-purple); margin-top:15px; border-top:1px solid #ccc; padding-top:10px;">🎯 نسبة النجاح: ${p}%</div>
+            let resHtml = `<div style="text-align:center; padding:20px; background:#f3e8ff; border-radius:10px; border:2px solid var(--primary-purple); margin-top:20px; direction:ltr;">
+                <h3 style="color:var(--primary-purple); margin-top:0;">📊 نتيجة الكلمات | Vocab Result</h3>
+                <p style="font-size:18px; margin:5px 0;">✔️ إجابات صحيحة | Correct Answers: <span style="color:green; font-weight:bold;">${scores.vocab}</span></p>
+                <p style="font-size:18px; margin:5px 0;">❌ أخطاء | Mistakes: <span style="color:red; font-weight:bold;">${actVocabWords.length - scores.vocab}</span></p>
+                <div style="font-size:24px; font-weight:bold; color:var(--dark-purple); margin-top:15px; border-top:1px solid #ccc; padding-top:10px;">🎯 نسبة النجاح | Success Rate: ${p}%</div>
             </div>`;
             document.getElementById('dictQuizOptions').innerHTML = resHtml; 
             document.getElementById('dictQuizResult').innerHTML = ""; 
-            document.getElementById('quizCounterDisplay').innerHTML = "اكتمل التحدي 🎉";
+            document.getElementById('quizCounterDisplay').innerHTML = "اكتمل التحدي 🎉 Challenge Completed";
             return; 
         }
         currentVocabAns = actVocabWords[vqCount]; 
@@ -723,11 +905,11 @@
         const btns = document.getElementById('dictQuizOptions').querySelectorAll('button'); btns.forEach(b => b.disabled = true);
         if(sel === currentVocabAns) { 
             if(firstTry.vocab) scores.vocab++;
-            playFeedback(true); btn.style.background = "#d4edda"; btn.style.borderColor = "green"; document.getElementById('dictQuizResult').innerHTML = "✔️ إجابة صحيحة!"; document.getElementById('dictQuizResult').style.color = "green"; updatePoints(10); setTimeout(nextAudioVocabQ, 1500); 
+            playFeedback(true); btn.style.background = "#d4edda"; btn.style.borderColor = "green"; document.getElementById('dictQuizResult').innerHTML = "✔️ إجابة صحيحة | Correct!"; document.getElementById('dictQuizResult').style.color = "green"; updatePoints(10); setTimeout(nextAudioVocabQ, 1500); 
         } 
         else { 
             firstTry.vocab = false;
-            playFeedback(false); btn.style.background = "#f8d7da"; btn.style.borderColor = "red"; document.getElementById('dictQuizResult').innerHTML = `❌ خطأ!`; document.getElementById('dictQuizResult').style.color = "red"; updatePoints(-5); btns.forEach(b => { if(b.innerText === currentVocabAns) { b.style.background = "#d4edda"; b.style.borderColor = "green"; }}); setTimeout(nextAudioVocabQ, 2500); 
+            playFeedback(false); btn.style.background = "#f8d7da"; btn.style.borderColor = "red"; document.getElementById('dictQuizResult').innerHTML = `❌ خطأ | Wrong!`; document.getElementById('dictQuizResult').style.color = "red"; updatePoints(-5); btns.forEach(b => { if(b.innerText === currentVocabAns) { b.style.background = "#d4edda"; b.style.borderColor = "green"; }}); setTimeout(nextAudioVocabQ, 2500); 
         }
     }
     function exitAudioVocabQuiz() { document.getElementById('dictDefaultView').style.display = 'flex'; document.getElementById('dictQuizView').style.display = 'none'; }
@@ -743,15 +925,15 @@
         if (mqIndex >= meaningQuizData.length) { 
             markProgress('meaning');
             let p = Math.round((scores.meaning / meaningQuizData.length) * 100);
-            let resHtml = `<div style="text-align:center; padding:20px; background:#f3e8ff; border-radius:10px; border:2px solid var(--primary-purple); margin-top:20px;">
-                <h3 style="color:var(--primary-purple); margin-top:0;">📊 نتيجة المعاني / Meaning Result</h3>
-                <p style="font-size:18px; margin:5px 0;">✔️ إجابات صحيحة (من أول مرة): <span style="color:green; font-weight:bold;">${scores.meaning}</span></p>
-                <p style="font-size:18px; margin:5px 0;">❌ أخطاء (احتاجت محاولات): <span style="color:red; font-weight:bold;">${meaningQuizData.length - scores.meaning}</span></p>
-                <div style="font-size:24px; font-weight:bold; color:var(--dark-purple); margin-top:15px; border-top:1px solid #ccc; padding-top:10px;">🎯 نسبة النجاح: ${p}%</div>
+            let resHtml = `<div style="text-align:center; padding:20px; background:#f3e8ff; border-radius:10px; border:2px solid var(--primary-purple); margin-top:20px; direction:ltr;">
+                <h3 style="color:var(--primary-purple); margin-top:0;">📊 نتيجة المعاني | Meaning Result</h3>
+                <p style="font-size:18px; margin:5px 0;">✔️ إجابات صحيحة | Correct Answers: <span style="color:green; font-weight:bold;">${scores.meaning}</span></p>
+                <p style="font-size:18px; margin:5px 0;">❌ أخطاء | Mistakes: <span style="color:red; font-weight:bold;">${meaningQuizData.length - scores.meaning}</span></p>
+                <div style="font-size:24px; font-weight:bold; color:var(--dark-purple); margin-top:15px; border-top:1px solid #ccc; padding-top:10px;">🎯 نسبة النجاح | Success Rate: ${p}%</div>
             </div>`;
             document.getElementById('mqOptions').parentElement.innerHTML = resHtml;
             document.getElementById('mqResult').innerHTML = "";
-            document.getElementById('mqCounterDisplay').innerHTML = "اكتمل التحدي 🎉";
+            document.getElementById('mqCounterDisplay').innerHTML = "اكتمل التحدي 🎉 Challenge Completed";
             return; 
         }
         const q = meaningQuizData[mqIndex]; 
@@ -759,529 +941,249 @@
         document.getElementById('mqDefinition').innerText = `"${q.def}"`; 
         document.getElementById('mqResult').innerText = ''; 
         document.getElementById('mqNextBtn').style.display = 'none';
-        
         let html = ""; q.opts.forEach((opt, idx) => { html += `<button class="quiz-opt" style="font-weight:normal;" onclick="checkMeaningQ(this, ${idx === q.correct})">${opt}</button>`; }); document.getElementById('mqOptions').innerHTML = html;
     }
     function checkMeaningQ(btn, isCorrect) {
         const btns = document.getElementById('mqOptions').querySelectorAll('button'); btns.forEach(b => b.disabled = true);
         if(isCorrect) { 
             if(firstTry.meaning) scores.meaning++;
-            btn.style.background = "#d4edda"; btn.style.borderColor = "green"; playFeedback(true); updatePoints(15); document.getElementById('mqResult').innerHTML = "✔️ إجابة صحيحة"; document.getElementById('mqResult').style.color = "green"; document.getElementById('mqNextBtn').style.display = 'block'; 
+            btn.style.background = "#d4edda"; btn.style.borderColor = "green"; playFeedback(true); updatePoints(15); document.getElementById('mqResult').innerHTML = "✔️ إجابة صحيحة | Correct!"; document.getElementById('mqResult').style.color = "green"; document.getElementById('mqNextBtn').style.display = 'block'; 
         } else { 
             firstTry.meaning = false;
-            btn.style.background = "#f8d7da"; btn.style.borderColor = "red"; playFeedback(false); updatePoints(-5); document.getElementById('mqResult').innerHTML = "❌ إجابة خاطئة"; document.getElementById('mqResult').style.color = "red"; const correctIndex = meaningQuizData[mqIndex].correct; btns[correctIndex].style.background = "#d4edda"; btns[correctIndex].style.borderColor = "green"; setTimeout(() => { document.getElementById('mqNextBtn').style.display = 'block'; }, 1500); 
+            btn.style.background = "#f8d7da"; btn.style.borderColor = "red"; playFeedback(false); updatePoints(-5); document.getElementById('mqResult').innerHTML = "❌ إجابة خاطئة | Wrong!"; document.getElementById('mqResult').style.color = "red"; const correctIndex = meaningQuizData[mqIndex].correct; btns[correctIndex].style.background = "#d4edda"; btns[correctIndex].style.borderColor = "green"; setTimeout(() => { document.getElementById('mqNextBtn').style.display = 'block'; }, 1500); 
         }
     }
     function nextMeaningQ() { firstTry.meaning = true; mqIndex++; loadMeaningQuiz(); }
     loadMeaningQuiz();
 
     const roleplayScene = scriptData.map(line => {
-        let imgName = "../../images/oliver.jpg";
-        if (line.speaker === "Narrator") imgName = "../../images/narrator.jpg";
-        else if (line.speaker === "Bumble") imgName = "../../images/bumble.jpg";
-        else if (line.speaker === "Mr. Sourberry") imgName = "../../images/mr_sourberry.jpg";
-        else if (line.speaker === "Mrs. Sourberry") imgName = "../../images/mrs_sourberry.jpg";
-        else if (line.speaker === "Noah") imgName = "../../images/noah.jpg";
-
-        return {
-            char: line.speaker,
-            text: line.text,
-            clean: line.text.toLowerCase().replace(/[.,?!]/g, '').trim(),
-            start: line.start,
-            end: line.end,
-            img: imgName
-        };
+        let imgName = "oliver.jpg";
+        if (line.speaker === "Narrator") imgName = "narrator.jpg";
+        else if (line.speaker === "Bumble") imgName = "bumble.jpg";
+        else if (line.speaker === "Mr. Sowerberry") imgName = "mr_sowerberry.jpg";
+        else if (line.speaker === "Mrs. Sowerberry") imgName = "mrs_sowerberry.jpg";
+        else if (line.speaker === "Noah") imgName = "noah.jpg";
+        return { char: line.speaker, text: line.text, clean: line.text.toLowerCase().replace(/[.,?!]/g, '').trim(), start: line.start, end: line.end, img: imgName };
     });
     
-    let userRole = "";
-    let rpIndex = 0;
-    let userAudioBlobs = {};
-    let recognition = null;
-    let mediaRecorder = null;
-    let audioChunks = [];
-    let isRpRecording = false;
-    let fullTranscript = ""; 
+    let userRole = ""; let rpIndex = 0; let userAudioBlobs = {}; let recognition = null; let mediaRecorder = null; let audioChunks = []; let isRpRecording = false; let fullTranscript = ""; 
 
     function selectRole(role) {
-        userRole = role;
-        userAudioBlobs = {};
-        rpIndex = 0; 
+        userRole = role; userAudioBlobs = {}; rpIndex = 0; 
         document.getElementById('chosenRoleDisplay').innerText = role;
-        document.getElementById('rpStep1').style.display = 'none';
-        document.getElementById('rpStep2').style.display = 'flex';
-        document.getElementById('chatInterface').innerHTML = "";
-        
-        document.getElementById('rpPlayFullBtn').style.display = 'none';
-        document.getElementById('rpMicBtn').style.display = 'none';
-        
-        isRoleplayingActive = true;
-        nextRoleplayStep();
+        document.getElementById('rpStep1').style.display = 'none'; document.getElementById('rpStep2').style.display = 'flex';
+        document.getElementById('chatInterface').innerHTML = ""; document.getElementById('rpPlayFullBtn').style.display = 'none'; document.getElementById('rpMicBtn').style.display = 'none';
+        isRoleplayingActive = true; nextRoleplayStep();
     }
 
     function resetRoleplay() {
-        if(isRpRecording) stopRecording();
-        stopFullScenePlay();
-        userRole = "";
-        document.getElementById('rpStep1').style.display = 'block';
-        document.getElementById('rpStep2').style.display = 'none';
-        isRoleplayingActive = false;
-        if(player && player.pauseVideo) player.pauseVideo();
+        if(isRpRecording) stopRecording(); stopFullScenePlay(); userRole = "";
+        document.getElementById('rpStep1').style.display = 'block'; document.getElementById('rpStep2').style.display = 'none';
+        isRoleplayingActive = false; pauseAppVideo();
     }
 
     function createFallbackImageString(charName) {
         let color = charName === "Oliver" ? "%28a745" : charName === "Bumble" ? "%17a2b8" : "%e83e8c";
-        if(charName === "Narrator") color = "%6f42c1";
-        if(charName === "Mr. Sourberry") color = "%fd7e14";
-        if(charName === "Mrs. Sourberry") color = "%20c997";
-        if(charName === "Noah") color = "%ffc107";
-        return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='45' height='45'><circle cx='22.5' cy='22.5' r='22.5' fill='${color}'/><text x='50%' y='50%' fill='white' font-size='16' font-family='Arial' dy='.3em' text-anchor='middle'>${charName.charAt(0)}</text></svg>`;
+        if(charName === "Narrator") color = "%6f42c1"; if(charName === "Mr. Sowerberry") color = "%17a2b8";
+        if(charName === "Mrs. Sowerberry") color = "%ffc107"; if(charName === "Noah") color = "%dc3545";
+        return `data:image/svg+xml;utf8,<svg xmlns='[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)' width='45' height='45'><circle cx='22.5' cy='22.5' r='22.5' fill='${color}'/><text x='50%' y='50%' fill='white' font-size='16' font-family='Arial' dy='.3em' text-anchor='middle'>${charName.charAt(0)}</text></svg>`;
     }
 
     function nextRoleplayStep() {
         if (rpIndex >= roleplayScene.length) {
-            document.getElementById('rpInstruction').innerHTML = "🎉 أحسنت! اكتمل المشهد.";
-            document.getElementById('rpInstruction').style.color = "green";
-            document.getElementById('rpMicBtn').style.display = 'none';
-            document.getElementById('rpPlayFullBtn').style.display = 'inline-block';
-            markProgress('speaking');
-            return;
+            document.getElementById('rpInstruction').innerHTML = "🎉 أحسنت! اكتمل المشهد | Scene Completed."; document.getElementById('rpInstruction').style.color = "green";
+            document.getElementById('rpMicBtn').style.display = 'none'; document.getElementById('rpPlayFullBtn').style.display = 'inline-block';
+            markProgress('speaking'); return;
         }
 
-        const line = roleplayScene[rpIndex];
-        const chatContainer = document.getElementById('chatInterface');
-        const isMyTurn = (line.char === userRole);
-        
-        const row = document.createElement('div');
-        row.className = `chat-row ${isMyTurn ? 'my-turn' : 'other-turn'}`;
-        
+        const line = roleplayScene[rpIndex]; const chatContainer = document.getElementById('chatInterface'); const isMyTurn = (line.char === userRole);
+        const row = document.createElement('div'); row.className = `chat-row ${isMyTurn ? 'my-turn' : 'other-turn'}`;
         const fallbackImg = createFallbackImageString(line.char);
-        row.innerHTML = `<img src="${line.img}" class="chat-avatar" alt="${line.char}" onerror="this.onerror=null; this.src='${fallbackImg}';">
-                         <div class="chat-bubble" id="bubble_${rpIndex}">${isMyTurn ? "..." : line.text}</div>`;
-        
-        chatContainer.appendChild(row);
-        
-        setTimeout(() => {
-            chatContainer.scrollTo({top: chatContainer.scrollHeight, behavior: 'smooth'});
-        }, 100);
+        row.innerHTML = `<img src="${line.img}" class="chat-avatar" alt="${line.char}" onerror="this.onerror=null; this.src='${fallbackImg}';"><div class="chat-bubble" id="bubble_${rpIndex}">${isMyTurn ? "..." : line.text}</div>`;
+        chatContainer.appendChild(row); setTimeout(() => { chatContainer.scrollTo({top: chatContainer.scrollHeight, behavior: 'smooth'}); }, 100);
 
         if (isMyTurn) {
-            document.getElementById('rpInstruction').innerHTML = `دورك! الجملة هي:<br><strong style="color:var(--dark-purple); display:inline-block; direction:ltr; margin-top:5px;">${line.text}</strong>`;
+            document.getElementById('rpInstruction').innerHTML = `دورك! الجملة هي | Your turn! The line is:<br><strong style="color:var(--dark-purple); display:inline-block; direction:ltr; margin-top:5px;">${line.text}</strong>`;
             document.getElementById('rpInstruction').style.color = "#333";
-            
-            const micBtn = document.getElementById('rpMicBtn');
-            micBtn.style.display = 'inline-block';
-            micBtn.innerHTML = "🎤 ابدأ التسجيل Start Recording";
-            micBtn.disabled = false;
-            micBtn.style.opacity = '1';
-            micBtn.classList.replace('warning', 'danger');
-            micBtn.classList.replace('success', 'danger');
-            
-            setTimeout(() => {
-                const chatContainer = document.getElementById('chatInterface');
-                chatContainer.scrollTo({top: chatContainer.scrollHeight, behavior: 'smooth'});
-            }, 200);
-
+            const micBtn = document.getElementById('rpMicBtn'); micBtn.style.display = 'inline-block'; micBtn.innerHTML = "🎤 ابدأ التسجيل | Start Recording"; micBtn.disabled = false; micBtn.style.opacity = '1'; micBtn.classList.replace('warning', 'danger'); micBtn.classList.replace('success', 'danger');
+            setTimeout(() => { const chatContainer = document.getElementById('chatInterface'); chatContainer.scrollTo({top: chatContainer.scrollHeight, behavior: 'smooth'}); }, 200);
         } else {
-            document.getElementById('rpInstruction').innerHTML = `استمع لرد ${line.char}...`;
-            document.getElementById('rpInstruction').style.color = "#666";
-            document.getElementById('rpMicBtn').style.display = 'none';
-            
-            if(player && player.unMute) {
-                player.unMute();
-                player.seekTo(line.start, true);
-                player.playVideo();
-                
-                let checkEnd = setInterval(() => {
-                    if(player.getCurrentTime() >= line.end) {
-                        player.pauseVideo();
-                        clearInterval(checkEnd);
-                        rpIndex++; 
-                        setTimeout(nextRoleplayStep, 500); 
-                    }
-                }, 50);
-            }
+            document.getElementById('rpInstruction').innerHTML = `استمع لرد ${line.char} | Listen to ${line.char}...`; document.getElementById('rpInstruction').style.color = "#666"; document.getElementById('rpMicBtn').style.display = 'none';
+            muteAppVideo(false); playAppVideo(line.start);
+            let checkEnd = setInterval(() => {
+                let currentTime = (useYouTube && ytPlayer) ? ytPlayer.getCurrentTime() : videoElement.currentTime; let duration = (useYouTube && ytPlayer) ? ytPlayer.getDuration() : videoElement.duration;
+                if(currentTime >= line.end || (duration > 0 && currentTime >= duration - 0.5)) { pauseAppVideo(); clearInterval(checkEnd); rpIndex++; setTimeout(nextRoleplayStep, 500); }
+            }, 50);
         }
     }
 
     async function toggleRoleplayMic() {
-        const btn = document.getElementById('rpMicBtn');
-        const instr = document.getElementById('rpInstruction');
-        
+        const btn = document.getElementById('rpMicBtn'); const instr = document.getElementById('rpInstruction');
         if (isRpRecording) { 
-            isRpRecording = false;
-            btn.innerHTML = "⏳ يتم الحفظ والاستمرار...";
-            btn.disabled = true;
-            btn.style.opacity = '0.7';
-
-            if(recognition) recognition.stop();
-            if(mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
-            
-            setTimeout(() => {
-                evaluateRecording(true); 
-            }, 800);
-            return; 
+            isRpRecording = false; btn.innerHTML = "⏳ يتم التقييم..."; btn.disabled = true; btn.style.opacity = '0.7';
+            if(recognition) recognition.stop(); if(mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
+            setTimeout(() => { evaluateRecording(true); }, 800); return; 
         }
-
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaRecorder = new MediaRecorder(stream);
-            audioChunks = [];
-            
-            let currentRecordIndex = rpIndex; 
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true }); mediaRecorder = new MediaRecorder(stream); audioChunks = []; let currentRecordIndex = rpIndex; 
             mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
-            mediaRecorder.onstop = () => {
-                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                userAudioBlobs[currentRecordIndex] = URL.createObjectURL(audioBlob);
-                stream.getTracks().forEach(t => t.stop());
-            };
-
+            mediaRecorder.onstop = () => { const audioBlob = new Blob(audioChunks, { type: 'audio/webm' }); userAudioBlobs[currentRecordIndex] = URL.createObjectURL(audioBlob); stream.getTracks().forEach(t => t.stop()); };
             window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (window.SpeechRecognition) {
-                recognition = new SpeechRecognition();
-                recognition.lang = 'en-US';
-                recognition.continuous = true; 
-                recognition.interimResults = true;
-                
-                fullTranscript = "";
-                
+                recognition = new SpeechRecognition(); recognition.lang = 'en-US'; recognition.continuous = true; recognition.interimResults = true; fullTranscript = "";
                 recognition.onstart = () => {
-                    isRpRecording = true;
-                    btn.innerHTML = "⏹️ إنهاء واستمرار Stop & Continue";
-                    btn.classList.replace('danger', 'warning');
-                    
-                    const line = roleplayScene[rpIndex];
-                    instr.innerHTML = `جاري التسجيل... 🔴<br><strong style="color:var(--dark-purple); display:inline-block; direction:ltr; margin-top:5px;">${line.text}</strong>`;
-                    
-                    mediaRecorder.start();
+                    isRpRecording = true; btn.innerHTML = "⏹️ إنهاء التسجيل | Stop"; btn.classList.replace('danger', 'warning');
+                    const line = roleplayScene[rpIndex]; instr.innerHTML = `جاري التسجيل... 🔴<br><strong style="color:var(--dark-purple); display:inline-block; direction:ltr; margin-top:5px;">${line.text}</strong>`; mediaRecorder.start();
                 };
-                
-                recognition.onresult = (e) => {
-                    fullTranscript = "";
-                    for(let i=0; i<e.results.length; i++) {
-                        fullTranscript += e.results[i][0].transcript + " ";
-                    }
-                };
-                
+                recognition.onresult = (e) => { fullTranscript = ""; for(let i=0; i<e.results.length; i++) { fullTranscript += e.results[i][0].transcript + " "; } };
                 recognition.onend = () => { 
-                    if (isRpRecording) {
-                        isRpRecording = false;
-                        if(mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
-                        btn.innerHTML = "⏳ يتم الحفظ...";
-                        btn.disabled = true;
-                        btn.style.opacity = '0.7';
-                        setTimeout(() => {
-                            evaluateRecording(true);
-                        }, 800);
-                    }
+                    if (isRpRecording) { isRpRecording = false; if(mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop(); btn.innerHTML = "⏳ يتم التقييم..."; btn.disabled = true; btn.style.opacity = '0.7'; setTimeout(() => { evaluateRecording(true); }, 800); }
                 };
                 recognition.start();
             } else { alert("عفواً، متصفحك لا يدعم التعرف على الصوت."); }
         } catch(e) { alert("يجب السماح باستخدام المايكروفون."); }
     }
 
-    function stopRecording() {
-        isRpRecording = false;
-        if(recognition) recognition.stop();
-        if(mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
-    }
+    function stopRecording() { isRpRecording = false; if(recognition) recognition.stop(); if(mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop(); }
 
     function evaluateRecording(forcePass = false) {
-        const line = roleplayScene[rpIndex];
-        playFeedback(true);
-        document.getElementById(`bubble_${rpIndex}`).innerText = line.text;
-        document.getElementById(`bubble_${rpIndex}`).innerHTML += "<br><span style='font-size:11px; color:#ddd;'>🎙️ مسجل</span>";
-        document.getElementById('rpMicBtn').style.display = 'none';
-        
-        rpIndex++;
-        setTimeout(nextRoleplayStep, 500);
+        const line = roleplayScene[rpIndex]; playFeedback(true);
+        document.getElementById(`bubble_${rpIndex}`).innerText = line.text; document.getElementById(`bubble_${rpIndex}`).innerHTML += "<br><span style='font-size:11px; color:#ddd;'>🎙️ مسجل</span>"; document.getElementById('rpMicBtn').style.display = 'none';
+        rpIndex++; setTimeout(nextRoleplayStep, 500);
     }
 
-    let isPlayingFullScene = false;
-    let sceneTimeout;
-    let currentUserAudio = null;
-
+    let isPlayingFullScene = false; let sceneTimeout; let currentUserAudio = null;
     function togglePlayFullScene() {
         const btn = document.getElementById('rpPlayFullBtn');
         if (isPlayingFullScene) {
-            stopFullScenePlay();
-            btn.innerHTML = "🎬 اسمع المحادثة كاملة بصوتك!";
-            btn.classList.replace('danger', 'success');
+            stopFullScenePlay(); btn.innerHTML = "🎬 اسمع المحادثة كاملة بصوتك! | Hear the full scene!"; btn.classList.replace('danger', 'success');
         } else {
-            btn.innerHTML = "⏹️ إيقاف العرض Stop Playback";
-            btn.classList.replace('success', 'danger');
-            
-            const chatContainer = document.getElementById('chatInterface');
-            chatContainer.scrollTo({top: 0, behavior: 'smooth'});
-            
-            playFullSceneStep(0);
+            btn.innerHTML = "⏹️ إيقاف العرض | Stop Playback"; btn.classList.replace('success', 'danger');
+            const chatContainer = document.getElementById('chatInterface'); chatContainer.scrollTo({top: 0, behavior: 'smooth'}); playFullSceneStep(0);
         }
     }
 
     function playFullSceneStep(index) {
         if (index >= roleplayScene.length) {
-            stopFullScenePlay();
-            document.getElementById('rpPlayFullBtn').innerHTML = "🎬 إعادة المشهد بصوتك";
-            document.getElementById('rpPlayFullBtn').classList.replace('danger', 'success');
-            return;
+            stopFullScenePlay(); document.getElementById('rpPlayFullBtn').innerHTML = "🎬 إعادة المشهد بصوتك | Replay your scene"; document.getElementById('rpPlayFullBtn').classList.replace('danger', 'success'); return;
         }
-        isPlayingFullScene = true;
-        const line = roleplayScene[index];
-        const bubbles = document.querySelectorAll('.chat-bubble');
-        bubbles.forEach((b, i) => { 
-            b.style.transform = i === index ? "scale(1.05)" : "scale(1)"; 
-            b.style.boxShadow = i === index ? "0 0 10px rgba(111,66,193,0.5)" : "none"; 
-        });
-        
-        if (bubbles[index]) {
-            const chatContainer = document.getElementById('chatInterface');
-            chatContainer.scrollTo({
-                top: bubbles[index].parentElement.offsetTop - (chatContainer.clientHeight / 2),
-                behavior: 'smooth'
-            });
-        }
-
+        isPlayingFullScene = true; const line = roleplayScene[index]; const bubbles = document.querySelectorAll('.chat-bubble');
+        bubbles.forEach((b, i) => { b.style.transform = i === index ? "scale(1.05)" : "scale(1)"; b.style.boxShadow = i === index ? "0 0 10px rgba(111,66,193,0.5)" : "none"; });
+        if (bubbles[index]) { const chatContainer = document.getElementById('chatInterface'); chatContainer.scrollTo({ top: bubbles[index].parentElement.offsetTop - (chatContainer.clientHeight / 2), behavior: 'smooth' }); }
         if (line.char === userRole && userAudioBlobs[index]) {
-            if(player && player.mute) player.mute(); 
-            player.seekTo(line.start, true);
-            player.playVideo();
-            
+            muteAppVideo(true); playAppVideo(line.start);
             currentUserAudio = new Audio(userAudioBlobs[index]);
-            currentUserAudio.onended = () => {
-                player.pauseVideo();
-                player.unMute();
-                playFullSceneStep(index + 1);
-            };
-            currentUserAudio.play();
+            currentUserAudio.onended = () => { pauseAppVideo(); muteAppVideo(false); playFullSceneStep(index + 1); }; currentUserAudio.play();
         } else {
-            if(player && player.unMute) {
-                player.unMute();
-                player.seekTo(line.start, true);
-                player.playVideo();
-                
-                let checkTime = setInterval(() => {
-                    if(!isPlayingFullScene) { clearInterval(checkTime); return; }
-                    if(player.getCurrentTime() >= line.end) {
-                        player.pauseVideo();
-                        clearInterval(checkTime);
-                        playFullSceneStep(index + 1);
-                    }
-                }, 50);
-            }
+            muteAppVideo(false); playAppVideo(line.start);
+            let checkTime = setInterval(() => {
+                if(!isPlayingFullScene) { clearInterval(checkTime); return; }
+                let currentTime = (useYouTube && ytPlayer) ? ytPlayer.getCurrentTime() : videoElement.currentTime; let duration = (useYouTube && ytPlayer) ? ytPlayer.getDuration() : videoElement.duration;
+                if(currentTime >= line.end || (duration > 0 && currentTime >= duration - 0.5)) { pauseAppVideo(); clearInterval(checkTime); playFullSceneStep(index + 1); }
+            }, 50);
         }
     }
 
     function stopFullScenePlay() {
-        isPlayingFullScene = false;
-        clearTimeout(sceneTimeout);
-        if(currentUserAudio) { currentUserAudio.pause(); currentUserAudio = null; }
-        if(player && player.pauseVideo) {
-            player.pauseVideo();
-            player.unMute();
-        }
+        isPlayingFullScene = false; clearTimeout(sceneTimeout);
+        if(currentUserAudio) { currentUserAudio.pause(); currentUserAudio = null; } pauseAppVideo(); muteAppVideo(false);
         document.querySelectorAll('.chat-bubble').forEach(b => { b.style.transform = "scale(1)"; b.style.boxShadow = "none"; });
     }
 
     const dictData = [
-        { ans: "he can come and work for me", hint: "What did Mr. Sourberry say Oliver can do?", time: 20.0, playTime: 5000 },
-        { ans: "these are some bits of cold meat for the dog", hint: "What food did Mrs. Sourberry give Oliver?", time: 54.0, playTime: 5000 },
+        { ans: "he can come and work for me", hint: "What did Mr. Sowerberry say Oliver can do?", time: 20.0, playTime: 5000 },
+        { ans: "these are some bits of cold meat for the dog", hint: "What food did Mrs. Sowerberry give Oliver?", time: 54.0, playTime: 5000 },
         { ans: "oliver slept in the room with the coffins", hint: "Where did Oliver sleep?", time: 68.0, playTime: 3000 },
         { ans: "she's dead don't talk about her", hint: "What did Oliver say about his mother?", time: 122.0, playTime: 4000 },
         { ans: "they pushed oliver downstairs into the cellar", hint: "Where did they push Oliver?", time: 155.0, playTime: 8000 }
     ];
     let dictIndex = 0;
     function loadDictation() { 
-        document.getElementById('dictCounterDisplay').innerHTML = `الجملة ${dictIndex + 1} من ${dictData.length}`;
-        document.getElementById('dictHint').innerHTML = "💡 تلميح: " + dictData[dictIndex].hint; 
-        document.getElementById('dictationInput').value = ''; 
-        document.getElementById('dictationResult').innerHTML = ''; 
-        document.getElementById('nextDictationBtn').style.display = 'none'; 
-        document.getElementById('dictationInput').disabled = false;
+        document.getElementById('dictCounterDisplay').innerHTML = `الجملة ${dictIndex + 1} من ${dictData.length}`; document.getElementById('dictHint').innerHTML = "💡 تلميح: " + dictData[dictIndex].hint; 
+        document.getElementById('dictationInput').value = ''; document.getElementById('dictationResult').innerHTML = ''; document.getElementById('nextDictationBtn').style.display = 'none'; document.getElementById('dictationInput').disabled = false;
     }
-    function playDictationAudio() { 
-        if(player && player.seekTo) {
-            player.seekTo(dictData[dictIndex].time, true); 
-            player.playVideo(); 
-            setTimeout(() => player.pauseVideo(), dictData[dictIndex].playTime); 
-        }
-    }
+    function playDictationAudio() { playAppVideo(dictData[dictIndex].time, dictData[dictIndex].playTime); }
     function playDictationTTS(langCode) { speakTTS(dictData[dictIndex].ans, langCode); }
     function checkDictation() { 
         let val = document.getElementById('dictationInput').value.toLowerCase().trim().replace(/[^\w\s']/g, '').replace(/\s+/g, ' '); 
         if (val === dictData[dictIndex].ans.replace(/[^\w\s']/g, '')) { 
             if(firstTry.dictation) scores.dictation++;
-            document.getElementById('dictationResult').innerHTML = "✔️ إجابة صحيحة!"; document.getElementById('dictationResult').style.color = "green"; playFeedback(true); updatePoints(20); document.getElementById('nextDictationBtn').style.display = 'inline-block'; 
+            document.getElementById('dictationResult').innerHTML = "✔️ إجابة صحيحة | Correct!"; document.getElementById('dictationResult').style.color = "green"; playFeedback(true); updatePoints(20); document.getElementById('nextDictationBtn').style.display = 'inline-block'; 
         } else { 
-            firstTry.dictation = false;
-            document.getElementById('dictationResult').innerHTML = "❌ حاول مرة أخرى!"; document.getElementById('dictationResult').style.color = "red"; playFeedback(false); updatePoints(-5); 
+            firstTry.dictation = false; document.getElementById('dictationResult').innerHTML = "❌ حاول مرة تانية | Try Again!"; document.getElementById('dictationResult').style.color = "red"; playFeedback(false); updatePoints(-5); 
         } 
     }
     function nextDictation() { 
-        firstTry.dictation = true;
-        dictIndex++; 
-        if(dictIndex < dictData.length) {
-            loadDictation(); 
-        } else { 
-            markProgress('dictation');
-            let p = Math.round((scores.dictation / dictData.length) * 100);
-            let resHtml = `<div style="text-align:center; padding:20px; background:#f3e8ff; border-radius:10px; border:2px solid var(--primary-purple); margin-top:10px;">
-                <h3 style="color:var(--primary-purple); margin-top:0;">📊 نتيجة الإملاء / Dictation Result</h3>
-                <p style="font-size:18px; margin:5px 0;">✔️ إجابات صحيحة (من أول مرة): <span style="color:green; font-weight:bold;">${scores.dictation}</span></p>
-                <p style="font-size:18px; margin:5px 0;">❌ أخطاء (احتاجت محاولات): <span style="color:red; font-weight:bold;">${dictData.length - scores.dictation}</span></p>
-                <div style="font-size:24px; font-weight:bold; color:var(--dark-purple); margin-top:15px; border-top:1px solid #ccc; padding-top:10px;">🎯 نسبة النجاح: ${p}%</div>
-            </div>`;
-            const container = document.getElementById('dictationInput').parentElement;
-            container.innerHTML = resHtml;
+        firstTry.dictation = true; dictIndex++; 
+        if(dictIndex < dictData.length) { loadDictation(); } else { 
+            markProgress('dictation'); let p = Math.round((scores.dictation / dictData.length) * 100);
+            let resHtml = `<div style="text-align:center; padding:20px; background:#f3e8ff; border-radius:10px; border:2px solid var(--primary-purple); margin-top:10px; direction:ltr;">
+                <h3 style="color:var(--primary-purple); margin-top:0;">📊 نتيجة الإملاء | Dictation Result</h3>
+                <p style="font-size:18px; margin:5px 0;">✔️ إجابات صحيحة | Correct Answers: <span style="color:green; font-weight:bold;">${scores.dictation}</span></p>
+                <p style="font-size:18px; margin:5px 0;">❌ أخطاء | Mistakes: <span style="color:red; font-weight:bold;">${dictData.length - scores.dictation}</span></p>
+                <div style="font-size:24px; font-weight:bold; color:var(--dark-purple); margin-top:15px; border-top:1px solid #ccc; padding-top:10px;">🎯 نسبة النجاح | Success Rate: ${p}%</div>
+            </div>`; document.getElementById('dictationInput').parentElement.innerHTML = resHtml;
         } 
     }
     loadDictation();
 
     const voiceQuizData = [
-        { q: "1. Who is Mr. Sourberry?", keywords: ["undertaker"], correctMsg: "Excellent! He is the undertaker." },
+        { q: "1. Who is Mr. Sowerberry?", keywords: ["undertaker"], correctMsg: "Excellent! He is the undertaker." },
         { q: "2. Where did Oliver sleep?", keywords: ["shop", "coffins", "room"], correctMsg: "Correct! In the room with the coffins." },
-        { q: "3. What did Mrs. Sourberry give Oliver to eat?", keywords: ["cold", "meat", "dog"], correctMsg: "Good job! She gave him cold meat." },
+        { q: "3. What did Mrs. Sowerberry give Oliver to eat?", keywords: ["cold", "meat", "dog"], correctMsg: "Good job! She gave him cold meat." },
         { q: "4. Who did Oliver attack?", keywords: ["noah", "claypole"], correctMsg: "Right! He attacked Noah." },
         { q: "5. Where did they push Oliver?", keywords: ["downstairs", "cellar"], correctMsg: "Perfect! Into the cellar." }
     ];
-    let vqIndex = 0;
-    let vqRecognition = null;
-    let isVqRecording = false;
-    let isVqChecking = false;
-    let fullSpokenText = "";
+    let voiceQIndex = 0; let voiceQRecognition = null; let isVoiceQRecording = false; let isVoiceQChecking = false; let voiceQFullSpokenText = "";
 
     function loadVideoQuiz() { 
-        if (vqIndex >= voiceQuizData.length) { 
-            markProgress('quiz');
-            let p = Math.round((scores.quiz / voiceQuizData.length) * 100);
-            let resHtml = `<div style="text-align:center; padding:20px; background:#f3e8ff; border-radius:10px; border:2px solid var(--primary-purple); margin-top:20px;">
-                <h3 style="color:var(--primary-purple); margin-top:0;">📊 نتيجة الامتحان / Quiz Result</h3>
-                <p style="font-size:18px; margin:5px 0;">✔️ إجابات صحيحة (من أول مرة): <span style="color:green; font-weight:bold;">${scores.quiz}</span></p>
-                <p style="font-size:18px; margin:5px 0;">❌ أخطاء (احتاجت محاولات): <span style="color:red; font-weight:bold;">${voiceQuizData.length - scores.quiz}</span></p>
-                <div style="font-size:24px; font-weight:bold; color:var(--dark-purple); margin-top:15px; border-top:1px solid #ccc; padding-top:10px;">🎯 نسبة النجاح: ${p}%</div>
-            </div>`;
-            document.getElementById('vqQuestion').parentElement.innerHTML = resHtml;
-            document.getElementById('vqResult').innerHTML = "";
-            return; 
+        if (voiceQIndex >= voiceQuizData.length) { 
+            markProgress('quiz'); let p = Math.round((scores.quiz / voiceQuizData.length) * 100);
+            let resHtml = `<div style="text-align:center; padding:20px; background:#f3e8ff; border-radius:10px; border:2px solid var(--primary-purple); margin-top:20px; direction:ltr;">
+                <h3 style="color:var(--primary-purple); margin-top:0;">📊 نتيجة الامتحان | Quiz Result</h3>
+                <p style="font-size:18px; margin:5px 0;">✔️ إجابات صحيحة | Correct Answers: <span style="color:green; font-weight:bold;">${scores.quiz}</span></p>
+                <p style="font-size:18px; margin:5px 0;">❌ أخطاء | Mistakes: <span style="color:red; font-weight:bold;">${voiceQuizData.length - scores.quiz}</span></p>
+                <div style="font-size:24px; font-weight:bold; color:var(--dark-purple); margin-top:15px; border-top:1px solid #ccc; padding-top:10px;">🎯 نسبة النجاح | Success Rate: ${p}%</div>
+            </div>`; document.getElementById('vqQuestion').parentElement.innerHTML = resHtml; document.getElementById('vqResult').innerHTML = ""; return; 
         }
-        const q = voiceQuizData[vqIndex]; 
-        document.getElementById('vqQuestion').innerText = q.q; 
-        document.getElementById('vqResult').innerText = ''; 
-        document.getElementById('vqTranscriptText').innerText = 'Your answer will appear here...'; 
-        document.getElementById('vqNextBtn').style.display = 'none';
-        
-        const btn = document.getElementById('vqMicBtn');
-        btn.innerHTML = "🎤 اضغط وتحدث Speak";
-        btn.classList.replace('warning', 'danger');
-        btn.style.display = 'inline-block';
-        
-        isVqChecking = false;
+        const q = voiceQuizData[voiceQIndex]; document.getElementById('vqQuestion').innerText = q.q; document.getElementById('vqResult').innerText = ''; document.getElementById('vqTranscriptText').innerText = 'Your answer will appear here...'; document.getElementById('vqNextBtn').style.display = 'none';
+        const btn = document.getElementById('vqMicBtn'); btn.innerHTML = "🎤 اضغط وتحدث | Speak"; btn.classList.replace('warning', 'danger'); btn.style.display = 'inline-block'; isVoiceQChecking = false;
     }
 
     async function toggleQuizMic() {
-        const btn = document.getElementById('vqMicBtn');
-        const transcriptText = document.getElementById('vqTranscriptText');
-        
-        if (isVqRecording || isVqChecking) {
-            if(vqRecognition) vqRecognition.stop();
-            return;
-        }
-
+        const btn = document.getElementById('vqMicBtn'); const transcriptText = document.getElementById('vqTranscriptText');
+        if (isVoiceQRecording || isVoiceQChecking) { if(voiceQRecognition) voiceQRecognition.stop(); return; }
         window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (window.SpeechRecognition) {
-            vqRecognition = new SpeechRecognition();
-            vqRecognition.lang = 'en-US';
-            vqRecognition.interimResults = true;
-            
-            vqRecognition.onstart = () => {
-                isVqRecording = true;
-                isVqChecking = false;
-                fullSpokenText = ""; 
-                btn.innerHTML = "⏹️ إيقاف Stop";
-                btn.classList.replace('danger', 'warning');
-                transcriptText.innerText = "Listening...";
-                transcriptText.style.color = "#8b5cf6";
+            voiceQRecognition = new SpeechRecognition(); voiceQRecognition.lang = 'en-US'; voiceQRecognition.interimResults = true;
+            voiceQRecognition.onstart = () => { isVoiceQRecording = true; isVoiceQChecking = false; voiceQFullSpokenText = ""; btn.innerHTML = "⏹️ إيقاف | Stop"; btn.classList.replace('danger', 'warning'); transcriptText.innerText = "Listening..."; transcriptText.style.color = "#8b5cf6"; };
+            voiceQRecognition.onresult = (e) => {
+                let interimText = ''; let currentFinal = '';
+                for (let i = e.resultIndex; i < e.results.length; ++i) { if (e.results[i].isFinal) { currentFinal += e.results[i][0].transcript.toLowerCase() + ' '; } else { interimText += e.results[i][0].transcript.toLowerCase(); } }
+                voiceQFullSpokenText += currentFinal; let displayTxt = voiceQFullSpokenText + interimText; if (displayTxt.trim() !== '') { transcriptText.innerText = `You are saying: "${displayTxt}"`; }
             };
-            
-            vqRecognition.onresult = (e) => {
-                let interimText = '';
-                let currentFinal = '';
-                
-                for (let i = e.resultIndex; i < e.results.length; ++i) {
-                    if (e.results[i].isFinal) {
-                        currentFinal += e.results[i][0].transcript.toLowerCase() + ' ';
-                    } else {
-                        interimText += e.results[i][0].transcript.toLowerCase();
-                    }
-                }
-                
-                fullSpokenText += currentFinal;
-                let displayTxt = fullSpokenText + interimText;
-                
-                if (displayTxt.trim() !== '') {
-                    transcriptText.innerText = `You are saying: "${displayTxt}"`;
-                }
+            voiceQRecognition.onerror = (e) => { isVoiceQRecording = false; if(isVoiceQChecking) return; btn.innerHTML = "🎤 أعد المحاولة | Try Again"; btn.classList.replace('warning', 'danger'); transcriptText.innerText = "Didn't catch that. Try again."; };
+            voiceQRecognition.onend = () => { 
+                isVoiceQRecording = false; let finalEvalText = voiceQFullSpokenText.trim();
+                if (!isVoiceQChecking && finalEvalText !== '') { isVoiceQChecking = true; transcriptText.innerText = `You said: "${finalEvalText}"`; transcriptText.style.color = "#333"; checkVoiceQuizAnswer(finalEvalText); } else if (!isVoiceQChecking && finalEvalText === '') { btn.innerHTML = "🎤 أعد المحاولة | Try Again"; btn.classList.replace('warning', 'danger'); transcriptText.innerText = "Didn't catch anything. Try again."; }
             };
-            
-            vqRecognition.onerror = (e) => {
-                isVqRecording = false;
-                if(isVqChecking) return;
-                btn.innerHTML = "🎤 أعد المحاولة Try Again";
-                btn.classList.replace('warning', 'danger');
-                transcriptText.innerText = "Didn't catch that. Try again.";
-            };
-            
-            vqRecognition.onend = () => { 
-                isVqRecording = false; 
-                let finalEvalText = fullSpokenText.trim();
-                
-                if (!isVqChecking && finalEvalText !== '') {
-                    isVqChecking = true;
-                    transcriptText.innerText = `You said: "${finalEvalText}"`;
-                    transcriptText.style.color = "#333";
-                    checkVoiceQuizAnswer(finalEvalText);
-                } else if (!isVqChecking && finalEvalText === '') {
-                    btn.innerHTML = "🎤 أعد المحاولة Try Again";
-                    btn.classList.replace('warning', 'danger');
-                    transcriptText.innerText = "Didn't catch anything. Try again.";
-                }
-            };
-            
-            vqRecognition.start();
+            voiceQRecognition.start();
         } else { alert("متصفحك لا يدعم هذه الخاصية."); }
     }
 
     function checkVoiceQuizAnswer(spokenText) {
-        const q = voiceQuizData[vqIndex];
-        const btn = document.getElementById('vqMicBtn');
-        btn.style.display = 'none'; 
-        
+        const q = voiceQuizData[voiceQIndex]; const btn = document.getElementById('vqMicBtn'); btn.style.display = 'none'; 
         let isCorrect = q.keywords.some(word => spokenText.includes(word));
-        
         if(isCorrect) { 
             if(firstTry.quiz) scores.quiz++;
-            playFeedback(true); 
-            updatePoints(30); 
-            document.getElementById('vqResult').innerHTML = "✔️ " + q.correctMsg; 
-            document.getElementById('vqResult').style.color = "green"; 
-            document.getElementById('vqNextBtn').style.display = 'block'; 
+            playFeedback(true); updatePoints(30); document.getElementById('vqResult').innerHTML = "✔️ " + q.correctMsg; document.getElementById('vqResult').style.color = "green"; document.getElementById('vqNextBtn').style.display = 'block'; 
         } else { 
-            firstTry.quiz = false;
-            playFeedback(false); 
-            updatePoints(-5); 
-            document.getElementById('vqResult').innerHTML = "❌ الإجابة غير دقيقة، حاول ذكر كلمات من المشهد."; 
-            document.getElementById('vqResult').style.color = "red"; 
-            
-            setTimeout(() => {
-                document.getElementById('vqResult').innerHTML = "";
-                btn.style.display = 'inline-block';
-                btn.innerHTML = "🎤 حاول مرة تانية Try Again";
-                btn.classList.replace('warning', 'danger');
-                isVqChecking = false; 
-            }, 2500); 
+            firstTry.quiz = false; playFeedback(false); updatePoints(-5); document.getElementById('vqResult').innerHTML = "❌ الإجابة غير دقيقة | Inaccurate answer, try again."; document.getElementById('vqResult').style.color = "red"; 
+            setTimeout(() => { document.getElementById('vqResult').innerHTML = ""; btn.style.display = 'inline-block'; btn.innerHTML = "🎤 حاول مرة تانية | Try Again"; btn.classList.replace('warning', 'danger'); isVoiceQChecking = false; }, 2500); 
         }
     }
-
-    function nextVideoQuiz() { firstTry.quiz = true; vqIndex++; loadVideoQuiz(); }
-
+    function nextVideoQuiz() { firstTry.quiz = true; voiceQIndex++; loadVideoQuiz(); }
+    if(isQuizUnlocked) unlockQuiz();
 </script>
 </body>
 </html>
