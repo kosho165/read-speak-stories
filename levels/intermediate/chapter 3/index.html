@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oliver Twist - Chapter 3 | Read & Speak Stories</title>
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root{--primary-purple:#6f42c1;--light-purple:#f3e8ff;--dark-purple:#553098;--bg-color:#f8f9fa;--text-dark:#333;--text-gray:#6c757d; --border-light:#e0e0e0; --highlight-yellow:#fff3cd; --border-yellow:#ffc107;}
+        body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:var(--bg-color);margin:0;padding:10px 20px;color:var(--text-dark); height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; overflow: hidden;}
+        
+        .top-headers{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:20px; flex-shrink: 0; max-width:1400px; width: 100%; margin-left: auto; margin-right: auto;}
+        .header-left{background:#fef3c7;border:1px solid #fde68a;padding:12px 25px;border-radius:40px;text-align:center;box-shadow:0 4px 6px rgba(0,0,0,0.05);}
+        .header-left h3{margin:0;color:#92400e;font-size:18px;display:flex;align-items:center;gap:8px;justify-content:center;}
+        .header-left p{margin:5px 0 0;color:#b45309;font-size:12px;font-weight:bold;direction:ltr;}
+        .header-right{background:white;padding:12px 30px;border-radius:20px;box-shadow:0 4px 6px rgba(0,0,0,0.05);flex-grow:1;text-align:left;border-bottom:4px solid var(--primary-purple);direction:ltr;display:flex;flex-direction:column;align-items:flex-start;}
+        .header-right h2{margin:0;color:var(--primary-purple);font-size:24px;display:flex;align-items:center;gap:10px;}
+        .header-right p{margin:5px 0 0;color:#666;font-size:13px;}
+
+        .top-controls-wrapper { background:white; border-radius:12px; padding:10px; margin-bottom:10px; box-shadow:0 4px 6px rgba(0,0,0,0.02); border:1px solid var(--border-light); max-width:1400px; width:100%; margin-left:auto; margin-right:auto; flex-shrink:0;}
+        .tabs-row-top { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; direction: rtl;}
+        .tab-btn-top { background:white; border:1px solid var(--border-light); padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:15px; color:#555; display:flex; flex-direction:column; align-items:center; gap:4px; transition:0.2s; flex:1; min-width:120px;}
+        .tab-btn-top:hover:not(.locked) { border-color:var(--primary-purple); color:var(--primary-purple); background:#f3e8ff;}
+        .tab-btn-top.active { background:var(--primary-purple); color:white; border-color:var(--dark-purple); box-shadow:0 4px 8px rgba(111,66,193,0.3);}
+        .tab-btn-top.locked { color:#aaa; cursor:not-allowed; background:#f9f9f9; }
+
+        .progress-tracker { background:white; border-radius:12px; padding:10px; margin-bottom:10px; box-shadow:0 4px 6px rgba(0,0,0,0.02); border:1px solid var(--border-light); max-width:1400px; width:100%; margin-left:auto; margin-right:auto; flex-shrink:0; display:flex; justify-content:center; gap:20px; flex-wrap:wrap; font-size:16px; font-weight:bold; color:#555; direction: ltr;}
+        .prog-item { display:flex; align-items:center; gap:8px; transition:0.3s; }
+        .prog-divider { color:#ccc; }
+
+        .word-counter-badge {background-color:#e63946 !important; color:#ffffff !important; border-radius:50px; padding:2px 8px; font-size:16px !important; font-weight:bold !important; margin-left:5px; border:2px solid #ffffff; box-shadow:0 2px 4px rgba(0,0,0,0.2); display:inline-flex; align-items:center; justify-content:center; min-width:20px;}
+
+        .main-layout{display:flex;gap:20px;align-items:flex-start;flex: 1; min-height: 0; max-width:1400px; width: 100%; margin: 0 auto; direction: rtl;}
+        
+        .media-column{flex:0 0 42%;display:flex;flex-direction:column;gap:15px; height:max-content; position: sticky; top: 15px; z-index: 10; direction: ltr;}
+        .video-wrapper{position:relative;padding-bottom:56.25%;height:0;background:#000;border-radius:12px;overflow:hidden;border:2px solid #ddd;box-shadow:0 4px 10px rgba(0,0,0,0.1); flex-shrink: 0;}
+        .video-wrapper video, .video-wrapper iframe, .video-wrapper #mainVideo {position:absolute;top:0;left:0;width:100%;height:100%; border:none;}
+        .speed-controls{display:flex;justify-content:center;gap:10px; flex-shrink: 0;}
+        .speed-btn{background:white;border:1px solid #ddd;padding:10px 15px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:13px;display:flex;flex-direction:column;align-items:center;gap:5px;transition:0.2s;}
+        .speed-btn.active-speed{background:var(--primary-purple);color:white;border-color:var(--dark-purple);}
+
+        .interactive-column{flex:1;display:flex;flex-direction:column;gap:15px;height:100%;min-width:0;}
+        
+        .content-area{flex:1; background:white; border-radius:12px; border:1px solid var(--border-light); padding:20px; display: flex; flex-direction: column; overflow: hidden; box-shadow:0 4px 6px rgba(0,0,0,0.02); min-height: 0; direction: rtl;}
+        .tab-content{display:none; flex:1; flex-direction:column; min-height:0;}
+        .tab-content.active-content{display:flex;}
+
+        .script-box{flex:1; overflow-y:auto; position:relative; text-align:left; scroll-behavior:smooth; padding-bottom: 50%; min-height: 0; direction: ltr;}
+        .script-line{font-size:18px;color:#333;padding:12px 15px;margin-bottom:8px;border-left:5px solid transparent;border-radius:4px;line-height:1.6;transition:0.2s;cursor:pointer;}
+        .script-line:hover{background:#f9f9f9;}
+        .script-line.active-line{background-color:var(--highlight-yellow);border-left-color:var(--border-yellow);font-weight:bold;color:#000;box-shadow:0 2px 4px rgba(0,0,0,0.05);}
+        .speaker-name{color:#000;font-weight:bold;margin-right:5px;}
+        .word{cursor:pointer;transition:0.2s;display:inline-block;border-bottom:1px dashed #ccc;padding:0 2px;}
+        .word:hover{background:#e0d4f5;color:var(--primary-purple);border-radius:4px;border-bottom-color:var(--primary-purple);}
+
+        .action-btn{background:var(--primary-purple);color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:15px;margin:3px;transition:0.2s; line-height:1.4;}
+        .action-btn.danger{background:#dc3545;}.action-btn.success{background:#28a745;}.action-btn.warning{background:#ffc107;color:#000;}.action-btn.info{background:#17a2b8;}
+        
+        #dictDefaultView {display: flex; flex-direction: column; height: 100%; min-height: 0;}
+        #wordBankList {flex: 1; overflow-y: auto; min-height: 0; margin-bottom: 15px; padding-right: 10px;}
+        
+        .dict-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #eee;}
+        .word-en{font-weight:bold;font-size:18px;color:var(--primary-purple);display:inline-block;}
+        .quiz-opt{display:block;width:100%;text-align:center;padding:15px;margin-bottom:10px;border:2px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-size:18px;font-weight:bold;transition:0.2s;}
+        .quiz-opt:hover{background:#f3e8ff;border-color:var(--primary-purple);}
+
+        .chat-container{flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:15px; padding-bottom:20px; min-height:0; scroll-behavior:smooth; position: relative;}
+        .chat-row{display:flex;gap:10px;align-items:flex-end; transition:0.3s;}
+        .chat-row.my-turn{flex-direction:row-reverse;}
+        .chat-avatar{width:45px;height:45px;border-radius:50%;object-fit:cover;border:2px solid var(--primary-purple);background:#eee;flex-shrink:0;}
+        .chat-bubble{padding:12px 18px;border-radius:18px;font-size:16px;max-width:75%;line-height:1.4;position:relative;}
+        .chat-row.my-turn .chat-bubble{background:var(--primary-purple);color:white;border-bottom-right-radius:2px;}
+        .chat-row.other-turn .chat-bubble{background:#f1f1f1;color:#333;border-bottom-left-radius:2px;border:1px solid #e0e0e0;}
+        .rp-instruction{text-align:center;color:#dc3545;font-weight:bold;font-size:18px;margin:10px 0; min-height: 60px;}
+
+        ::-webkit-scrollbar{width:8px;}::-webkit-scrollbar-track{background:#f1f1f1;}::-webkit-scrollbar-thumb{background:#ccc;border-radius:4px;}::-webkit-scrollbar-thumb:hover{background:var(--primary-purple);}
+    </style>
+</head>
+<body>
+
+<div class="top-headers">
+    <div class="header-right">
+        <h2>Oliver Twist 👑</h2>
+        <p>Chapter 3 | The Artful Dodger</p>
+    </div>
+
+    <div class="header-left">
+        <h3>⭐ <span id="totalPoints">100</span></h3>
+        <p>Points | Level: Intermediate</p>
+    </div>
+
+    <a href="/levels.html" style="background: #dc3545; color: white; text-decoration: none; padding: 12px 25px; border-radius: 40px; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;">
+        <span>🔙</span> Chapters Menu
+    </a>
+</div>
+
+<div class="top-controls-wrapper">
+    <div class="tabs-row-top" style="direction: rtl;">
+        <button class="tab-btn-top active" onclick="switchTab('scriptTab', this)">
+            <span>📖 Script</span>
+        </button>
+        <button class="tab-btn-top" onclick="switchTab('speakTab', this)">
+            <span>🗣️ Roleplay</span>
+        </button>
+        <button class="tab-btn-top" onclick="switchTab('writeTab', this)">
+            <span>✍️ Dictation</span>
+        </button>
+        <button class="tab-btn-top" onclick="switchTab('dictTab', this)">
+            <span>🏦 Dictionary <span id="wordCounter" class="word-counter-badge">0</span></span>
+        </button>
+        <button class="tab-btn-top" onclick="switchTab('meaningTab', this)">
+            <span>🧠 Meaning Quiz</span>
+        </button>
+        <button id="quizTabBtn" class="tab-btn-top locked" onclick="switchTab('quizTab', this)">
+            <span>🔒 Speak Answer</span>
+        </button>
+    </div>
+</div>
+
+<div class="progress-tracker">
+    <div class="prog-item" id="prog-quiz"><span class="icon">❌</span> Quiz 📋</div>
+    <span class="prog-divider">|</span>
+    <div class="prog-item" id="prog-dictation"><span class="icon">❌</span> Dictation ✍️</div>
+    <span class="prog-divider">|</span>
+    <div class="prog-item" id="prog-speaking"><span class="icon">❌</span> Speaking 🗣️</div>
+    <span class="prog-divider">|</span>
+    <div class="prog-item" id="prog-meaning"><span class="icon">❌</span> Meaning 🧠</div>
+    <span class="prog-divider">|</span>
+    <div class="prog-item" id="prog-vocab"><span class="icon">❌</span> Vocab 🎧</div>
+</div>
+
+<div id="successOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; flex-direction:column;">
+    <div style="background:white; padding:40px; border-radius:20px; text-align:center; max-width:500px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+        <h1 style="font-size:60px; margin:0;">🏆</h1>
+        <h2 style="color:var(--primary-purple); margin-top:10px;">Great job!</h2>
+        <p style="font-size:20px; color:#555; margin-bottom:5px;">You completed the chapter with a success rate of:</p>
+        <div style="font-size:50px; font-weight:bold; color:#28a745; margin:10px 0;" id="finalPercentageDisplay">100%</div>
+        <button class="action-btn success" style="font-size:18px; padding:10px 30px; margin-top:20px;" onclick="document.getElementById('successOverlay').style.display='none'">Continue</button>
+    </div>
+</div>
+
+<div class="main-layout">
+    <div class="media-column">
+        <div class="video-wrapper">
+            <!-- اليوتيوب هنا بدل ملف الكمبيوتر -->
+            <div id="mainVideo"></div>
+        </div>
+        <div class="speed-controls">
+            <button class="speed-btn" onclick="changeVideoSpeed(0.5, this)">
+                <span>Very Slow (0.5x)</span>
+            </button>
+            <button class="speed-btn" onclick="changeVideoSpeed(0.75, this)">
+                <span>Slow (0.75x)</span>
+            </button>
+            <button class="speed-btn active-speed" onclick="changeVideoSpeed(1, this)">
+                <span>Normal Speed</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="interactive-column">
+        <div class="content-area" id="mainContentArea">
+            
+            <div id="scriptTab" class="tab-content active-content">
+                <div style="color:var(--primary-purple); font-weight:bold; font-size:18px; margin-bottom:15px; text-align:left; flex-shrink: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; direction: ltr;">
+                    📖 Interactive Script
+                </div>
+                <div class="script-box" id="scriptBoxContainer"></div>
+            </div>
+
+            <div id="speakTab" class="tab-content">
+                <h3 style="color:var(--primary-purple); margin-top:0; text-align:center; flex-shrink:0; border-bottom: 2px solid #eee; padding-bottom: 10px; direction: ltr;">
+                    🗣️ Live Chat (Roleplay)
+                </h3>
+                
+                <div id="rpStep1" style="text-align:center; margin-top:30px; flex:1; direction: ltr;">
+                    <p style="font-size:18px; font-weight:bold; margin-bottom:20px;">
+                        Choose the character you want to play:
+                    </p>
+                    <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
+                        <button class="action-btn" style="background:#6f42c1; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Narrator')">
+                            <img src="narrator.jpg" alt="Narrator" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <div style="font-weight:bold; font-size:18px;">Role: Narrator</div>
+                        </button>
+                        <button class="action-btn" style="background:#e83e8c; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Oliver')">
+                            <img src="oliver.jpg" alt="Oliver" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <div style="font-weight:bold; font-size:18px;">Role: Oliver</div>
+                        </button>
+                        <button class="action-btn" style="background:#17a2b8; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Dodger')">
+                            <img src="dodger.jpg" alt="Dodger" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <div style="font-weight:bold; font-size:18px;">Role: Dodger</div>
+                        </button>
+                        <button class="action-btn" style="background:#28a745; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Fagin')">
+                            <img src="fagin.jpg" alt="Fagin" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <div style="font-weight:bold; font-size:18px;">Role: Fagin</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="rpStep2" style="display:none; flex:1; flex-direction:column; min-height:0; direction: ltr;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #eee; padding-bottom:10px; margin-bottom:15px; flex-shrink:0;">
+                        <h4 style="margin:0; color:var(--dark-purple);">Role: <span id="chosenRoleDisplay" style="color:#dc3545;"></span></h4>
+                        <button class="action-btn danger" style="padding:8px 15px; font-size:14px; margin:0;" onclick="resetRoleplay()">
+                            🔄 Change Character
+                        </button>
+                    </div>
+                    
+                    <div id="chatInterface" class="chat-container"></div>
+
+                    <div id="rpControlsArea" style="text-align:center; padding-top:15px; border-top:1px solid #eee; margin-top:10px; flex-shrink:0;">
+                        <div id="rpInstruction" class="rp-instruction"></div>
+                        <button id="rpMicBtn" class="action-btn danger" style="border-radius:50px; padding:12px 30px; font-size:16px; display:none;" onclick="toggleRoleplayMic()">
+                            🎤 Start Recording
+                        </button>
+                        <button id="rpPlayFullBtn" class="action-btn success" style="width:100%; padding:15px; font-size:18px; display:none;" onclick="togglePlayFullScene()">
+                            🎬 Hear the full scene with your voice!
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="writeTab" class="tab-content" style="text-align:center; direction: ltr;">
+                <h3 style="color:var(--primary-purple); margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+                    ✍️ Listen and Write
+                </h3>
+                <div style="background:#f9f9f9; padding:20px; border-radius:10px; border:1px solid #eee; margin-top:15px; flex:1; overflow-y:auto;">
+                    <p id="dictCounterDisplay" style="font-weight:bold; font-size:18px; color:#555; margin-top:0; line-height:1.4;">Sentence 1 of 5</p>
+                    
+                    <div style="display:flex; justify-content:center; gap:10px; margin-bottom:20px;">
+                        <button class="action-btn" onclick="playDictationAudio()">
+                            🎬 Video
+                        </button>
+                        <button class="action-btn info" onclick="playDictationTTS('en-US')">
+                            🇺🇸 US Audio
+                        </button>
+                        <button class="action-btn" style="background:#e83e8c;" onclick="playDictationTTS('en-GB')">
+                            🇬🇧 UK Audio
+                        </button>
+                    </div>
+                    <input type="text" id="dictationInput" placeholder="Type what you hear..." style="width:80%; padding:12px; font-size:20px; border:2px solid #ccc; border-radius:6px; text-align:center;">
+                    <p id="dictHint" style="color:#666; margin:10px 0; font-weight:bold; line-height:1.4; font-size:18px;"></p>
+                    
+                    <div style="display:flex; justify-content:center; gap:10px; margin-top:15px;">
+                        <button id="checkDictationBtn" class="action-btn success" onclick="checkDictation()">
+                            ✔️ Check
+                        </button>
+                        <button id="nextDictationBtn" class="action-btn" style="display:none;" onclick="nextDictation()">
+                            ➡️ Next
+                        </button>
+                    </div>
+                    <p id="dictationResult" style="font-weight:bold; font-size:18px; margin-top:15px; line-height:1.4;"></p>
+                </div>
+            </div>
+
+            <div id="dictTab" class="tab-content" style="text-align:center; direction: ltr;">
+                <div id="dictDefaultView">
+                    <h3 style="color:var(--primary-purple); margin-top:0; flex-shrink:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+                        🏦 Audio Dictionary
+                    </h3>
+                    <div id="wordBankList">
+                        <p style="color:#888; margin-top:50px;">Click on any word in the script to add it.</p>
+                    </div>
+                    <button class="action-btn success" style="width:100%; padding:15px; font-size:16px; flex-shrink:0;" onclick="startAudioVocabQuiz()">
+                        🎧 Listening Challenge
+                    </button>
+                </div>
+                <div id="dictQuizView" style="display: none; flex-direction: column; height: 100%;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; flex-shrink: 0;">
+                        <h3 style="color:var(--primary-purple); margin:0; line-height: 1.2; text-align: left;">
+                            🎧 Listening Challenge
+                        </h3>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <p id="quizCounterDisplay" style="font-weight:bold; font-size:16px; color:#555; margin:0;">Question 1 of X</p>
+                            <button class="action-btn warning" style="border-radius:50%; width:50px; height:50px; font-size:20px; margin:0; display:flex; justify-content:center; align-items:center;" onclick="playCurrentQuizAudio()">🔊</button>
+                        </div>
+                    </div>
+                    
+                    <div style="flex: 1; overflow-y: auto; min-height: 0; padding-bottom: 10px;">
+                        <div id="dictQuizOptions" style="text-align:left;"></div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px; margin-top: auto; flex-shrink: 0;">
+                        <p id="dictQuizResult" style="font-weight:bold; font-size:16px; margin:0; line-height:1.4; text-align:left; flex:1; padding-left:10px;"></p>
+                        <button class="action-btn danger" style="padding:10px 20px; font-size:15px; margin:0; white-space: nowrap;" onclick="exitAudioVocabQuiz()">
+                            🚪 End Challenge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="meaningTab" class="tab-content" style="text-align:center; direction: ltr;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; flex-shrink: 0;">
+                    <h3 style="color:var(--primary-purple); margin:0; line-height: 1.2; text-align: left;">
+                        🧠 Meaning Quiz
+                    </h3>
+                    <p id="mqCounterDisplay" style="font-weight:bold; font-size:16px; color:#888; margin:0;">Question 1 of X</p>
+                </div>
+                
+                <div style="flex: 1; overflow-y: auto; min-height: 0; padding-bottom:10px;">
+                    <div style="background:white; padding:15px; border-radius:10px; border:1px solid #eee; text-align:left;">
+                        <h4 id="mqDefinition" style="font-size:18px; color:var(--dark-purple); margin-top:0; margin-bottom:15px; line-height:1.4;"></h4>
+                        <div id="mqOptions"></div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px; margin-top: auto; flex-shrink: 0;">
+                    <p id="mqResult" style="font-weight:bold; font-size:16px; margin:0; line-height:1.4; text-align:left; flex:1; padding-left:10px;"></p>
+                    <button id="mqNextBtn" class="action-btn success" style="padding:10px 20px; font-size:15px; display:none; margin:0; white-space: nowrap;" onclick="nextMeaningQ()">
+                        Next ➡️
+                    </button>
+                </div>
+            </div>
+
+            <div id="quizTab" class="tab-content" style="text-align:center; direction: ltr;">
+                <div id="lockedMessage">
+                    <h3 style="color:var(--text-gray);">🔒 Quiz Locked</h3>
+                    <p style="color:#888;">Watch the video to the end to unlock the quiz.</p>
+                </div>
+                <div id="unlockedQuiz" style="display:none; flex-direction: column; height: 100%;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; flex-shrink: 0;">
+                        <h3 style="color:#28a745; margin:0; line-height: 1.2; text-align: left;">
+                            🔓 Speak The Answer
+                        </h3>
+                    </div>
+                    
+                    <div style="flex: 1; overflow-y: auto; min-height: 0; padding-bottom:10px;">
+                        <div style="background:white; padding:20px; border-radius:10px; border:1px solid #eee; text-align:left;">
+                            <h4 id="vqQuestion" style="font-size:20px; color:var(--dark-purple); margin-top:0; margin-bottom:20px; line-height:1.4;"></h4>
+                            
+                            <div style="text-align:center; padding:20px; background:#f9f9f9; border-radius:10px; border:2px dashed #ccc;">
+                                <p id="vqTranscriptText" style="color:#666; font-size:16px; margin-bottom:15px; min-height:24px;">Your answer will appear here...</p>
+                                <button id="vqMicBtn" class="action-btn danger" style="border-radius:50px; padding:15px 40px; font-size:18px; display:inline-block;" onclick="toggleQuizMic()">
+                                    🎤 Speak
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px; margin-top: auto; flex-shrink: 0;">
+                        <p id="vqResult" style="font-weight:bold; font-size:18px; margin:0; line-height:1.4; text-align:left; flex:1; padding-left:10px;"></p>
+                        <button id="vqNextBtn" class="action-btn success" style="padding:10px 20px; font-size:15px; display:none; margin:0; white-space: nowrap;" onclick="nextVideoQuiz()">
+                            Next ➡️
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // ربط مشغل اليوتيوب الذكي
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    let player;
+    let timeUpdateInterval;
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('mainVideo', {
+            videoId: 'yOu5MiCm5Cw',
+            playerVars: { 
+                'playsinline': 1,
+                'rel': 0,
+                'modestbranding': 1
+            },
+            events: {
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.PLAYING) {
+            clearInterval(timeUpdateInterval);
+            timeUpdateInterval = setInterval(handleTimeUpdate, 100);
+        } else {
+            clearInterval(timeUpdateInterval);
+        }
+    }
+
+    const correctSound = new Audio('correct.mp3');
+    const wrongSound = new Audio('wrong.mp3');
+    function playFeedback(isCorrect) {
+        if(isCorrect) { correctSound.currentTime = 0; correctSound.play().catch(()=>{}); }
+        else { wrongSound.currentTime = 0; wrongSound.play().catch(()=>{}); }
+    }
+
+    let points = 100;
+    function updatePoints(amount) { points += amount; document.getElementById('totalPoints').innerText = points; }
+
+    let isQuizUnlocked = false;
+    let isRoleplayingActive = false; 
+
+    let completedSections = { speaking: false, dictation: false, vocab: false, meaning: false, quiz: false };
+    let scores = { dictation: 0, vocab: 0, meaning: 0, quiz: 0 };
+    let totals = { dictation: 5, vocab: 0, meaning: 4, quiz: 5 }; 
+    let firstTry = { dictation: true, vocab: true, meaning: true, quiz: true };
+
+    function markProgress(section) {
+        if(!completedSections[section]) {
+            completedSections[section] = true;
+            let el = document.getElementById('prog-' + section);
+            el.innerHTML = el.innerHTML.replace('❌', '✔️');
+            el.style.color = '#28a745';
+            checkAllCompleted();
+        }
+    }
+
+    function checkAllCompleted() {
+        if(completedSections.speaking && completedSections.dictation && completedSections.vocab && completedSections.meaning && completedSections.quiz) {
+            let totalQ = totals.dictation + totals.vocab + totals.meaning + totals.quiz;
+            let totalScore = scores.dictation + scores.vocab + scores.meaning + scores.quiz;
+            let percentage = totalQ > 0 ? Math.round((totalScore / totalQ) * 100) : 100;
+            
+            setTimeout(() => {
+                document.getElementById('finalPercentageDisplay').innerText = percentage + "%";
+                document.getElementById('successOverlay').style.display = 'flex';
+                
+                if (typeof confetti !== 'undefined') {
+                    confetti({ particleCount: 200, spread: 100, origin: { y: 0.9 }, zIndex: 10000 });
+                }
+                
+                try {
+                    let successMusic = new Audio('success.mp3');
+                    successMusic.volume = 0.4;
+                    successMusic.play().catch(e => console.log(e));
+                } catch(e) {}
+                
+            }, 1000);
+        }
+    }
+
+    function switchTab(tabId, btnElement) { 
+        if (btnElement.style.cursor === 'not-allowed') return; 
+        
+        if (player && player.pauseVideo) player.pauseVideo(); 
+        window.speechSynthesis.cancel();
+        if(isPlayingFullScene) stopFullScenePlay();
+
+        document.querySelectorAll('.tab-btn-top').forEach(btn => { 
+            if(btn.style.cursor !== 'not-allowed') btn.classList.remove('active'); 
+        }); 
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active-content')); 
+        document.getElementById(tabId).classList.add('active-content'); 
+        btnElement.classList.add('active'); 
+    }
+
+    const mainDictionary = { 
+        "runs away": "🏃‍♂️ Leaves quickly to escape", 
+        "next morning": "🌅 The early part of the next day", 
+        "long road": "🛣️ A great distance to travel",
+        "came up": "🚶‍♂️ Walked towards someone", 
+        "artful dodger": "🦊 A clever, tricky boy", 
+        "hurry up": "⏱️ Move or do something fast",
+        "broken stairs": "🏚️ Old, damaged steps", 
+        "old man": "👴 A man with many years of age", 
+        "good evening": "🌙 A polite night greeting",
+        "little game": "🎲 A short activity for fun", 
+        "fell asleep": "😴 Started sleeping", 
+        "fields": "🌾 Open land with grass",
+        "tired": "🥱 Needing rest", 
+        "arrived": "📍 Reached a place", 
+        "city": "🏙️ A large town with many people", 
+        "boy": "👦 A young male child",
+        "pub": "🍻 A place to eat and drink", 
+        "gentleman": "🎩 A polite, well-dressed man", 
+        "followed": "🚶‍♂️ Walked behind someone", 
+        "narrow": "↔️ Not wide, very close together",
+        "dark": "🌑 Having no light", 
+        "dirty": "🗑️ Not clean, messy", 
+        "afraid": "😨 Scared or frightened", 
+        "pushed": "🤚 Moved someone with force",
+        "suddenly": "⚡ Happening very fast and unexpectedly", 
+        "honoured": "🤝 Feeling proud and happy to meet", 
+        "handkerchief": "🤧 A small cloth used for the nose", 
+        "strange": "👽 Not normal, weird",
+        "london": "🇬🇧 The capital city of England", 
+        "hungry": "🍽️ Wanting or needing food", 
+        "door": "🚪 Used to enter or leave a room", 
+        "jack dawkins": "👦 The Dodger's real name",
+        "game": "🎮 An activity done for fun",
+        "playing": "⚽ Doing an activity for fun"
+    };
+
+    const scriptData = [
+        { start: 0.0, end: 4.0, speaker: "Narrator", text: "Chapter 3" },
+        { start: 4.0, end: 8.0, speaker: "Narrator", text: "Oliver runs away." },
+        { start: 8.0, end: 14.0, speaker: "Narrator", text: "Early the next morning, Oliver left the shop." },
+        { start: 14.0, end: 16.0, speaker: "Oliver", text: "Where can I go?" },
+        { start: 16.0, end: 20.0, speaker: "Oliver", text: "London. They'll never find me there." },
+        { start: 20.0, end: 23.0, speaker: "Narrator", text: "It was a long road to walk." },
+        { start: 23.0, end: 26.0, speaker: "Narrator", text: "At night, he slept in the fields." },
+        { start: 26.0, end: 29.0, speaker: "Oliver", text: "I'm so tired." },
+        { start: 29.0, end: 38.0, speaker: "Narrator", text: "After seven days, he arrived in the city." },
+        { start: 38.0, end: 43.0, speaker: "Oliver", text: "What can I do now? I don't know anybody in London." },
+        { start: 43.0, end: 46.0, speaker: "Narrator", text: "A boy came up to him." },
+        { start: 46.0, end: 48.0, speaker: "Dodger", text: "Hello. What's the matter?" },
+        { start: 48.0, end: 52.0, speaker: "Oliver", text: "I have no money and I'm very hungry." },
+        { start: 52.0, end: 55.0, speaker: "Dodger", text: "Come with me. I'll get you some food." },
+        { start: 55.0, end: 60.0, speaker: "Narrator", text: "He took Oliver into a pub." },
+        { start: 60.0, end: 62.0, speaker: "Dodger", text: "Have you got a home in London?" },
+        { start: 62.0, end: 63.0, speaker: "Oliver", text: "No,I haven't." },
+        { start: 63.0, end: 68.0, speaker: "Dodger", text: "I know an old gentleman. You can stay with him." },
+        { start: 68.0, end: 73.0, speaker: "Narrator", text: "Oliver followed him to a very old part of the city." },
+        { start: 73.0, end: 87.0, speaker: "Dodger", text: "My name's Jack Dawkins, but people call me the Artful Dodger." },
+        { start: 87.0, end: 91.0, speaker: "Narrator", text: "The streets were narrow, dark and dirty." },
+        { start: 91.0, end: 95.0, speaker: "Narrator", text: "Oliver was a little afraid." },
+        { start: 95.0, end: 100.0, speaker: "Dodger", text: "Come on, hurry up." },
+        { start: 100.0, end: 104.0, speaker: "Narrator", text: "Dodger pushed him through a door." },
+        { start: 104.0, end: 107.0, speaker: "Dodger", text: "In here." },
+        { start: 107.0, end: 113.0, speaker: "Narrator", text: "They went up some dark, broken stairs." },
+        { start: 113.0, end: 119.0, speaker: "Narrator", text: "Suddenly, they were in a room with an old man and some boys." },
+        { start: 119.0, end: 123.0, speaker: "Dodger", text: "Fagin, this is Oliver." },
+        { start: 123.0, end: 129.0, speaker: "Fagin", text: "Good evening, Oliver. I'm very honoured to meet you." },
+        { start: 129.0, end: 133.0, speaker: "Fagin", text: "You must be hungry. Come and eat with us." },
+        { start: 133.0, end: 136.0, speaker: "Oliver", text: "Thank you." },
+        { start: 136.0, end: 141.0, speaker: "Fagin", text: "Now, do you want to play a little game?" },
+        { start: 141.0, end: 143.0, speaker: "Oliver", text: "Yes, please." },
+        { start: 143.0, end: 146.0, speaker: "Fagin", text: "Can you see my handkerchief?" },
+        { start: 146.0, end: 153.0, speaker: "Fagin", text: "Try to take it, but you mustn't let me see you." },
+        { start: 153.0, end: 158.0, speaker: "Narrator", text: "Oliver enjoyed playing the strange game." },
+        { start: 158.0, end: 162.0, speaker: "Fagin", text: "I saw you." },
+        { start: 162.0, end: 168.0, speaker: "Narrator", text: "But he was tired. Soon, he fell asleep." }
+    ];
+
+    const scriptBox = document.getElementById('scriptBoxContainer');
+    let collectedWords = [];
+
+    function formatClickableText(text) {
+        let html = text;
+        const compounds = ["runs away", "next morning", "long road", "came up", "artful dodger", "jack dawkins", "hurry up", "broken stairs", "old man", "good evening", "little game", "fell asleep"];
+        compounds.forEach(phrase => { const regex = new RegExp(`\\b${phrase.replace('.', '\\.')}\\b`, 'gi'); html = html.replace(regex, match => match.replace(/ /g, '___SPACE___')); });
+        return html.split(' ').map(w => { 
+            let cleanW = w.replace(/___SPACE___/g, ' '); 
+            return `<span class="word">${cleanW}</span>`; 
+        }).join(' ');
+    }
+
+    scriptData.forEach((line) => {
+        const div = document.createElement('div');
+        div.className = 'script-line';
+        div.setAttribute('data-start', line.start);
+        div.setAttribute('data-end', line.end);
+        div.innerHTML = `<span class="speaker-name">${line.speaker}:</span> ${formatClickableText(line.text)}`;
+        
+        div.addEventListener('click', function(e) {
+            if (e.target.classList.contains('word')) return; 
+            if(player && player.seekTo) {
+                player.seekTo(line.start, true);
+                player.playVideo();
+            }
+        });
+        scriptBox.appendChild(div);
+    });
+
+    document.querySelectorAll('.word').forEach(wordEl => { 
+        wordEl.addEventListener('click', function(e) { 
+            e.stopPropagation(); 
+            const cleanWord = this.innerText.replace(/[.,?!]/g, '').toLowerCase(); 
+            if(!collectedWords.includes(cleanWord)) { collectedWords.push(cleanWord); renderWordBank(); }
+            this.style.background = "var(--light-purple)"; setTimeout(() => { this.style.background = ""; }, 300);
+        }); 
+    });
+
+    let activeLineIndex = -1;
+    function handleTimeUpdate() {
+        if (!player || !player.getCurrentTime) return;
+        
+        const currentTime = player.getCurrentTime();
+        if (!isRoleplayingActive) {
+            let foundIndex = -1;
+            const lines = document.querySelectorAll('.script-line');
+            lines.forEach((line, index) => {
+                const start = parseFloat(line.getAttribute('data-start'));
+                const end = parseFloat(line.getAttribute('data-end'));
+                if (currentTime >= start && currentTime <= end) {
+                    foundIndex = index;
+                }
+            });
+
+            if (foundIndex !== -1 && foundIndex !== activeLineIndex) {
+                lines.forEach(l => l.classList.remove('active-line'));
+                const activeLine = lines[foundIndex];
+                activeLine.classList.add('active-line');
+                
+                const container = document.getElementById('scriptBoxContainer');
+                const scrollPos = activeLine.offsetTop - (container.clientHeight / 2) + (activeLine.clientHeight / 2);
+                container.scrollTo({ top: scrollPos, behavior: 'smooth' });
+                
+                activeLineIndex = foundIndex;
+            }
+        }
+        
+        let dur = player.getDuration();
+        if (dur && currentTime >= dur - 2 && !isQuizUnlocked) unlockQuiz();
+    }
+    
+    function changeVideoSpeed(rate, btn) { 
+        if(player && player.setPlaybackRate) player.setPlaybackRate(rate); 
+        document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active-speed')); 
+        btn.classList.add('active-speed'); 
+    }
+    
+    function unlockQuiz() { 
+        isQuizUnlocked = true; 
+        const btn = document.getElementById('quizTabBtn'); 
+        btn.style.color = "white"; btn.style.cursor = "pointer"; btn.style.background = "#28a745"; 
+        btn.innerHTML = "🔓 Speak Answer"; 
+        btn.classList.remove('locked');
+        document.getElementById('lockedMessage').style.display = 'none'; 
+        document.getElementById('unlockedQuiz').style.display = 'flex'; 
+        loadVideoQuiz(); 
+    }
+
+    function renderWordBank() { 
+        const list = document.getElementById('wordBankList'); list.innerHTML = ''; 
+        if(collectedWords.length === 0) { list.innerHTML = '<p style="color:#888; margin-top:50px;">Click on any word in the script to add it.</p>'; document.getElementById('wordCounter').innerText = 0; return; } 
+        document.getElementById('wordCounter').innerText = collectedWords.length; 
+        collectedWords.forEach(cleanWord => { 
+            const translation = mainDictionary[cleanWord] || "Translation not available"; 
+            const safeWord = cleanWord.replace(/'/g, "\\'");
+            
+            const itemDiv = document.createElement('div'); itemDiv.className = 'dict-item'; 
+            itemDiv.innerHTML = `<div style="display:flex; gap:5px; align-items:center;">
+                                    <button class="action-btn" onclick="speakTTS('${safeWord}', 'en-US')">🇺🇸</button>
+                                    <button class="action-btn info" onclick="speakTTS('${safeWord}', 'en-GB')">🇬🇧</button>
+                                    <button class="action-btn danger" onclick="removeWord('${safeWord}')">✖</button>
+                                 </div>
+                                 <div style="text-align:left; flex: 1; padding-left: 15px;">
+                                    <span class="word-en">${cleanWord}</span><br>
+                                    <span style="font-size:15px; color:#555;">${translation}</span>
+                                 </div>`; 
+            list.appendChild(itemDiv); 
+        }); 
+    }
+    
+    function removeWord(word) { collectedWords = collectedWords.filter(w => w !== word); renderWordBank(); }
+    
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = function() {};
+    }
+
+    function speakTTS(text, accent) { 
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text); 
+        u.lang = accent;
+        const voices = window.speechSynthesis.getVoices();
+        let selectedVoice;
+
+        if (accent === 'en-US') {
+            selectedVoice = voices.find(v => v.lang === 'en-US' && (v.name.includes('Female') || v.name.includes('Google US English'))) || 
+                            voices.find(v => v.lang === 'en-US');
+        } else if (accent === 'en-GB') {
+            selectedVoice = voices.find(v => v.lang === 'en-GB' && (v.name.includes('Female') || v.name.includes('Google UK English Female'))) || 
+                            voices.find(v => v.lang === 'en-GB');
+        }
+        
+        if (selectedVoice) u.voice = selectedVoice;
+        u.pitch = 1.0; 
+        u.rate = 0.9; 
+        window.speechSynthesis.speak(u); 
+    }
+
+    let currentVocabAns = ""; let vqCount = 0; let actVocabWords = [];
+    function startAudioVocabQuiz() { 
+        if(collectedWords.length < 3) return alert("Please add at least 3 words to the dictionary."); 
+        vqCount = 0; 
+        actVocabWords = [...collectedWords].sort(()=>0.5-Math.random()); 
+        totals.vocab = actVocabWords.length; 
+        document.getElementById('dictDefaultView').style.display = 'none'; 
+        document.getElementById('dictQuizView').style.display = 'flex'; 
+        nextAudioVocabQ(); 
+    }
+    function nextAudioVocabQ() { 
+        firstTry.vocab = true;
+        if (vqCount >= actVocabWords.length) { 
+            markProgress('vocab');
+            let p = Math.round((scores.vocab / actVocabWords.length) * 100);
+            let resHtml = `<div style="text-align:center; padding:20px; background:#f3e8ff; border-radius:10px; border:2px solid var(--primary-purple); margin-top:20px;">
+                <h3 style="color:var(--primary-purple); margin-top:0;">📊 Vocab Result</h3>
+                <p style="font-size:18px; margin:5px 0;">✔️ Correct Answers: <span style="color:green; font-weight:bold;">${scores.vocab}</span></p>
+                <p style="font-size:18px; margin:5px 0;">❌ Mistakes: <span style="color:red; font-weight:bold;">${actVocabWords.length - scores.vocab}</span></p>
+                <div style="font-size:24px; font-weight:bold; color:var(--dark-purple); margin-top:15px; border-top:1px solid #ccc; padding-top:10px;">🎯 Success Rate: ${p}%</div>
+            </div>`;
+            document.getElementById('dictQuizOptions').innerHTML = resHtml; 
+            document.getElementById('dictQuizResult').innerHTML = ""; 
+            document.getElementById('quizCounterDisplay').innerHTML = "Challenge Completed 🎉";
+            return; 
+        }
+        currentVocabAns = actVocabWords[vqCount]; 
+        vqCount++; 
+        document.getElementById('quizCounterDisplay').innerHTML = `Question ${vqCount} of ${actVocabWords.length}`; 
+        document.getElementById('dictQuizResult').innerText = "";
+        
+        let keys = Object.keys(mainDictionary).filter(k => k !== currentVocabAns).sort(()=>0.5-Math.random()); let opts = [currentVocabAns, keys[0], keys[1]].sort(()=>0.5-Math.random());
+        let html = ""; opts.forEach(opt => { 
+            const safeOpt = opt.replace(/'/g, "\\'");
+            html += `<button class="quiz-opt" onclick="checkVocabQ('${safeOpt}', this)">${opt}</button>`; 
+        }); document.getElementById('dictQuizOptions').innerHTML = html; 
+        setTimeout(()=>speakTTS(currentVocabAns,'en-GB'), 500);
+    }
+    function playCurrentQuizAudio() { speakTTS(currentVocabAns, 'en-GB'); }
+    function checkVocabQ(sel, btn) { 
+        const btns = document.getElementById('dictQuizOptions').querySelectorAll('button'); btns.forEach(b => b.disabled = true);
+        if(sel === currentVocabAns) { 
+            if(firstTry.vocab) scores.vocab++;
+            playFeedback(true); btn.style.background = "#d4edda"; btn.style.borderColor = "green"; document.getElementById('dictQuizResult').innerHTML = "✔️ Correct answer!"; document.getElementById('dictQuizResult').style.color = "green"; updatePoints(10); setTimeout(nextAudioVocabQ, 1500); 
+        } 
+        else { 
+            firstTry.vocab = false;
+            playFeedback(false); btn.style.background = "#f8d7da"; btn.style.borderColor = "red"; document.getElementById('dictQuizResult').innerHTML = `❌ Wrong answer!`; document.getElementById('dictQuizResult').style.color = "red"; updatePoints(-5); btns.forEach(b => { if(b.innerText === currentVocabAns) { b.style.background = "#d4edda"; b.style.borderColor = "green"; }}); setTimeout(nextAudioVocabQ, 2500); 
+        }
+    }
+    function exitAudioVocabQuiz() { document.getElementById('dictDefaultView').style.display = 'flex'; document.getElementById('dictQuizView').style.display = 'none'; }
+
+    const meaningQuizData = [
+        { def: "A place where people go to drink and eat.", opts: ["pub", "shop", "cellar"], correct: 0 },
+        { def: "Not wide; having a small distance from one side to the other.", opts: ["dirty", "narrow", "dark"], correct: 1 },
+        { def: "A piece of cloth used for wiping the face or nose.", opts: ["handkerchief", "coffin", "meat"], correct: 0 },
+        { def: "To stop being awake.", opts: ["fell asleep", "arrive", "run away"], correct: 0 }
+    ];
+    let mqIndex = 0;
+    function loadMeaningQuiz() {
+        if (mqIndex >= meaningQuizData.length) { 
+            markProgress('meaning');
+            let p = Math.round((scores.meaning / meaningQuizData.length) * 100);
+            let resHtml = `<div style="text-align:center; padding:20px; background:#f3e8ff; border-radius:10px; border:2px solid var(--primary-purple); margin-top:20px;">
+                <h3 style="color:var(--primary-purple); margin-top:0;">📊 Meaning Result</h3>
+                <p style="font-size:18px; margin:5px 0;">✔️ Correct Answers: <span style="color:green; font-weight:bold;">${scores.meaning}</span></p>
+                <p style="font-size:18px; margin:5px 0;">❌ Mistakes: <span style="color:red; font-weight:bold;">${meaningQuizData.length - scores.meaning}</span></p>
+                <div style="font-size:24px; font-weight:bold; color:var(--dark-purple); margin-top:15px; border-top:1px solid #ccc; padding-top:10px;">🎯 Success Rate: ${p}%</div>
+            </div>`;
+            document.getElementById('mqOptions').parentElement.innerHTML = resHtml;
+            document.getElementById('mqResult').innerHTML = "";
+            document.getElementById('mqCounterDisplay').innerHTML = "Challenge Completed 🎉";
+            return; 
+        }
+        const q = meaningQuizData[mqIndex]; 
+        document.getElementById('mqCounterDisplay').innerHTML = `Question ${mqIndex + 1} of ${meaningQuizData.length}`; 
+        document.getElementById('mqDefinition').innerText = `"${q.def}"`; 
+        document.getElementById('mqResult').innerText = ''; 
+        document.getElementById('mqNextBtn').style.display = 'none';
+        
+        let html = ""; q.opts.forEach((opt, idx) => { html += `<button class="quiz-opt" style="font-weight:normal;" onclick="checkMeaningQ(this, ${idx === q.correct})">${opt}</button>`; }); document.getElementById('mqOptions').innerHTML = html;
+    }
+    function checkMeaningQ(btn, isCorrect) {
+        const btns = document.getElementById('mqOptions').querySelectorAll('button'); btns.forEach(b => b.disabled = true);
+        if(isCorrect) { 
+            if(firstTry.meaning) scores.meaning++;
+            btn.style.background = "#d4edda"; btn.style.borderColor = "green"; playFeedback(true); updatePoints(15); document.getElementById('mqResult').innerHTML = "✔️ Correct answer!"; document.getElementById('mqResult').style.color = "green"; document.getElementById('mqNextBtn').style.display = 'block'; 
+        } else { 
+            firstTry.meaning = false;
+            btn.style.background = "#f8d7da"; btn.style.borderColor = "red"; playFeedback(false); updatePoints(-5); document.getElementById('mqResult').innerHTML = "❌ Wrong answer!"; document.getElementById('mqResult').style.color = "red"; const correctIndex = meaningQuizData[mqIndex].correct; btns[correctIndex].style.background = "#d4edda"; btns[correctIndex].style.borderColor = "green"; setTimeout(() => { document.getElementById('mqNextBtn').style.display = 'block'; }, 1500); 
+        }
+    }
+    function nextMeaningQ() { firstTry.meaning = true; mqIndex++; loadMeaningQuiz(); }
+    loadMeaningQuiz();
+
+    const roleplayScene = scriptData.map(line => {
+        let imgName = "oliver.jpg";
+        if (line.speaker === "Narrator") imgName = "narrator.jpg";
+        else if (line.speaker === "Dodger") imgName = "dodger.jpg";
+        else if (line.speaker === "Fagin") imgName = "fagin.jpg";
+
+        return {
+            char: line.speaker,
+            text: line.text,
+            clean: line.text.toLowerCase().replace(/[.,?!]/g, '').trim(),
+            start: line.start,
+            end: line.end,
+            img: imgName
+        };
+    });
+    
+    let userRole = "";
+    let rpIndex = 0;
+    let userAudioBlobs = {};
+    let recognition = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRpRecording = false;
+    let fullTranscript = ""; 
+
+    function selectRole(role) {
+        userRole = role;
+        userAudioBlobs = {};
+        rpIndex = 0; 
+        document.getElementById('chosenRoleDisplay').innerText = role;
+        document.getElementById('rpStep1').style.display = 'none';
+        document.getElementById('rpStep2').style.display = 'flex';
+        document.getElementById('chatInterface').innerHTML = "";
+        
+        document.getElementById('rpPlayFullBtn').style.display = 'none';
+        document.getElementById('rpMicBtn').style.display = 'none';
+        
+        isRoleplayingActive = true;
+        nextRoleplayStep();
+    }
+
+    function resetRoleplay() {
+        if(isRpRecording) stopRecording();
+        stopFullScenePlay();
+        userRole = "";
+        document.getElementById('rpStep1').style.display = 'block';
+        document.getElementById('rpStep2').style.display = 'none';
+        isRoleplayingActive = false;
+        if(player && player.pauseVideo) player.pauseVideo();
+    }
+
+    function createFallbackImageString(charName) {
+        let color = "%e83e8c";
+        if(charName === "Narrator") color = "%6f42c1";
+        if(charName === "Dodger") color = "%17a2b8";
+        if(charName === "Fagin") color = "%28a745";
+        return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='45' height='45'><circle cx='22.5' cy='22.5' r='22.5' fill='${color}'/><text x='50%' y='50%' fill='white' font-size='16' font-family='Arial' dy='.3em' text-anchor='middle'>${charName.charAt(0)}</text></svg>`;
+    }
+
+    function nextRoleplayStep() {
+        if (rpIndex >= roleplayScene.length) {
+            document.getElementById('rpInstruction').innerHTML = "🎉 Scene Completed!";
+            document.getElementById('rpInstruction').style.color = "green";
+            document.getElementById('rpMicBtn').style.display = 'none';
+            document.getElementById('rpPlayFullBtn').style.display = 'inline-block';
+            markProgress('speaking');
+            return;
+        }
+
+        const line = roleplayScene[rpIndex];
+        const chatContainer = document.getElementById('chatInterface');
+        const isMyTurn = (line.char === userRole);
+        
+        const row = document.createElement('div');
+        row.className = `chat-row ${isMyTurn ? 'my-turn' : 'other-turn'}`;
+        
+        const fallbackImg = createFallbackImageString(line.char);
+        row.innerHTML = `<img src="${line.img}" class="chat-avatar" alt="${line.char}" onerror="this.onerror=null; this.src='${fallbackImg}';">
+                         <div class="chat-bubble" id="bubble_${rpIndex}">${isMyTurn ? "..." : line.text}</div>`;
+        
+        chatContainer.appendChild(row);
+        
+        setTimeout(() => {
+            chatContainer.scrollTo({top: chatContainer.scrollHeight, behavior: 'smooth'});
+        }, 100);
+
+        if (isMyTurn) {
+            document.getElementById('rpInstruction').innerHTML = `Your turn! The line is:<br><strong style="color:var(--dark-purple); display:inline-block; direction:ltr; margin-top:5px;">${line.text}</strong>`;
+            document.getElementById('rpInstruction').style.color = "#333";
+            
+            const micBtn = document.getElementById('rpMicBtn');
+            micBtn.style.display = 'inline-block';
+            micBtn.innerHTML = "🎤 Start Recording";
+            micBtn.disabled = false;
+            micBtn.style.opacity = '1';
+            micBtn.classList.remove('danger', 'warning', 'success');
+            micBtn.classList.add('danger');
+            
+            setTimeout(() => {
+                const chatContainer = document.getElementById('chatInterface');
+                chatContainer.scrollTo({top: chatContainer.scrollHeight, behavior: 'smooth'});
+            }, 200);
+
+        } else {
+            document.getElementById('rpInstruction').innerHTML = `Listen to ${line.char}...`;
+            document.getElementById('rpInstruction').style.color = "#666";
+            document.getElementById('rpMicBtn').style.display = 'none';
+            
+            if(player && player.unMute) {
+                player.unMute();
+                player.seekTo(line.start, true);
+                player.playVideo();
+                
+                let checkEnd = setInterval(() => {
+                    let currentTime = player.getCurrentTime();
+                    let duration = player.getDuration();
+                    if(currentTime >= line.end || (duration > 0 && currentTime >= duration - 0.5)) {
+                        player.pauseVideo();
+                        clearInterval(checkEnd);
+                        rpIndex++; 
+                        setTimeout(nextRoleplayStep, 500); 
+                    }
+                }, 50);
+            }
+        }
+    }
+
+    async function toggleRoleplayMic() {
+        const btn = document.getElementById('rpMicBtn');
+        const instr = document.getElementById('rpInstruction');
+        
+        if (isRpRecording) { 
+            isRpRecording = false;
+            btn.innerHTML = "⏳ Evaluating...";
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+
+            if(recognition) recognition.stop();
+            if(mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
+            
+            setTimeout(() => {
+                evaluateRecording(false); 
+            }, 800);
+            return; 
+        }
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+            
+            let currentRecordIndex = rpIndex; 
+            mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                userAudioBlobs[currentRecordIndex] = URL.createObjectURL(audioBlob);
+                stream.getTracks().forEach(t => t.stop());
+            };
+
+            window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (window.SpeechRecognition) {
+                recognition = new SpeechRecognition();
+                recognition.lang = 'en-US';
+                recognition.continuous = true; 
+                recognition.interimResults = true;
+                
+                fullTranscript = "";
+                
+                recognition.onstart = () => {
+                    isRpRecording = true;
+                    btn.innerHTML = "⏹️ Stop Recording";
+                    btn.classList.replace('danger', 'warning');
+                    
+                    const line = roleplayScene[rpIndex];
+                    instr.innerHTML = `Recording... 🔴<br><strong style="color:var(--dark-purple); display:inline-block; direction:ltr; margin-top:5px;">${line.text}</strong>`;
+                    
+                    mediaRecorder.start();
+                };
+                
+                recognition.onresult = (e) => {
+                    fullTranscript = "";
+                    for(let i=0; i<e.results.length; i++) {
+                        fullTranscript += e.results[i][0].transcript + " ";
+                    }
+                };
+                
+                recognition.onend = () => { 
+                    if (isRpRecording) {
+                        isRpRecording = false;
+                        if(mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
+                        btn.innerHTML = "⏳ Evaluating...";
+                        btn.disabled = true;
+                        btn.style.opacity = '0.7';
+                        setTimeout(() => {
+                            evaluateRecording(false); 
+                        }, 800);
+                    }
+                };
+                recognition.start();
+            } else { alert("Sorry, your browser doesn't support speech recognition."); }
+        } catch(e) { alert("Microphone access is required."); }
+    }
+
+    function stopRecording() {
+        isRpRecording = false;
+        if(recognition) recognition.stop();
+        if(mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
+    }
+
+    function evaluateRecording(forcePass = false) {
+        const line = roleplayScene[rpIndex];
+        
+        let userSaid = fullTranscript.toLowerCase().trim().replace(/[^\w\s']/g, '');
+        let targetWords = line.clean.split(/\s+/);
+        let userWords = userSaid.split(/\s+/);
+        
+        let matchCount = 0;
+        targetWords.forEach(w => {
+            if(userWords.includes(w)) matchCount++;
+        });
+        
+        let matchPercentage = targetWords.length > 0 ? (matchCount / targetWords.length) : 1;
+
+        if (!forcePass && (userSaid === "" || matchPercentage < 0.3)) {
+            playFeedback(false);
+            let displaySaid = userSaid === "" ? "No audio detected" : userSaid;
+            document.getElementById('rpInstruction').innerHTML = `❌ Focus on the keywords. (You said: "${displaySaid}").<br>Required line:<br><strong style="color:var(--dark-purple); display:inline-block; direction:ltr; margin-top:5px;">${line.text}</strong>`;
+            document.getElementById('rpInstruction').style.color = "red";
+            
+            const btn = document.getElementById('rpMicBtn');
+            btn.innerHTML = "🎤 Try Again";
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.classList.remove('warning', 'success');
+            btn.classList.add('danger');
+            btn.style.display = 'inline-block';
+            return; 
+        }
+
+        playFeedback(true);
+        document.getElementById(`bubble_${rpIndex}`).innerText = line.text;
+        document.getElementById(`bubble_${rpIndex}`).innerHTML += "<br><span style='font-size:11px; color:#ddd;'>🎙️ Recorded</span>";
+        document.getElementById('rpMicBtn').style.display = 'none';
+        
+        rpIndex++;
+        setTimeout(nextRoleplayStep, 500);
+    }
+
+    let isPlayingFullScene = false;
+    let sceneTimeout;
+    let currentUserAudio = null;
+
+    function togglePlayFullScene() {
+        const btn = document.getElementById('rpPlayFullBtn');
+        if (isPlayingFullScene) {
+            stopFullScenePlay();
+            btn.innerHTML = "🎬 Hear the full scene with your voice!";
+            btn.classList.replace('danger', 'success');
+        } else {
+            btn.innerHTML = "⏹️ Stop Playback";
+            btn.classList.replace('success', 'danger');
+            
+            const chatContainer = document.getElementById('chatInterface');
+            chatContainer.scrollTo({top: 0, behavior: 'smooth'});
+            
+            playFullSceneStep(0);
+        }
+    }
+
+    function playFullSceneStep(index) {
+        if (index >= roleplayScene.length) {
+            stopFullScenePlay();
+            document.getElementById('rpPlayFullBtn').innerHTML = "🎬 Replay your scene";
+            document.getElementById('rpPlayFullBtn').classList.replace('danger', 'success');
+            return;
+        }
+        isPlayingFullScene = true;
+        const line = roleplayScene[index];
+        const bubbles = document.querySelectorAll('.chat-bubble');
+        bubbles.forEach((b, i) => { 
+            b.style.transform = i === index ? "scale(1.05)" : "scale(1)"; 
+            b.style.boxShadow = i === index ? "0 0 10px rgba(111,66,193,0.5)" : "none"; 
+        });
+        
+        if (bubbles[index]) {
+            const chatContainer = document.getElementById('chatInterface');
+            chatContainer.scrollTo({
+                top: bubbles[index].parentElement.offsetTop - (chatContainer.clientHeight / 2),
+                behavior: 'smooth'
+            });
+        }
+
+        if (line.char === userRole && userAudioBlobs[index]) {
+            if(player && player.mute) player.mute(); 
+            player.seekTo(line.start, true);
+            player.playVideo();
+            
+            currentUserAudio = new Audio(userAudioBlobs[index]);
+            currentUserAudio.onended = () => {
+                player.pauseVideo();
+                player.unMute();
+                playFullSceneStep(index + 1);
+            };
+            currentUserAudio.play();
+        } else {
+            if(player && player.unMute) {
+                player.unMute();
+                player.seekTo(line.start, true);
+                player.playVideo();
+                
+                let checkTime = setInterval(() => {
+                    if(!isPlayingFullScene) { clearInterval(checkTime); return; }
+                    let currentTime = player.getCurrentTime();
+                    let duration = player.getDuration();
+                    if(currentTime >= line.end || (duration > 0 && currentTime >= duration - 0.5)) {
+                        player.pauseVideo();
+                        clearInterval(checkTime);
+                        playFullSceneStep(index + 1);
+                    }
+                }, 50);
+            }
+        }
+    }
+
+    function stopFullScenePlay() {
+        isPlayingFullScene = false;
+        clearTimeout(sceneTimeout);
+        if(currentUserAudio) { currentUserAudio.pause(); currentUserAudio = null; }
+        if(player && player.pauseVideo) {
+            player.pauseVideo();
+            player.unMute();
+        }
+        document.querySelectorAll('.chat-bubble').forEach(b => { b.style.transform = "scale(1)"; b.style.boxShadow = "none"; });
+    }
+
+    const dictData = [
+        { ans: "early the next morning oliver left the shop", hint: "When did Oliver leave the shop?", time: 8.0, playTime: 5000 },
+        { ans: "i have no money and i'm very hungry", hint: "What did Oliver tell Dodger?", time: 48.0, playTime: 4000 },
+        { ans: "oliver followed him to a very old part of the city", hint: "Where did Oliver follow him to?", time: 68.0, playTime: 5000 },
+        { ans: "my name's jack dawkins but people call me the artful dodger", hint: "What is the boy's full name and nickname?", time: 73.0, playTime: 12000 },
+        { ans: "suddenly they were in a room with an old man and some boys", hint: "Who was in the room they went into?", time: 113.0, playTime: 6000 }
+    ];
+    let dictIndex = 0;
+    function loadDictation() { 
+        document.getElementById('dictCounterDisplay').innerHTML = `Sentence ${dictIndex + 1} of ${dictData.length}`;
+        document.getElementById('dictHint').innerHTML = "💡 Hint: " + dictData[dictIndex].hint; 
+        document.getElementById('dictationInput').value = ''; 
+        document.getElementById('dictationResult').innerHTML = ''; 
+        document.getElementById('nextDictationBtn').style.display = 'none'; 
+        document.getElementById('dictationInput').disabled = false;
+    }
+    function playDictationAudio() { 
+        if(player && player.seekTo) {
+            player.seekTo(dictData[dictIndex].time, true); 
+            player.playVideo(); 
+            setTimeout(() => player.pauseVideo(), dictData[dictIndex].playTime); 
+        }
+    }
+    function playDictationTTS(langCode) { speakTTS(dictData[dictIndex].ans, langCode); }
+    function checkDictation() { 
+        let val = document.getElementById('dictationInput').value.toLowerCase().trim().replace(/[^\w\s']/g, '').replace(/\s+/g, ' '); 
+        if (val === dictData[dictIndex].ans.replace(/[^\w\s']/g, '')) { 
+            if(firstTry.dictation) scores.dictation++;
+            document.getElementById('dictationResult').innerHTML = "✔️ Correct answer!"; document.getElementById('dictationResult').style.color = "green"; playFeedback(true); updatePoints(20); document.getElementById('nextDictationBtn').style.display = 'inline-block'; 
+        } else { 
+            firstTry.dictation = false;
+            document.getElementById('dictationResult').innerHTML = "❌ Try again!"; document.getElementById('dictationResult').style.color = "red"; playFeedback(false); updatePoints(-5); 
+        } 
+    }
+    function nextDictation() { 
+        firstTry.dictation = true;
+        dictIndex++; 
+        if(dictIndex < dictData.length) {
+            loadDictation(); 
+        } else { 
+            markProgress('dictation');
+            let p = Math.round((scores.dictation / dictData.length) * 100);
+            let resHtml = `<div style="text-align:center; padding:20px; background:#f3e8ff; border-radius:10px; border:2px solid var(--primary-purple); margin-top:10px;">
+                <h3 style="color:var(--primary-purple); margin-top:0;">📊 Dictation Result</h3>
+                <p style="font-size:18px; margin:5px 0;">✔️ Correct Answers: <span style="color:green; font-weight:bold;">${scores.dictation}</span></p>
+                <p style="font-size:18px; margin:5px 0;">❌ Mistakes: <span style="color:red; font-weight:bold;">${dictData.length - scores.dictation}</span></p>
+                <div style="font-size:24px; font-weight:bold; color:var(--dark-purple); margin-top:15px; border-top:1px solid #ccc; padding-top:10px;">🎯 Success Rate: ${p}%</div>
+            </div>`;
+            const container = document.getElementById('dictationInput').parentElement;
+            container.innerHTML = resHtml;
+        } 
+    }
+    loadDictation();
+
+    const voiceQuizData = [
+        { q: "1. Where did Oliver go after he left the shop?", keywords: ["london"], correctMsg: "Correct! He went to London." },
+        { q: "2. Who did Oliver meet in London?", keywords: ["boy", "dodger", "jack", "dawkins"], correctMsg: "Good job! He met Dodger." },
+        { q: "3. Where did Dodger take Oliver first?", keywords: ["pub", "food"], correctMsg: "Right! He took him to a pub." },
+        { q: "4. Who is the old gentleman?", keywords: ["fagin", "old", "man"], correctMsg: "Excellent! The old man is Fagin." },
+        { q: "5. What did they play a game with?", keywords: ["handkerchief"], correctMsg: "Perfect! With a handkerchief." }
+    ];
+    let vqIndex = 0;
+    let vqRecognition = null;
+    let isVqRecording = false;
+    let isVqChecking = false;
+    let fullSpokenText = "";
+
+    function loadVideoQuiz() { 
+        if (vqIndex >= voiceQuizData.length) { 
+            markProgress('quiz');
+            let p = Math.round((scores.quiz / voiceQuizData.length) * 100);
+            let resHtml = `<div style="text-align:center; padding:20px; background:#f3e8ff; border-radius:10px; border:2px solid var(--primary-purple); margin-top:20px;">
+                <h3 style="color:var(--primary-purple); margin-top:0;">📊 Quiz Result</h3>
+                <p style="font-size:18px; margin:5px 0;">✔️ Correct Answers: <span style="color:green; font-weight:bold;">${scores.quiz}</span></p>
+                <p style="font-size:18px; margin:5px 0;">❌ Mistakes: <span style="color:red; font-weight:bold;">${voiceQuizData.length - scores.quiz}</span></p>
+                <div style="font-size:24px; font-weight:bold; color:var(--dark-purple); margin-top:15px; border-top:1px solid #ccc; padding-top:10px;">🎯 Success Rate: ${p}%</div>
+            </div>`;
+            document.getElementById('vqQuestion').parentElement.innerHTML = resHtml;
+            document.getElementById('vqResult').innerHTML = "";
+            return; 
+        }
+        const q = voiceQuizData[vqIndex]; 
+        document.getElementById('vqQuestion').innerText = q.q; 
+        document.getElementById('vqResult').innerText = ''; 
+        document.getElementById('vqTranscriptText').innerText = 'Your answer will appear here...'; 
+        document.getElementById('vqNextBtn').style.display = 'none';
+        
+        const btn = document.getElementById('vqMicBtn');
+        btn.innerHTML = "🎤 Speak";
+        btn.classList.replace('warning', 'danger');
+        btn.style.display = 'inline-block';
+        
+        isVqChecking = false;
+    }
+
+    async function toggleQuizMic() {
+        const btn = document.getElementById('vqMicBtn');
+        const transcriptText = document.getElementById('vqTranscriptText');
+        
+        if (isVqRecording || isVqChecking) {
+            if(vqRecognition) vqRecognition.stop();
+            return;
+        }
+
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (window.SpeechRecognition) {
+            vqRecognition = new SpeechRecognition();
+            vqRecognition.lang = 'en-US';
+            vqRecognition.interimResults = true;
+            
+            vqRecognition.onstart = () => {
+                isVqRecording = true;
+                isVqChecking = false;
+                fullSpokenText = ""; 
+                btn.innerHTML = "⏹️ Stop";
+                btn.classList.replace('danger', 'warning');
+                transcriptText.innerText = "Listening...";
+                transcriptText.style.color = "#8b5cf6";
+            };
+            
+            vqRecognition.onresult = (e) => {
+                let interimText = '';
+                let currentFinal = '';
+                
+                for (let i = e.resultIndex; i < e.results.length; ++i) {
+                    if (e.results[i].isFinal) {
+                        currentFinal += e.results[i][0].transcript.toLowerCase() + ' ';
+                    } else {
+                        interimText += e.results[i][0].transcript.toLowerCase();
+                    }
+                }
+                
+                fullSpokenText += currentFinal;
+                let displayTxt = fullSpokenText + interimText;
+                
+                if (displayTxt.trim() !== '') {
+                    transcriptText.innerText = `You are saying: "${displayTxt}"`;
+                }
+            };
+            
+            vqRecognition.onerror = (e) => {
+                isVqRecording = false;
+                if(isVqChecking) return;
+                btn.innerHTML = "🎤 Try Again";
+                btn.classList.replace('warning', 'danger');
+                transcriptText.innerText = "Didn't catch that. Try again.";
+            };
+            
+            vqRecognition.onend = () => { 
+                isVqRecording = false; 
+                let finalEvalText = fullSpokenText.trim();
+                
+                if (!isVqChecking && finalEvalText !== '') {
+                    isVqChecking = true;
+                    transcriptText.innerText = `You said: "${finalEvalText}"`;
+                    transcriptText.style.color = "#333";
+                    checkVoiceQuizAnswer(finalEvalText);
+                } else if (!isVqChecking && finalEvalText === '') {
+                    btn.innerHTML = "🎤 Try Again";
+                    btn.classList.replace('warning', 'danger');
+                    transcriptText.innerText = "Didn't catch anything. Try again.";
+                }
+            };
+            
+            vqRecognition.start();
+        } else { alert("Sorry, your browser doesn't support this feature."); }
+    }
+
+    function checkVoiceQuizAnswer(spokenText) {
+        const q = voiceQuizData[vqIndex];
+        const btn = document.getElementById('vqMicBtn');
+        btn.style.display = 'none'; 
+        
+        let isCorrect = q.keywords.some(word => spokenText.includes(word));
+        
+        if(isCorrect) { 
+            if(firstTry.quiz) scores.quiz++;
+            playFeedback(true); 
+            updatePoints(30); 
+            document.getElementById('vqResult').innerHTML = "✔️ " + q.correctMsg; 
+            document.getElementById('vqResult').style.color = "green"; 
+            document.getElementById('vqNextBtn').style.display = 'block'; 
+        } else { 
+            firstTry.quiz = false;
+            playFeedback(false); 
+            updatePoints(-5); 
+            document.getElementById('vqResult').innerHTML = "❌ Inaccurate answer, please try mentioning key words."; 
+            document.getElementById('vqResult').style.color = "red"; 
+            
+            setTimeout(() => {
+                document.getElementById('vqResult').innerHTML = "";
+                btn.style.display = 'inline-block';
+                btn.innerHTML = "🎤 Try Again";
+                btn.classList.replace('warning', 'danger');
+                isVqChecking = false; 
+            }, 2500); 
+        }
+    }
+
+    function nextVideoQuiz() { firstTry.quiz = true; vqIndex++; loadVideoQuiz(); }
+
+</script>
+</body>
+</html>
