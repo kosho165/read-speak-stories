@@ -14,11 +14,9 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            /* خلفية موف هادية عشان المربع الأبيض ينطق ويبرز */
             background: linear-gradient(135deg, #eaddf7 0%, #d4c1ee 100%);
         }
         
-        /* تصميم المربع الأبيض اللي في النص (الكارت) */
         .main-card {
             background: #ffffff;
             padding: 40px 40px 25px 40px;
@@ -48,7 +46,27 @@
         .main-card p.subtitle { 
             color: #666; 
             font-size: 15px; 
-            margin-bottom: 35px; 
+            margin-bottom: 25px; 
+        }
+
+        /* تصميم مربع الاسم الجديد */
+        .name-input {
+            width: 80%;
+            padding: 12px 15px;
+            margin-bottom: 25px;
+            border: 2px solid #d4c1ee;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+            color: #553098;
+            outline: none;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .name-input:focus {
+            border-color: #6f42c1;
+            box-shadow: 0 0 8px rgba(111, 66, 193, 0.2);
         }
         
         .go-btn {
@@ -65,6 +83,8 @@
             align-items: center;
             gap: 10px;
             margin-bottom: 30px;
+            cursor: pointer;
+            border: none;
         }
         
         .go-btn:hover { 
@@ -73,7 +93,6 @@
             box-shadow: 0 6px 20px rgba(111, 66, 193, 0.4);
         }
 
-        /* جملة حقوق الملكية جوه المربع */
         .creator-text {
             color: #999;
             font-size: 13px;
@@ -87,19 +106,44 @@
 <body>
 
     <div class="main-card">
-        <!-- مسار مطلق للصورة مع حل بديل لو كانت بصيغة jpg -->
         <img src="images/logo.png" alt="Read & Speak Stories Logo" onerror="this.src='/images/logo.jpg'">
         
         <h1>Interactive Stories Academy</h1>
         <p class="subtitle">Listen, Read, and Speak Fluently</p>
         
-        <a href="/levels.html" class="go-btn">GO 🚀</a>
+        <!-- حقل إدخال الاسم -->
+        <input type="text" id="studentNameInput" class="name-input" placeholder="Type your name here...">
+        
+        <!-- زرار الانطلاق المربوط بالبرمجة -->
+        <button onclick="saveNameAndGo()" class="go-btn">GO 🚀</button>
 
-        <!-- حقوق الملكية -->
         <div class="creator-text">
             Created by : Hisham Embaby
         </div>
     </div>
 
+    <!-- برمجة حفظ الاسم في الذاكرة -->
+    <script>
+        // لو الطالب كان مسجل اسمه قبل كده، نكتبهوله جاهز
+        window.onload = function() {
+            const savedName = localStorage.getItem('studentName');
+            if(savedName) {
+                document.getElementById('studentNameInput').value = savedName;
+            }
+        };
+
+        function saveNameAndGo() {
+            const nameField = document.getElementById('studentNameInput').value.trim();
+            if(nameField === "") {
+                alert("Please enter your name first! / من فضلك اكتب اسمك أولاً");
+                document.getElementById('studentNameInput').focus();
+            } else {
+                // حفظ الاسم في المتصفح باسم موحد لكل الفصول
+                localStorage.setItem('studentName', nameField);
+                // الانتقال لصفحة المستويات
+                window.location.href = '/levels.html';
+            }
+        }
+    </script>
 </body>
 </html>
