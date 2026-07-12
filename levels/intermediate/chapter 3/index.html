@@ -496,7 +496,7 @@
         "playing": "⚽ Doing an activity for fun"
     };
 
-    /* التعديل هنا: ظبطت التوقيتات عشان الفيديو يمشي بالترتيب السليم من غير نطة */
+    /* التوقيتات المضبوطة بدقة */
     const scriptData = [
         { start: 0.0, end: 8.0, speaker: "Narrator", text: "Chapter 3. Oliver runs away." },
         { start: 8.0, end: 14.0, speaker: "Narrator", text: "Early the next morning, Oliver left the shop." },
@@ -883,16 +883,19 @@
                 player.seekTo(line.start, true);
                 player.playVideo();
                 
-                let checkEnd = setInterval(() => {
-                    let currentTime = player.getCurrentTime();
-                    let duration = player.getDuration();
-                    if(currentTime >= line.end || (duration > 0 && currentTime >= duration - 0.5)) {
-                        player.pauseVideo();
-                        clearInterval(checkEnd);
-                        rpIndex++; 
-                        setTimeout(nextRoleplayStep, 500); 
-                    }
-                }, 50);
+                /* إضافة مهلة الصبر وقفل الأمان عشان اليوتيوب ميقفزش في البداية */
+                setTimeout(() => {
+                    let checkEnd = setInterval(() => {
+                        let currentTime = player.getCurrentTime();
+                        let duration = player.getDuration();
+                        if((currentTime >= line.end && currentTime <= line.end + 2) || (duration > 0 && currentTime >= duration - 0.5 && line.end >= duration - 2)) {
+                            player.pauseVideo();
+                            clearInterval(checkEnd);
+                            rpIndex++; 
+                            setTimeout(nextRoleplayStep, 500); 
+                        }
+                    }, 50);
+                }, 400);
             }
         }
     }
@@ -1080,16 +1083,19 @@
                 player.seekTo(line.start, true);
                 player.playVideo();
                 
-                let checkTime = setInterval(() => {
-                    if(!isPlayingFullScene) { clearInterval(checkTime); return; }
-                    let currentTime = player.getCurrentTime();
-                    let duration = player.getDuration();
-                    if(currentTime >= line.end || (duration > 0 && currentTime >= duration - 0.5)) {
-                        player.pauseVideo();
-                        clearInterval(checkTime);
-                        playFullSceneStep(index + 1);
-                    }
-                }, 50);
+                /* إضافة مهلة الصبر وقفل الأمان في التشغيل المجمع كمان */
+                setTimeout(() => {
+                    let checkTime = setInterval(() => {
+                        if(!isPlayingFullScene) { clearInterval(checkTime); return; }
+                        let currentTime = player.getCurrentTime();
+                        let duration = player.getDuration();
+                        if((currentTime >= line.end && currentTime <= line.end + 2) || (duration > 0 && currentTime >= duration - 0.5 && line.end >= duration - 2)) {
+                            player.pauseVideo();
+                            clearInterval(checkTime);
+                            playFullSceneStep(index + 1);
+                        }
+                    }, 50);
+                }, 400);
             }
         }
     }
