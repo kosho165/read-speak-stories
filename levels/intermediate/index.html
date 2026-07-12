@@ -5,7 +5,7 @@
     <title>Oliver Twist Chapters | Read & Speak Stories</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; text-align: center; padding: 50px; margin: 0; }
-        .chapters-container { display: flex; gap: 20px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+        .chapters-container { display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
         .chapter-card { background: white; padding: 30px; border-radius: 15px; width: 220px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 2px solid transparent; transition: 0.3s; }
         .chapter-card:hover { transform: translateY(-5px); border-color: #6f42c1; box-shadow: 0 8px 15px rgba(111,66,193,0.1); }
         .chapter-card h3 { color: #6f42c1; margin-top: 0; font-size: 22px; }
@@ -13,34 +13,6 @@
         .btn:hover { background: #553098; }
         .back-btn { margin-top: 50px; display: inline-block; color: #dc3545; text-decoration: none; font-weight: bold; font-size: 16px; padding: 10px 20px; border: 1px solid #dc3545; border-radius: 50px; transition: 0.2s; }
         .back-btn:hover { background: #dc3545; color: white; }
-        
-        /* التعديل هنا: تصميم مربع كتابة الاسم */
-        .student-name-box {
-            background: white;
-            border: 2px dashed #6f42c1;
-            padding: 20px;
-            border-radius: 15px;
-            max-width: 400px;
-            margin: 20px auto 10px auto;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-            direction: rtl;
-        }
-        .student-name-box input {
-            padding: 10px 15px;
-            font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            width: 80%;
-            text-align: center;
-            margin-top: 10px;
-            font-family: inherit;
-            outline: none;
-            transition: 0.2s;
-        }
-        .student-name-box input:focus {
-            border-color: #6f42c1;
-            box-shadow: 0 0 8px rgba(111,66,193,0.2);
-        }
     </style>
 </head>
 <body>
@@ -50,19 +22,13 @@
     <h1 style="color: #333; margin-top: 0;">Oliver Twist Chapters</h1>
     <p style="color: #666; font-size: 18px;">Choose the chapter you want to study:</p>
 
-    <!-- التعديل هنا: مربع إدخال اسم الطالب -->
-    <div class="student-name-box">
-        <label for="studentNameInput" style="font-weight: bold; color: #553098; font-size: 18px; display: block;">👑 اكتب اسمك هنا يا بطل:</label>
-        <input type="text" id="studentNameInput" placeholder="مثال: عمر أو أحمد..." oninput="saveStudentName(this.value)">
-    </div>
-
     <div class="chapters-container">
         <!-- Chapter 1 -->
         <div class="chapter-card">
             <h3>Chapter 1</h3>
             <p style="color: #888; font-size: 14px; margin-bottom: 20px;">The Beginning of the Story</p>
             <!-- التعديل هنا: مسار الفصل الأول -->
-            <a href="/levels/intermediate/chapter 1/index.html" class="btn" onclick="checkNameBeforeGo(event)">Start Chapter</a>
+            <a href="/levels/intermediate/chapter 1/index.html" class="btn">Start Chapter</a>
         </div>
 
         <!-- Chapter 2 -->
@@ -70,7 +36,7 @@
             <h3>Chapter 2</h3>
             <p style="color: #888; font-size: 14px; margin-bottom: 20px;">Mr. Sowerberry</p>
             <!-- التعديل هنا: مسار الفصل التاني -->
-            <a href="/levels/intermediate/chapter 2/index.html" class="btn" onclick="checkNameBeforeGo(event)">Start Chapter</a>
+            <a href="/levels/intermediate/chapter 2/index.html" class="btn">Start Chapter</a>
         </div>
 
         <!-- Chapter 3 -->
@@ -78,35 +44,12 @@
             <h3>Chapter 3</h3>
             <p style="color: #888; font-size: 14px; margin-bottom: 20px;">The Artful Dodger</p>
             <!-- مسار الفصل التالت -->
-            <a href="/levels/intermediate/chapter 3/index.html" class="btn" onclick="checkNameBeforeGo(event)">Start Chapter</a>
+            <a href="/levels/intermediate/chapter 3/index.html" class="btn">Start Chapter</a>
         </div>
     </div>
 
     <!-- التعديل هنا: مسار زرار الرجوع لصفحة المستويات -->
     <a href="/levels.html" class="back-btn">🔙 Back to Main Portal</a>
 
-    <script>
-        // أول ما الصفحة تفتح، لو الطالب كان كاتب اسمه قبل كده هيرجع يكتبهوله أوتوماتيك في المربع
-        window.onload = function() {
-            var savedName = localStorage.getItem('studentName');
-            if (savedName) {
-                document.getElementById('studentNameInput').value = savedName;
-            }
-        };
-
-        // حفظ الاسم في ذاكرة المتصفح أول بأول مع كل حرف بيكتبه
-        function saveStudentName(name) {
-            localStorage.setItem('studentName', name.trim());
-        }
-
-        // التأكد إن الطالب كتب اسمه قبل ما يروح للفصل (خطوة اختيارية لطيفة عشان ميفوتش الترحيب)
-        function checkNameBeforeGo(e) {
-            var name = document.getElementById('studentNameInput').value.trim();
-            if (!name) {
-                // لو مكنش كاتب اسمه، هنحفظله اسم افتراضي عشان لو دخل ينورله برضه
-                localStorage.setItem('studentName', 'Champion');
-            }
-        }
-    </script>
 </body>
 </html>
