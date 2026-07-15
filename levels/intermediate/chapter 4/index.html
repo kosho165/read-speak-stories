@@ -378,7 +378,6 @@
         }
     }
 
-    // ⚠️ تحديث الدوال لتعمل مع اليوتيوب ⚠️
     const playerWrapper = {
         getCurrentTime: () => player.getCurrentTime(),
         getDuration: () => player.getDuration(),
@@ -895,7 +894,6 @@
             vqRecognition = new SpeechRecognition(); vqRecognition.lang = 'en-US'; vqRecognition.interimResults = true;
             vqRecognition.onstart = () => { isVqRecording = true; isVqChecking = false; fullSpokenText = ""; btn.innerHTML = "⏹️ Stop"; btn.classList.replace('danger', 'warning'); transcriptText.innerText = "Listening..."; transcriptText.style.color = "#8b5cf6"; };
             vqRecognition.onresult = (e) => { let interimText = ''; let currentFinal = ''; for (let i = e.resultIndex; i < e.results.length; ++i) { if (e.results[i].isFinal) { currentFinal += e.results[i][0].transcript.toLowerCase() + ' '; } else { interimText += e.results[i][0].transcript.toLowerCase(); } } fullSpokenText += currentFinal; let displayTxt = fullSpokenText + interimText; if (displayTxt.trim() !== '') { transcriptText.innerText = `You are saying: "${displayTxt}"`; } };
-            vqRecognition.onerror = (e) => { isVqRecording = false; if(isVqChecking) return; btn.innerHTML = "🎤 Try Again"; btn.classList.replace('warning', 'danger'); transcriptText.innerText = "Didn't catch that. Try again."; };
             vqRecognition.onerror = (e) => { isVqRecording = false; if(isVqChecking) return; btn.innerHTML = "🎤 Try Again"; btn.classList.replace('warning', 'danger'); transcriptText.innerText = "Didn't catch that. Try again."; };
             vqRecognition.onend = () => { isVqRecording = false; let finalEvalText = fullSpokenText.trim(); if (!isVqChecking && finalEvalText !== '') { isVqChecking = true; transcriptText.innerText = `You said: "${finalEvalText}"`; transcriptText.style.color = "#333"; checkVoiceQuizAnswer(finalEvalText); } else if (!isVqChecking && finalEvalText === '') { btn.innerHTML = "🎤 Try Again"; btn.classList.replace('warning', 'danger'); transcriptText.innerText = "Didn't catch anything. Try again."; } };
             vqRecognition.start();
