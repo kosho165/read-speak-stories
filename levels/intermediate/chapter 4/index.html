@@ -196,6 +196,14 @@
                             <img src="fagin.jpg" alt="Fagin" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
                             <div style="font-weight:bold; font-size:18px;">Role: Fagin</div>
                         </button>
+                        <button class="action-btn" style="background:#fd7e14; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Old man')">
+                            <img src="old man.jpg" alt="Old man" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <div style="font-weight:bold; font-size:18px;">Role: Old man</div>
+                        </button>
+                        <button class="action-btn" style="background:#007bff; padding:10px 20px; display:flex; align-items:center; gap:10px;" onclick="selectRole('Police officer')">
+                            <img src="police-officer.jpg" alt="Police officer" style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid white;" onerror="this.style.display='none'">
+                            <div style="font-weight:bold; font-size:18px;">Role: Police officer</div>
+                        </button>
                     </div>
                 </div>
 
@@ -434,7 +442,6 @@
         btnElement.classList.add('active'); 
     }
 
-    /* ⚠️ القاموس بعد إضافة الكلمات الجديدة وتفسيراتها ⚠️ */
     const mainDictionary = { 
         "chapter": "📖 A section of a book",
         "working": "👷 Doing a job",
@@ -926,7 +933,7 @@
         { ans: "when oliver woke up fagin was alone", hint: "Who was alone when Oliver woke up?", time: 7.0, playTime: 5000 },
         { ans: "what are you looking at", hint: "What did Fagin ask Oliver?", time: 23.0, playTime: 3000 },
         { ans: "would you like to learn how to make them", hint: "What did Fagin offer to teach Oliver?", time: 63.0, playTime: 4000 },
-        { ans: "the next day oliver went out with dodger and another boy", hint: "Who did Oliver go out with?", time: 90.0, playTime: 5000 },
+        { ans: "the next day oliver went out with dodger and another boy", hint: "Who did Oliver go out with?", time: 89.0, playTime: 5000 },
         { ans: "he was afraid and started to run", hint: "How did Oliver feel and what did he do?", time: 125.0, playTime: 4000 }
     ];
     let dictIndex = 0;
