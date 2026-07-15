@@ -35,8 +35,8 @@
         
         .media-column{flex:0 0 42%;display:flex;flex-direction:column;gap:15px; height:max-content; position: sticky; top: 15px; z-index: 10; direction: ltr;}
         .video-wrapper{position:relative;padding-bottom:56.25%;height:0;background:#000;border-radius:12px;overflow:hidden;border:2px solid #ddd;box-shadow:0 4px 10px rgba(0,0,0,0.1); flex-shrink: 0;}
-        /* ⚠️ تعديل لليوتيوب ⚠️ */
-        .video-wrapper iframe, .video-wrapper #mainVideo {position:absolute;top:0;left:0;width:100%;height:100%; border:none;}
+        /* ⚠️ تم تعديل الحاوية لتناسب يوتيوب ⚠️ */
+        .video-wrapper iframe {position:absolute;top:0;left:0;width:100%;height:100%; border:none;}
         .speed-controls{display:flex;justify-content:center;gap:10px; flex-shrink: 0;}
         .speed-btn{background:white;border:1px solid #ddd;padding:10px 15px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:13px;display:flex;flex-direction:column;align-items:center;gap:5px;transition:0.2s;}
         .speed-btn.active-speed{background:var(--primary-purple);color:white;border-color:var(--dark-purple);}
@@ -352,7 +352,6 @@
 </div>
 
 <script>
-    // ⚠️ تم إرجاع برمجة الـ YouTube API ⚠️
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -363,7 +362,7 @@
 
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('mainVideo', {
-            videoId: 'lxuf_GaGw_g', // ID بتاع فيديو اليوتيوب اللي بعته
+            videoId: 'lxuf_GaGw_g',
             playerVars: { 'playsinline': 1, 'rel': 0, 'modestbranding': 1 },
             events: { 'onStateChange': onPlayerStateChange }
         });
@@ -377,6 +376,17 @@
             clearInterval(timeUpdateInterval);
         }
     }
+
+    const playerWrapper = {
+        getCurrentTime: () => player.getCurrentTime(),
+        getDuration: () => player.getDuration(),
+        seekTo: (time, allow) => player.seekTo(time, allow),
+        playVideo: () => player.playVideo(),
+        pauseVideo: () => player.pauseVideo(),
+        mute: () => player.mute(),
+        unMute: () => player.unMute(),
+        setPlaybackRate: (rate) => player.setPlaybackRate(rate)
+    };
 
     const correctSound = new Audio('correct.mp3');
     const wrongSound = new Audio('wrong.mp3');
@@ -434,7 +444,27 @@
         btnElement.classList.add('active'); 
     }
 
-    const mainDictionary = { "woke up": "🥱 Stopped sleeping", "jewels": "💎 Precious stones like diamonds", "precious": "💍 Very valuable", "disturbed": "🚫 Interrupted someone's peace", "wallets": "👛 Small cases for holding money", "clever": "🧠 Smart and quick to understand", "surprised": "😲 Feeling shock or wonder", "pocket": "👖 A small bag sewn into clothes", "understood": "🤔 Knew the meaning of something", "afraid": "😨 Feeling fear", "thief": "🦹 Someone who steals", "crowd": "👨‍👩‍👧‍👦 A large group of people", "chase": "🏃‍♂️ To run after someone to catch them", "hit": "🥊 To strike someone or something", "police officer": "👮 A person who catches criminals" };
+    /* قاموس الفصل الرابع الشامل */
+    const mainDictionary = { 
+        "woke up": "🥱 Stopped sleeping", 
+        "jewels": "💎 Precious stones like diamonds", 
+        "precious": "💍 Very valuable", 
+        "disturbed": "🚫 Interrupted someone's peace", 
+        "wallets": "👛 Small cases for holding money", 
+        "clever": "🧠 Smart and quick to understand", 
+        "surprised": "😲 Feeling shock or wonder", 
+        "pocket": "👖 A small bag sewn into clothes", 
+        "understood": "🤔 Knew the meaning of something", 
+        "afraid": "😨 Feeling fear", 
+        "thief": "🦹 Someone who steals", 
+        "crowd": "👨‍👩‍👧‍👦 A large group of people", 
+        "chase": "🏃‍♂️ To run after someone to catch them", 
+        "hit": "🥊 To strike someone or something", 
+        "police officer": "👮 A person who catches criminals",
+        "fell": "📉 Dropped down to the ground",
+        "all right": "✅ Everything is okay or safe",
+        "turned around": "🔄 Changed the direction you are looking"
+    };
 
     const scriptData = [
         { start: 0.0, end: 7.0, speaker: "Narrator", text: "Chapter 4. Working with Dodger." },
@@ -499,7 +529,7 @@
         div.setAttribute('data-start', line.start);
         div.setAttribute('data-end', line.end);
         div.innerHTML = `<span class="speaker-name">${line.speaker}:</span> ${formatClickableText(line.text)}`;
-        div.addEventListener('click', function(e) { if (e.target.classList.contains('word')) return; if(player && player.seekTo) { player.seekTo(line.start, true); player.playVideo(); } });
+        div.addEventListener('click', function(e) { if (e.target.classList.contains('word')) return; if(playerWrapper && playerWrapper.seekTo) { playerWrapper.seekTo(line.start, true); playerWrapper.playVideo(); } });
         scriptBox.appendChild(div);
     });
 
@@ -512,17 +542,15 @@
         }); 
     });
 
-    let activeLineIndex = -1;
     function handleTimeUpdate() {
-        if (!player || !player.getCurrentTime) return;
-        const currentTime = player.getCurrentTime();
+        if (!playerWrapper || !playerWrapper.getCurrentTime) return;
+        const currentTime = playerWrapper.getCurrentTime();
         if (!isRoleplayingActive) {
             let foundIndex = -1;
             const lines = document.querySelectorAll('.script-line');
             lines.forEach((line, index) => {
                 const start = parseFloat(line.getAttribute('data-start'));
                 const end = parseFloat(line.getAttribute('data-end'));
-                /* الشرط الدقيق عشان التظليل ميمشيش قبل الترجمة */
                 if (currentTime >= start && currentTime < end) foundIndex = index;
             });
             if (foundIndex !== -1 && foundIndex !== activeLineIndex) {
@@ -533,10 +561,10 @@
                 activeLineIndex = foundIndex;
             }
         }
-        if (player.getDuration() && currentTime >= player.getDuration() - 2 && !isQuizUnlocked) unlockQuiz();
+        if (playerWrapper.getDuration && playerWrapper.getDuration() > 0 && currentTime >= playerWrapper.getDuration() - 2 && !isQuizUnlocked) unlockQuiz();
     }
     
-    function changeVideoSpeed(rate, btn) { if(player && player.setPlaybackRate) player.setPlaybackRate(rate); document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active-speed')); btn.classList.add('active-speed'); }
+    function changeVideoSpeed(rate, btn) { if(playerWrapper && playerWrapper.setPlaybackRate) playerWrapper.setPlaybackRate(rate); document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active-speed')); btn.classList.add('active-speed'); }
     
     function unlockQuiz() { 
         isQuizUnlocked = true; 
@@ -689,7 +717,7 @@
 
     function resetRoleplay() {
         if(isRpRecording) stopRecording(); stopFullScenePlay(); userRole = "";
-        document.getElementById('rpStep1').style.display = 'block'; document.getElementById('rpStep2').style.display = 'none'; isRoleplayingActive = false; if(player && player.pauseVideo) player.pauseVideo();
+        document.getElementById('rpStep1').style.display = 'block'; document.getElementById('rpStep2').style.display = 'none'; isRoleplayingActive = false; if(playerWrapper && playerWrapper.pauseVideo) playerWrapper.pauseVideo();
     }
 
     function createFallbackImageString(charName) {
@@ -714,13 +742,13 @@
             const micBtn = document.getElementById('rpMicBtn'); micBtn.style.display = 'inline-block'; micBtn.innerHTML = "🎤 Start Recording"; micBtn.disabled = false; micBtn.style.opacity = '1'; micBtn.classList.remove('danger', 'warning', 'success'); micBtn.classList.add('danger'); setTimeout(() => { chatContainer.scrollTo({top: chatContainer.scrollHeight, behavior: 'smooth'}); }, 200);
         } else {
             document.getElementById('rpInstruction').innerHTML = `Listen to ${line.char}...`; document.getElementById('rpInstruction').style.color = "#666"; document.getElementById('rpMicBtn').style.display = 'none';
-            if(player && player.unMute) {
-                player.unMute(); player.seekTo(line.start, true); player.playVideo();
+            if(playerWrapper && playerWrapper.unMute) {
+                playerWrapper.unMute(); playerWrapper.seekTo(line.start, true); playerWrapper.playVideo();
                 setTimeout(() => {
                     let checkEnd = setInterval(() => {
-                        let currentTime = player.getCurrentTime(); let duration = player.getDuration();
+                        let currentTime = playerWrapper.getCurrentTime(); let duration = playerWrapper.getDuration();
                         if((currentTime >= line.end && currentTime <= line.end + 2) || (duration > 0 && currentTime >= duration - 0.5 && line.end >= duration - 2)) {
-                            player.pauseVideo(); clearInterval(checkEnd); rpIndex++; setTimeout(nextRoleplayStep, 500); 
+                            playerWrapper.pauseVideo(); clearInterval(checkEnd); rpIndex++; setTimeout(nextRoleplayStep, 500); 
                         }
                     }, 50);
                 }, 400);
@@ -779,17 +807,17 @@
         bubbles.forEach((b, i) => { b.style.transform = i === index ? "scale(1.05)" : "scale(1)"; b.style.boxShadow = i === index ? "0 0 10px rgba(111,66,193,0.5)" : "none"; });
         if (bubbles[index]) { const chatContainer = document.getElementById('chatInterface'); chatContainer.scrollTo({ top: bubbles[index].parentElement.offsetTop - (chatContainer.clientHeight / 2), behavior: 'smooth' }); }
         if (line.char === userRole && userAudioBlobs[index]) {
-            if(player && player.mute) player.mute(); player.seekTo(line.start, true); player.playVideo();
-            currentUserAudio = new Audio(userAudioBlobs[index]); currentUserAudio.onended = () => { player.pauseVideo(); player.unMute(); playFullSceneStep(index + 1); }; currentUserAudio.play();
+            if(playerWrapper && playerWrapper.mute) playerWrapper.mute(); playerWrapper.seekTo(line.start, true); playerWrapper.playVideo();
+            currentUserAudio = new Audio(userAudioBlobs[index]); currentUserAudio.onended = () => { playerWrapper.pauseVideo(); playerWrapper.unMute(); playFullSceneStep(index + 1); }; currentUserAudio.play();
         } else {
-            if(player && player.unMute) {
-                player.unMute(); player.seekTo(line.start, true); player.playVideo();
+            if(playerWrapper && playerWrapper.unMute) {
+                playerWrapper.unMute(); playerWrapper.seekTo(line.start, true); playerWrapper.playVideo();
                 setTimeout(() => {
                     let checkTime = setInterval(() => {
                         if(!isPlayingFullScene) { clearInterval(checkTime); return; }
-                        let currentTime = player.getCurrentTime(); let duration = player.getDuration();
+                        let currentTime = playerWrapper.getCurrentTime(); let duration = playerWrapper.getDuration();
                         if((currentTime >= line.end && currentTime <= line.end + 2) || (duration > 0 && currentTime >= duration - 0.5 && line.end >= duration - 2)) {
-                            player.pauseVideo(); clearInterval(checkTime); playFullSceneStep(index + 1);
+                            playerWrapper.pauseVideo(); clearInterval(checkTime); playFullSceneStep(index + 1);
                         }
                     }, 50);
                 }, 400);
@@ -797,7 +825,7 @@
         }
     }
 
-    function stopFullScenePlay() { isPlayingFullScene = false; clearTimeout(sceneTimeout); if(currentUserAudio) { currentUserAudio.pause(); currentUserAudio = null; } if(player && player.pauseVideo) { player.pauseVideo(); player.unMute(); } document.querySelectorAll('.chat-bubble').forEach(b => { b.style.transform = "scale(1)"; b.style.boxShadow = "none"; }); }
+    function stopFullScenePlay() { isPlayingFullScene = false; clearTimeout(sceneTimeout); if(currentUserAudio) { currentUserAudio.pause(); currentUserAudio = null; } if(playerWrapper && playerWrapper.pauseVideo) { playerWrapper.pauseVideo(); playerWrapper.unMute(); } document.querySelectorAll('.chat-bubble').forEach(b => { b.style.transform = "scale(1)"; b.style.boxShadow = "none"; }); }
 
     const dictData = [
         { ans: "when oliver woke up fagin was alone", hint: "Who was alone when Oliver woke up?", time: 7.0, playTime: 5000 },
@@ -808,7 +836,7 @@
     ];
     let dictIndex = 0;
     function loadDictation() { document.getElementById('dictCounterDisplay').innerHTML = `Sentence ${dictIndex + 1} of ${dictData.length}`; document.getElementById('dictHint').innerHTML = "💡 Hint: " + dictData[dictIndex].hint; document.getElementById('dictationInput').value = ''; document.getElementById('dictationResult').innerHTML = ''; document.getElementById('nextDictationBtn').style.display = 'none'; document.getElementById('dictationInput').disabled = false; }
-    function playDictationAudio() { if(player && player.seekTo) { player.seekTo(dictData[dictIndex].time, true); player.playVideo(); setTimeout(() => player.pauseVideo(), dictData[dictIndex].playTime); } }
+    function playDictationAudio() { if(playerWrapper && playerWrapper.seekTo) { playerWrapper.seekTo(dictData[dictIndex].time, true); playerWrapper.playVideo(); setTimeout(() => playerWrapper.pauseVideo(), dictData[dictIndex].playTime); } }
     function playDictationTTS(langCode) { speakTTS(dictData[dictIndex].ans, langCode); }
     function checkDictation() { 
         let val = document.getElementById('dictationInput').value.toLowerCase().trim().replace(/[^\w\s']/g, '').replace(/\s+/g, ' '); 
