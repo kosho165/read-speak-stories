@@ -85,12 +85,11 @@
     <div class="main-card">
         <img src="/images/logo.png" alt="Read & Speak Stories Logo" onerror="this.src='/images/logo.jpg'">
         
-        <!-- العنوان اتضاف له ID عشان يتغير بالبرمجة -->
         <h1 id="welcomeMessage">Choose Your Level</h1>
         
         <div class="levels-container">
             <a href="/levels/beginner/index.html" class="level-btn">Beginner</a>
-            <a href="/levels/intermediate/index.html" class="level-btn">Intermediate</a>
+            <a href="/levels/intermediate/stories.html" class="level-btn">Intermediate</a>
             <a href="/levels/advanced/index.html" class="level-btn">Advanced</a>
         </div>
 
@@ -99,12 +98,10 @@
         </div>
     </div>
 
-    <!-- برمجة الترحيب بالطالب -->
     <script>
         window.onload = function() {
             const savedName = localStorage.getItem('studentName');
             if(savedName) {
-                // يغير العنوان لرسالة ترحيب بالاسم
                 document.getElementById('welcomeMessage').innerText = "Welcome, " + savedName + "!";
             }
         };
